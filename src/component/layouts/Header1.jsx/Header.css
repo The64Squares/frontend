@@ -1,0 +1,261 @@
+.the64squares-header {
+  width: 100%;
+  z-index: 1000;
+  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              backdrop-filter 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              -webkit-backdrop-filter 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Home page overlay: fixed at top: 0 so the hero section flows underneath from top: 0 */
+.the64squares-header.header-home-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+/* Subpages: sticky at top: 0 in normal document flow */
+.the64squares-header.header-subpage-sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+}
+
+/* State 1: Completely Transparent over the Hero Section */
+.the64squares-header.header-transparent {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 1px solid transparent !important;
+  box-shadow: none !important;
+}
+
+.the64squares-header.header-transparent .header-announcement-bar {
+  max-height: 0;
+  opacity: 0;
+  padding: 0;
+  overflow: hidden;
+  border-bottom: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* State 2: Modern Blurry Frosted Glass (When all frames finish scrolling or on subpages) */
+.the64squares-header.header-frosted {
+  background: rgba(255, 255, 255, 0.82) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+.the64squares-header.header-frosted .header-announcement-bar {
+  max-height: 40px;
+  opacity: 1;
+  padding: 0.35rem 1rem;
+  overflow: visible;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.header-announcement-bar {
+  background-color: rgba(10, 10, 10, 0.94);
+  color: #E4E4E7;
+  text-align: center;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  padding: 0.35rem 1rem;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.header-announcement-bar p {
+  margin: 0;
+}
+
+.header-main-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 3.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: opacity 0.25s ease;
+}
+
+.header-brand-logo:hover {
+  opacity: 0.88;
+}
+
+.brand-logo-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
+}
+
+.header-brand-logo:hover .brand-logo-img {
+  transform: scale(1.08);
+}
+
+.brand-logo-text {
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #0A0A0A;
+  text-transform: uppercase;
+}
+
+.header-nav-menu ul {
+  display: flex;
+  gap: 2.2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header-nav-menu ul li a {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #18181B;
+  text-transform: uppercase;
+  transition: color 0.25s ease;
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.header-nav-menu ul li a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #0A0A0A;
+  transition: width 0.25s ease;
+}
+
+.header-nav-menu ul li a:hover {
+  color: #0A0A0A;
+}
+
+.header-nav-menu ul li a:hover::after {
+  width: 100%;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.header-cart-link {
+  display: flex;
+  align-items: center;
+  color: #18181B;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.header-cart-link:hover {
+  color: #0A0A0A;
+  transform: scale(1.08);
+}
+
+.header-mobile-toggle {
+  display: none;
+}
+
+.header-mobile-toggle-btn {
+  background: none;
+  border: none;
+  padding: 0.35rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  color: #171717;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.header-mobile-toggle-btn:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.header-mobile-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 960px) {
+  .header-nav-menu {
+    display: none;
+  }
+
+  .header-mobile-toggle {
+    display: flex;
+    align-items: center;
+  }
+
+  .header-main-container {
+    padding: 0 1.25rem;
+    height: 3.75rem;
+  }
+
+  .brand-logo-text {
+    font-size: 1.25rem;
+    letter-spacing: 0.08em;
+  }
+
+  .header-actions {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  /* On mobile screens, hide the upper announcement bar to eliminate awkward wrapping and conserve screen height */
+  .header-announcement-bar {
+    display: none !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-main-container {
+    padding: 0 0.85rem;
+    height: 3.35rem;
+  }
+
+  .brand-logo-img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .brand-logo-text {
+    font-size: 1.05rem;
+    letter-spacing: 0.06em;
+  }
+
+  .header-actions {
+    gap: 0.65rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .brand-logo-text {
+    display: none;
+  }
+}

@@ -1,0 +1,152 @@
+/* The64Squares - Trust & Assurance Services Section */
+
+.the64squares-services-section {
+  background-color: var(--bg-dark);
+  border-top: 1px solid rgba(226, 220, 210, 0.12);
+  border-bottom: 1px solid rgba(226, 220, 210, 0.08);
+  padding: 3.5rem 1.5rem;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle background accent glow */
+.the64squares-services-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 120px;
+  background: radial-gradient(ellipse at center, rgba(138, 106, 67, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.the64squares-services-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.the64squares-services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.the64squares-service-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(226, 220, 210, 0.08);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 1.25rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.the64squares-service-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 0;
+  background-color: var(--accent-gold);
+  transition: height 0.3s ease;
+}
+
+.the64squares-service-card:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: rgba(138, 106, 67, 0.35);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.the64squares-service-card:hover::after {
+  height: 100%;
+}
+
+.the64squares-service-icon-box {
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  border-radius: 50%;
+  background-color: rgba(138, 106, 67, 0.12);
+  border: 1px solid rgba(138, 106, 67, 0.25);
+  color: var(--accent-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.the64squares-service-card:hover .the64squares-service-icon-box {
+  background-color: var(--accent-gold);
+  color: #FFFFFF;
+  border-color: var(--accent-gold);
+  transform: scale(1.08);
+  box-shadow: 0 0 16px rgba(138, 106, 67, 0.4);
+}
+
+.the64squares-service-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.the64squares-service-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #F7F4EE;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.25rem 0;
+  line-height: 1.25;
+}
+
+.the64squares-service-info {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: #A39D93;
+  margin: 0;
+  line-height: 1.4;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* Tablet Layout */
+@media (max-width: 1100px) {
+  .the64squares-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+/* Mobile Layout */
+@media (max-width: 640px) {
+  .the64squares-services-section {
+    padding: 2.5rem 1rem;
+  }
+
+  .the64squares-services-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .the64squares-service-card {
+    padding: 1.25rem 1rem;
+  }
+
+  .the64squares-service-icon-box {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+  }
+}

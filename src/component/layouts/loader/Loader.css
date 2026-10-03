@@ -1,0 +1,65 @@
+.chess-loader-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  gap: 1.5rem;
+  padding: 4rem 0;
+}
+
+.chess-loader-logo-wrapper {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chess-loader-logo {
+  width: 58px;
+  height: 58px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  animation: logoBreath 2s ease-in-out infinite;
+}
+
+.chess-loader-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 76px;
+  height: 76px;
+  border-radius: 14px;
+  border: 2px solid transparent;
+  border-top-color: #0A0A0A;
+  border-bottom-color: #0A0A0A;
+  animation: spinRing 1.5s linear infinite;
+}
+
+@keyframes logoBreath {
+  0%, 100% {
+    transform: scale(0.96);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+
+@keyframes spinRing {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loader-brand-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  letter-spacing: 0.25em;
+  color: #0A0A0A;
+  font-weight: 700;
+  text-transform: uppercase;
+}

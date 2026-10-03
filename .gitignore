@@ -1,0 +1,63 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Production Build
+/build
+/dist
+
+# Testing & Coverage
+/coverage
+*.lcov
+.nyc_output
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env*
+!example.env
+
+# Editor & IDE directories
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS & System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Tt]emp/
+[Tt]mp/
+*.tmp
+*.bak
+*.swp
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Caches
+.eslintcache
+.stylelintcache
+.cache/
+
+# Deployment & Hosting
+/vercel.json
+.vercel

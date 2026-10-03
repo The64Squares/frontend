@@ -1,0 +1,193 @@
+.the64squares-about-page {
+  background-color: var(--bg-primary);
+  min-height: 100vh;
+  padding-bottom: 6rem;
+}
+
+.about-hero-banner {
+  background-color: var(--bg-dark);
+  color: #FFFFFF;
+  text-align: center;
+  padding: 5rem 1.5rem 4rem 1.5rem;
+  margin-bottom: 4rem;
+}
+
+.about-tag {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.about-hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+  font-weight: 500;
+  margin: 0 0 1rem 0;
+  color: #FFFFFF;
+}
+
+.about-hero-sub {
+  font-size: 1.05rem;
+  color: #B8B0A4;
+  max-width: 650px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.about-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.about-section-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  margin-bottom: 6rem;
+}
+
+.about-image-col {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  aspect-ratio: 4 / 3;
+}
+
+.about-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-text-col h2 {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  color: var(--text-primary);
+  margin: 0.5rem 0 1.25rem 0;
+}
+
+.about-text-col p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 1.25rem;
+}
+
+.about-craft-spotlight {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 4rem 3rem;
+  margin-bottom: 6rem;
+}
+
+.about-craft-spotlight h2 {
+  font-family: var(--font-serif);
+  font-size: 2.4rem;
+  color: var(--text-primary);
+  margin: 0.5rem 0 2.5rem 0;
+}
+
+.craft-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.pillar-card {
+  background-color: var(--bg-primary);
+  padding: 2rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.pillar-card h3 {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  color: var(--text-primary);
+  margin: 0 0 0.75rem 0;
+}
+
+.pillar-card p {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.about-cta-card {
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.about-cta-card h2 {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  color: var(--text-primary);
+  margin: 0 0 0.75rem 0;
+}
+
+.about-cta-card p {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.about-btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+.btn-primary-about {
+  background-color: var(--text-primary);
+  color: #FFFFFF;
+  padding: 0.875rem 2.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.25s ease;
+}
+
+.btn-primary-about:hover {
+  background-color: var(--accent-gold);
+}
+
+.btn-secondary-about {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--text-primary);
+  padding: 0.875rem 2.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  transition: all 0.25s ease;
+}
+
+.btn-secondary-about:hover {
+  background-color: var(--text-primary);
+  color: #FFFFFF;
+}
+
+@media (max-width: 960px) {
+  .about-section-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .craft-pillars-grid {
+    grid-template-columns: 1fr;
+  }
+}

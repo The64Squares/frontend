@@ -95,12 +95,10 @@ export default function HeroMotion() {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const imagesRef = useRef(new Array(TOTAL_FRAMES));
-  const rafRef = useRef(null);
   const targetProgressRef = useRef(0);
   const currentProgressRef = useRef(0);
   const lastDrawnFrameRef = useRef(-1);
 
-  const [loadedCount, setLoadedCount] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
 
   // Retrieve cached frame or closest loaded neighbor
@@ -195,7 +193,6 @@ export default function HeroMotion() {
     const onImageLoaded = () => {
       if (!isMounted) return;
       loaded++;
-      setLoadedCount(loaded);
       if (loaded === 1 || lastDrawnFrameRef.current === -1) {
         resizeCanvas();
         renderFrame(0);

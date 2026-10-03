@@ -50,6 +50,7 @@ const ProductDetails = () => {
       dispatch({ type: PRODUCT_DETAILS_RESET });
     }
     dispatch(getProductDetails(id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, error, alert, success, id]);
 
   const handleAddItem = () => {

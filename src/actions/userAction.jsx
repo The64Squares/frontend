@@ -105,7 +105,7 @@ export const load_UserProfile = () => async (dispatch) => {
        dispatch({ type: LOAD_USER_SUCCESS, payload: user });
     } else {
       // If user data is not available in session storage, make a backend API call
-      const { data } = await axios.get("api/v1/profile");
+      const { data } = await axios.get("/api/v1/profile");
    
       dispatch({ type: LOAD_USER_SUCCESS, payload: data.user });
 

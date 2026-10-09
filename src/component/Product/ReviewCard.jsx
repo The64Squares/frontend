@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 import { useAlert } from "../../context/AlertContext";
 import { useNavigate } from "react-router-dom";
 import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
-import StarIcon from "@mui/icons-material/Star";
 
 const DialogBox = lazy(() => import("./DialogBox"));
 

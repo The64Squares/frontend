@@ -9,10 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import MetaData from "../layouts/MataData/MataData";
 import CartItem from "./CartItem";
 import { useAlert } from "../../context/AlertContext";
-import {
-  dispalyMoney,
-  generateDiscountedPrice,
-} from "../DisplayMoney/DisplayMoney";
+import { dispalyMoney } from "../DisplayMoney/DisplayMoney";
 
 const Cart = () => {
   const navigate = useNavigate();

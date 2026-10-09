@@ -8,7 +8,6 @@ import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
-import ArrowForwardOutlinedIcon from "@mui/icons-material/ArrowForwardOutlined";
 
 import { getAdminProducts, clearErrors } from "../../actions/productAction";
 import { getAllOrders } from "../../actions/orderAction";
@@ -16,8 +15,8 @@ import { getAllUsers } from "../../actions/userAction";
 import MetaData from "../layouts/MataData/MataData";
 import Loader from "../layouts/loader/Loader";
 import { useAlert } from "../../context/AlertContext";
-import Navbar from "./Navbar";
 import Sidebar from "./Siderbar";
+import Navbar from "./Navbar";
 import "./Dashboard.css";
 
 Highcharts3D(Highcharts);

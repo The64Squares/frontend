@@ -4,10 +4,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
-import {
-  dispalyMoney,
-  generateDiscountedPrice,
-} from "../DisplayMoney/DisplayMoney";
+import { dispalyMoney } from "../DisplayMoney/DisplayMoney";
 
 const useStyles = makeStyles((theme) => ({
   itemCard: {

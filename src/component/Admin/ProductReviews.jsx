@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import StarIcon from "@mui/icons-material/Star";
 import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
@@ -16,15 +15,14 @@ import {
 } from "../../actions/productAction";
 import MetaData from "../layouts/MataData/MataData";
 import Loader from "../layouts/loader/Loader";
-import Navbar from "./Navbar";
 import Sidebar from "./Siderbar";
+import Navbar from "./Navbar";
 import { DELETE_REVIEW_RESET } from "../../constants/productsConstatns";
 import "./ProductList.css";
 import "./ProductReviews.css";
 
 function ProductReviews() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const alert = useAlert();
   const [toggle, setToggle] = useState(false);
   const [productId, setProductId] = useState("");

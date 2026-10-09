@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
@@ -22,7 +22,6 @@ import "./ProductList.css";
 function UserList() {
   const dispatch = useDispatch();
   const alert = useAlert();
-  const navigate = useNavigate();
 
   const { error, users, loading } = useSelector((state) => state.allUsers);
   const { error: deleteError, isDeleted, message } = useSelector(

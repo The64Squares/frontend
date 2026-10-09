@@ -8,7 +8,6 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import StarIcon from "@mui/icons-material/Star";
 import { NEW_REVIEW_RESET } from "../../constants/productsConstatns";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";

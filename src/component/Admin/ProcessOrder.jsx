@@ -13,7 +13,7 @@ import MetaData from "../layouts/MataData/MataData";
 import Loader from "../layouts/loader/Loader";
 import { useAlert } from "../../context/AlertContext";
 import { UPDATE_ORDER_RESET } from "../../constants/orderConstant";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 // Icons
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -32,7 +32,6 @@ function ProcessOrder() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const alert = useAlert();
-  const navigate = useNavigate();
 
   const { order, error, loading } = useSelector((state) => state.orderDetails);
   const { error: updateError, isUpdated, loading: updateLoading } = useSelector(

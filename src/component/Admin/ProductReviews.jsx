@@ -1,206 +1,57 @@
 import React, { useEffect, useState } from "react";
-import "./ProductList.css";
 import { DataGrid } from "@mui/x-data-grid";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
+import StarIcon from "@mui/icons-material/Star";
+import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
+import SearchIcon from "@mui/icons-material/Search";
+
 import { useAlert } from "../../context/AlertContext";
 import {
   getAllreviews,
   clearErrors,
   deleteProductReview,
+  getAdminProducts,
 } from "../../actions/productAction";
-import {useNavigate } from "react-router-dom";
 import MetaData from "../layouts/MataData/MataData";
 import Loader from "../layouts/loader/Loader";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Star from "@mui/icons-material/Star";
-import {
-  Avatar,
-  Button,
-  TextField,
-  Typography,
-  InputAdornment,
-} from "@mui/material";
 import Navbar from "./Navbar";
 import Sidebar from "./Siderbar";
 import { DELETE_REVIEW_RESET } from "../../constants/productsConstatns";
-import { makeStyles } from "@mui/styles";
-import StarRateIcon from "@mui/icons-material/StarRate";
-
-const useStyles = makeStyles((theme) => ({
-  updateUser1: {
-    display: "flex",
-    alignItems: "flex-start",
-    backgroundColor: "#f1f1f1",
-    justifyContent: "center",
-    width: "100%",
-    gap: "1rem",
-    overflow: "hidden",
-    margin: "-1.1rem 0 0 0",
-    padding: 0,
-  },
-  firstBox_01: {
-    width: "20%",
-    margin: "0rem",
-    height: "fit-content",
-    backgroundColor: "white",
-    borderRadius: "5px",
-    boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
-    display: "block",
-    [theme.breakpoints.down("999")]: {
-      display: "none",
-    },
-  },
-
-  toggleBox_01: {
-    width: "16rem",
-    margin: "0rem",
-    height: "fit-content",
-    backgroundColor: "white",
-    borderRadius: "5px",
-    boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
-    display: "block",
-    zIndex: "100",
-    position: "absolute",
-    top: "58px",
-    left: "17px",
-  },
-  secondBox_01: {
-    width: "75%",
-
-    height: "fit-content",
-    display: "flex",
-    flexDirection: "column",
-    margin: "-0.5rem 0 0 0",
-    gap: "10px",
-    justifyContent: "center",
-    [theme.breakpoints.down("999")]: {
-      width: "100%",
-    },
-  },
-  navBar_01: {
-    margin: "0rem",
-  },
-  formSection: {
-    width: "100%",
-    margin: "auto",
-    borderRadius: "5px",
-    height: "100vh",
-    backgroundColor: "white",
-    padding: "1rem 2rem",
-  },
-  form: {
-    width: "350px",
-    margin: "-1rem auto 0 auto",
-    borderRadius: "5px",
-    padding: "2rem",
-  },
-
-  avatar: {
-    margin: " 8px auto",
-    backgroundColor: "black",
-  },
-  textField: {
-    marginBottom: theme.spacing(2), 
-    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
-      color: "black",
-      padding: "12px 14px",
-    },
-    "& .MuiInputLabel-root": {
-      color: "black",
-      fontSize: "14px",
-      textAlign: "center",
-    },
-    "& .MuiInputLabel-root.Mui-focused": {
-      color: "black",
-      fontSize: "14px",
-      textAlign: "center",
-    },
-    "& .MuiOutlinedInput-root": {
-      "&:hover fieldset": {
-        borderColor: "black",
-        color: "black",
-      },
-      "& .MuiOutlinedInput-input": {
-        padding: "13px 8px",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "black",
-        color: "black",
-        outline: "none",
-      },
-    },
-  },
-
-  heading: {
-    textAlign: "center",
-    marginBottom: theme.spacing(3),
-    color: "#414141",
-    fontWeight: "bold",
-  },
-  heading_02: {
-    textAlign: "center",
-    textShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
-    color: "#414141",
-    fontWeight: "900",
-  },
-
-  nameInput: {
-    position: "relative",
-    "& > label": {
-      left: ".2rem",
-    },
-    padding: "4px 0px",
-    fontSize: "1rem",
-    width: "100%",
-    marginBottom: theme.spacing(5.5),
-    height: ".7rem",
-  },
-
-  loginButton: {
-    color: "#fff",
-    backgroundColor: "#000",
-    border: "2px solid #000",
-    margin: `${theme.spacing(3)}px 0`,
-    marginTop: "1rem",
-    "&:disabled": {
-      backgroundColor: "#444444", // faded black
-      color: "#FFFFFF",
-      borderColor: "#444444",
-    },
-    "&:hover": {
-      backgroundColor: "#ed1c24",
-      color: "#fff",
-      borderColor: "#ed1c24",
-    },
-  },
-}));
+import "./ProductList.css";
+import "./ProductReviews.css";
 
 function ProductReviews() {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const alert = useAlert();
   const [toggle, setToggle] = useState(false);
-  const { error, reviews, loading } = useSelector(
-    (state) => state.getAllReview
-  );
+  const [productId, setProductId] = useState("");
+  const [customInput, setCustomInput] = useState("");
+
+  const { products } = useSelector((state) => state.products);
+  const { error, reviews, loading } = useSelector((state) => state.getAllReview);
   const { error: deleteError, isDeleted } = useSelector(
     (state) => state.deleteReview
   );
 
-  const [productId, setProductId] = useState("");
-
-  // togle handler =>
   const toggleHandler = () => {
-    console.log("toggle");
-    setToggle(!toggle);
+    setToggle((prev) => !prev);
   };
 
   useEffect(() => {
-    if (productId.length === 24) {
-      dispatch(getAllreviews(productId)); // when in input box string lenght goes ===24 then automatically search occures
-    }
+    dispatch(getAdminProducts());
+  }, [dispatch]);
 
+  // Load reviews whenever a valid productId is selected
+  useEffect(() => {
+    if (productId && productId.length === 24) {
+      dispatch(getAllreviews(productId));
+    }
+  }, [dispatch, productId]);
+
+  useEffect(() => {
     if (error) {
       alert.error(error);
       dispatch(clearErrors());
@@ -211,214 +62,244 @@ function ProductReviews() {
     }
     if (isDeleted) {
       alert.success("Review Deleted Successfully");
-      navigate("/admin/reviews");
       dispatch({ type: DELETE_REVIEW_RESET });
+      if (productId) {
+        dispatch(getAllreviews(productId));
+      }
     }
-  }, [dispatch, error, alert, deleteError, isDeleted, productId, navigate]);
+  }, [dispatch, error, alert, deleteError, isDeleted, productId]);
 
-  // to close the sidebar when the screen size is greater than 1000px
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 999 && toggle) {
         setToggle(false);
       }
     };
-
     window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, [toggle]);
 
-  // delet review from given prodcuts reviews =>
   const deleteReviewHandler = (reviewId) => {
- 
     dispatch(deleteProductReview(reviewId, productId));
   };
 
-  const productReviewsSubmitHandler = (e) => {
-    e.preventDefault();
-    dispatch(getAllreviews(productId)); // get this product reviews
+  const handleProductSelectChange = (e) => {
+    const selectedId = e.target.value;
+    setProductId(selectedId);
+    setCustomInput(selectedId);
   };
+
+  const handleCustomSearchSubmit = (e) => {
+    e.preventDefault();
+    if (customInput.trim().length === 24) {
+      setProductId(customInput.trim());
+      dispatch(getAllreviews(customInput.trim()));
+    } else {
+      alert.error("Please enter a valid 24-character Product ID");
+    }
+  };
+
+  // Find currently selected product info
+  const selectedProduct = products?.find((p) => p._id === productId);
+
   const columns = [
     {
       field: "id",
       headerName: "Review ID",
-      minWidth: 230,
-      flex: 0.5,
+      minWidth: 200,
+      flex: 0.6,
       headerClassName: "column-header",
     },
     {
       field: "user",
-      headerName: "User",
-      flex: 0.8,
-      magin: "0 auto",
-      headerClassName: "column-header hide-on-mobile",
+      headerName: "Reviewer Name",
+      minWidth: 160,
+      flex: 0.6,
+      headerClassName: "column-header",
     },
-
     {
       field: "comment",
       headerName: "Comment",
-      minWidth: 350,
-      flex: 0.8,
+      minWidth: 260,
+      flex: 1.2,
+      headerClassName: "column-header",
     },
-    {
-      field: "recommend",
-      headerName: "Recommend",
-      minWidth: 100,
-      flex: 1,
-      headerClassName: "column-header hide-on-mobile",
-      cellClassName: (params) => {
-        return params.getValue(params.id, "recommend") === true
-          ? "greenColor"
-          : "redColor"; // if rating of review greater then class green else red
-      },
-    },
-
     {
       field: "rating",
       headerName: "Rating",
       type: "number",
-      minWidth: 200,
+      minWidth: 130,
       flex: 0.5,
-      headerClassName: "column-header hide-on-mobile",
-      cellClassName: (params) => {
-        return params.getValue(params.id, "rating") >= 3
-          ? "greenColor"
-          : "redColor"; // if rating of review greater then class green else red
+      headerClassName: "column-header",
+      renderCell: (params) => {
+        return (
+          <div style={{ display: "flex", alignItems: "center", gap: "0.25rem", color: "#d97706", fontWeight: "600" }}>
+            <StarIcon style={{ fontSize: "1.1rem", color: "#f59e0b" }} />
+            <span>{params.value} / 5</span>
+          </div>
+        );
       },
     },
-
+    {
+      field: "recommend",
+      headerName: "Recommend",
+      minWidth: 140,
+      flex: 0.5,
+      headerClassName: "column-header",
+      renderCell: (params) => {
+        const isRec = params.value === true;
+        return (
+          <span className={isRec ? "greenColor" : "redColor"}>
+            {isRec ? "Recommended" : "Not Recommended"}
+          </span>
+        );
+      },
+    },
     {
       field: "actions",
-      flex: 1,
+      flex: 0.4,
       headerName: "Actions",
-      minWidth: 230,
+      minWidth: 100,
       headerClassName: "column-header1",
       sortable: false,
       renderCell: (params) => {
+        const reviewId = params.row?.id || params.id;
         return (
-          <>
-            <div 
-              onClick={() =>
-                deleteReviewHandler(params.getValue(params.id, "id"))
-              }
-            >
-              <DeleteIcon className="iconbtn" style={{ marginLeft: "1rem" }} />
-            </div>
-          </>
+          <button
+            type="button"
+            className="table-action-btn delete"
+            onClick={() => deleteReviewHandler(reviewId)}
+            title="Delete Review"
+          >
+            <DeleteIcon fontSize="small" />
+          </button>
         );
       },
     },
   ];
 
   const rows = [];
-
-  reviews &&
+  if (reviews && reviews.length > 0) {
     reviews.forEach((item) => {
       rows.push({
         id: item._id,
-        user: item.name,
+        rating: item.rating,
         comment: item.comment,
-        rating: item.ratings,
-        recommend: item.recommend ? "Yes" : "No",
+        user: item.name,
+        recommend: item.recommend ?? (item.rating >= 3),
       });
     });
+  }
 
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          <MetaData title="All Reviews" />
+      <MetaData title="Reviews Management - Admin" />
 
-          <div className={classes.updateUser1}>
-            <div
-              className={
-                !toggle ? `${classes.firstBox_01}` : `${classes.toggleBox_01}`
-              }
-            >
-              <Sidebar />
-            </div>
+      <div className="admin-reviews-root">
+        <div className={!toggle ? "admin-reviews-sidebar-wrap" : "admin-reviews-sidebar-toggle"}>
+          <Sidebar />
+        </div>
 
-            <div className={classes.secondBox_01}>
-              <div className={classes.navBar_01}>
-                <Navbar toggleHandler={toggleHandler} />
-              </div>
-              <div className={classes.formSection}>
-                <form
-                  className={`${classes.form}`}
-                  onSubmit={productReviewsSubmitHandler}
-                >
-                  <Avatar className={classes.avatar}>
-                    <StarRateIcon />
-                  </Avatar>
-                  <Typography
-                    variant="h5"
-                    component="h1"
-                    className={classes.heading}
-                  >
-                    All Reviews
-                  </Typography>
-                  <TextField
-                    variant="outlined"
-                    fullWidth
-                    className={`${classes.nameInput} ${classes.textField}`}
-                    label="Product Id"
-                    required
-                    value={productId}
-                    onChange={(e) => setProductId(e.target.value)}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Star
-                            style={{
-                              fontSize: 20,
-                              color: "#414141",
-                            }}
-                          />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
+        <main className="admin-reviews-main">
+          <Navbar toggleHandler={toggleHandler} />
 
-                  <Button
-                    id="createProductBtn"
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    className={classes.loginButton}
-                    disabled={
-                      loading ? true : false || productId === "" ? true : false
-                    }
-                  >
-                    Search
-                  </Button>
-                </form>
-
-                {reviews && reviews.length > 0 ? (
-                  <div className="productListContainer">
-                    <h4 id="productListHeading">ALL PRODUCTS</h4>
-                    <DataGrid
-                      rows={rows}
-                      columns={columns}
-                      pageSize={10}
-                      autoHeight
-                      disableRowSelectionOnClick
-                      className="productListTable"
-                    />
-                  </div>
-                ) : (
-                  <h1 className={classes.heading_02}>No Reviews Found</h1>
-                )}
-              </div>
-              ;
+          <div className="admin-reviews-header">
+            <div>
+              <h1 className="admin-reviews-title">Reviews & Accolades</h1>
+              <p className="admin-reviews-subtitle">
+                Inspect customer ratings, testimonials, and feedback across your catalog.
+              </p>
             </div>
           </div>
-        </>
-      )}
+
+          {/* Product Selector Card */}
+          <section className="admin-reviews-selector-card">
+            <div className="admin-reviews-selector-row">
+              <div className="admin-reviews-select-group">
+                <label className="admin-reviews-label">Select Boutique Product</label>
+                <select
+                  className="admin-reviews-select"
+                  value={productId}
+                  onChange={handleProductSelectChange}
+                >
+                  <option value="">-- Choose a Product from Catalog --</option>
+                  {products &&
+                    products.map((p) => (
+                      <option key={p._id} value={p._id}>
+                        {p.name} (₹{p.price})
+                      </option>
+                    ))}
+                </select>
+              </div>
+
+              <div className="admin-reviews-select-group">
+                <label className="admin-reviews-label">Or Search by Product ID</label>
+                <input
+                  type="text"
+                  className="admin-reviews-input"
+                  placeholder="Paste 24-character Product ID..."
+                  value={customInput}
+                  onChange={(e) => setCustomInput(e.target.value)}
+                />
+              </div>
+
+              <button
+                type="button"
+                className="admin-reviews-search-btn"
+                onClick={handleCustomSearchSubmit}
+              >
+                <SearchIcon fontSize="small" />
+                <span>Search</span>
+              </button>
+            </div>
+
+            {selectedProduct && (
+              <div className="admin-reviews-product-banner">
+                <div>
+                  <div className="admin-reviews-product-name">{selectedProduct.name}</div>
+                  <div className="admin-reviews-product-meta">
+                    Category: {selectedProduct.category} | Price: ₹{selectedProduct.price} | Stock: {selectedProduct.Stock}
+                  </div>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: "#d97706", fontWeight: "700" }}>
+                  <StarIcon style={{ color: "#f59e0b", fontSize: "1.2rem" }} />
+                  <span>{selectedProduct.ratings?.toFixed(1) || "5.0"} Rating ({selectedProduct.numOfReviews || 0} Reviews)</span>
+                </div>
+              </div>
+            )}
+          </section>
+
+          {/* Reviews Table / Empty state */}
+          <section className="admin-reviews-results-card">
+            {loading ? (
+              <Loader />
+            ) : rows.length > 0 ? (
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                pageSize={10}
+                disableRowSelectionOnClick
+                className="productListTable"
+                autoHeight
+              />
+            ) : (
+              <div className="admin-reviews-empty">
+                <div className="admin-reviews-empty-icon">
+                  <RateReviewOutlinedIcon fontSize="large" />
+                </div>
+                <h3 className="admin-reviews-empty-title">
+                  {productId ? "No Customer Reviews Found" : "No Product Selected"}
+                </h3>
+                <p className="admin-reviews-empty-text">
+                  {productId
+                    ? "This product currently has no reviews or ratings recorded by customers."
+                    : "Select a chess set from the dropdown above to view customer feedback."}
+                </p>
+              </div>
+            )}
+          </section>
+        </main>
+      </div>
     </>
   );
 }

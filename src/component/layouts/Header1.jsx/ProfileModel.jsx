@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import LockOpenIcon from "@mui/icons-material/LockOpen";
-import PersonIcon from "@mui/icons-material/Person";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import { Modal, Avatar } from "@mui/material";
-import { AccountCircle as AccountCircleIcon } from "@mui/icons-material";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
+import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
+import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { Avatar } from "@mui/material";
 import "./ProfileModel.css";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../../../context/AlertContext";
@@ -20,164 +18,186 @@ const ProfileModal = ({ user, isAuthenticated }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const modalRef = useRef(null);
+  const dropdownRef = useRef(null);
+  const triggerRef = useRef(null);
 
-  const createdAt = (user) => {
-   const createdAt = new Date(user.createdAt);
-   const options = {
-     year: "numeric",
-     month: "2-digit",
-     day: "2-digit",
-     hour: "2-digit",
-     minute: "2-digit",
-     hour12: true,
-     timeZone: "Asia/Kolkata",
-   };
-
-   const formatter = new Intl.DateTimeFormat("en-IN", options);
-   const formattedDate = formatter.format(createdAt);
-   return formattedDate;
- };
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        triggerRef.current &&
+        !triggerRef.current.contains(event.target)
+      ) {
         setIsOpen(false);
       }
     };
 
-    window.addEventListener("click", handleClickOutside);
-    return () => {
-      window.removeEventListener("click", handleClickOutside);
+    const handleEscape = (event) => {
+      if (event.key === "Escape" && isOpen) {
+        setIsOpen(false);
+      }
     };
-  }, []);
 
-  const handleOpen = (event) => {
+    if (isOpen) {
+      window.addEventListener("mousedown", handleClickOutside);
+      window.addEventListener("keydown", handleEscape);
+    }
+
+    return () => {
+      window.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [isOpen]);
+
+  const toggleDropdown = (event) => {
     event.stopPropagation();
-    setIsOpen((prevState) => !prevState);
+    setIsOpen((prev) => !prev);
   };
 
-  const onClose = () => {
+  const handleNavigate = (path) => {
     setIsOpen(false);
+    navigate(path);
   };
 
-  function dashboardHandler() {
-     setIsOpen(false);
-    navigate("/admin/dashboard");
-  }
-
-  function accountHandler() {
-     setIsOpen(false);
-    navigate("/account");
-  }
-
-  function ordersHandler() {
-     setIsOpen(false);
-    navigate("/orders");
-  }
-
-  function logoutUserHandler() {
-     setIsOpen(false);
-     dispatch(logout());
+  const logoutUserHandler = () => {
+    setIsOpen(false);
+    dispatch(logout());
     alert.success("Logout Successfully");
-  }
-
-  function cartHandler() {
-      setIsOpen(false);
-
-    navigate("/cart");
-  }
-
-  function loginHandler() {
-      setIsOpen(false);
-      
-    navigate("/login");
-  }
+  };
 
   return (
-    <>
-      <div className="profile-icon" onClick={handleOpen}>
-        <PersonIcon
-          className={`icon smaller ${isOpen ? "active" : ""}`}
-          fontSize="large"
-        />
-        {isOpen ? (
-          <ArrowDropUpIcon className="arrow-icon" />
+    <div className="profile-dropdown-wrapper">
+      <button
+        ref={triggerRef}
+        type="button"
+        className={`profile-trigger-btn ${isOpen ? "active" : ""}`}
+        onClick={toggleDropdown}
+        aria-expanded={isOpen}
+        aria-haspopup="true"
+        aria-label="Account menu"
+      >
+        {isAuthenticated && user?.avatar?.url ? (
+          <Avatar
+            src={user.avatar.url}
+            alt={user.name || "User Avatar"}
+            className="profile-trigger-avatar"
+            sx={{ width: 26, height: 26 }}
+          />
         ) : (
-          <ArrowDropDownIcon className="arrow-icon" />
+          <PersonOutlineOutlinedIcon className="profile-trigger-icon" />
         )}
-      </div>
+        <KeyboardArrowDownIcon
+          className={`profile-trigger-chevron ${isOpen ? "chevron-rotated" : ""}`}
+        />
+      </button>
+
       {isOpen && (
-        <Modal open={isOpen} onClose={onClose} className="modal-container">
-          <div className="modal-content" ref={modalRef}>
-            {!isAuthenticated ? (
-              <div className="welcome-message">
-                <strong>Welcome!</strong>
-                <p>To access your account and manage orders, please log in.</p>
-              </div>
-            ) : (
-              <>
-                <div className="profile-info">
-                  <Avatar
-                    src={user.avatar.url}
-                    alt="User Avatar"
-                    className="avatar"
-                    style={{ width: "68px", height: "68px" }}
-                  />
-                  <p className="user-id">
-                    <strong>ID :</strong> {user._id.substring(0, 8)}
-                  </p>
-
-                  <p className="user-name">
-                    <strong>Name :</strong> {user.name}
-                  </p>
-
-                  <p className="user-email">
-                    <strong>Email :</strong> {user.email}
-                  </p>
-
-                  <p className="created-at">
-                    <strong>Joined at:</strong> {createdAt(user)}
-                  </p>
-                </div>
-              </>
-            )}
-            <div className="divider" />
-            <div className="profile-menu">
-              {user && user.role ==="admin" && (
-                <div className="menu-item" onClick={dashboardHandler}>
-                  <DashboardIcon className="menu-icon" />
-                  <span>Dashboard</span>
-                </div>
-              )}
-              <div className="menu-item" onClick={accountHandler}>
-                <AccountCircleIcon className="menu-icon" />
-                <span>Profile</span>
-              </div>
-              <div className="menu-item" onClick={ordersHandler}>
-                <AssignmentIcon className="menu-icon" />
-                <span>Orders</span>
-              </div>
-              <div className="menu-item" onClick={cartHandler}>
-                <ShoppingCartIcon className="menu-icon" />
-                <span>Cart</span>
-              </div>
-              {!isAuthenticated ? (
-                <div className="menu-item" onClick={loginHandler}>
-                  <LockOpenIcon className="menu-icon" />
-                  <span>Login</span>
-                </div>
-              ) : (
-                <div className="menu-item" onClick={logoutUserHandler}>
-                  <ExitToAppIcon className="menu-icon" />
-                  <span>Logout</span>
-                </div>
-              )}
+        <div className="profile-dropdown-card" ref={dropdownRef} role="menu">
+          {!isAuthenticated ? (
+            <div className="profile-guest-header">
+              <span className="profile-welcome-badge">THE 64 SQUARES</span>
+              <h3 className="profile-guest-title">Welcome</h3>
+              <p className="profile-guest-desc">
+                Sign in to manage orders, wishlist, and artisanal chess pieces.
+              </p>
+              <button
+                type="button"
+                className="profile-signin-btn"
+                onClick={() => handleNavigate("/login")}
+              >
+                Sign In / Register
+              </button>
             </div>
+          ) : (
+            <div className="profile-user-card">
+              <div className="profile-avatar-wrap">
+                <Avatar
+                  src={user?.avatar?.url}
+                  alt={user?.name || "Avatar"}
+                  sx={{ width: 44, height: 44, bgcolor: "#09090B", color: "#FFFFFF" }}
+                >
+                  {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
+                </Avatar>
+              </div>
+              <div className="profile-user-meta">
+                <span className="profile-user-name">{user?.name}</span>
+                <span className="profile-user-email">{user?.email}</span>
+                <span className="profile-user-role">
+                  {user?.role === "admin" ? "Grandmaster (Admin)" : "Member"}
+                </span>
+              </div>
+            </div>
+          )}
+
+          <div className="profile-menu-divider" />
+
+          <div className="profile-menu-items">
+            {isAuthenticated && user?.role === "admin" && (
+              <button
+                type="button"
+                className="profile-menu-item"
+                onClick={() => handleNavigate("/admin/dashboard")}
+              >
+                <DashboardOutlinedIcon className="profile-menu-icon" />
+                <span>Admin Dashboard</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              className="profile-menu-item"
+              onClick={() => handleNavigate(isAuthenticated ? "/account" : "/login")}
+            >
+              <PersonOutlineOutlinedIcon className="profile-menu-icon" />
+              <span>{isAuthenticated ? "My Profile" : "Account Overview"}</span>
+            </button>
+
+            <button
+              type="button"
+              className="profile-menu-item"
+              onClick={() => handleNavigate(isAuthenticated ? "/orders" : "/login")}
+            >
+              <ReceiptLongOutlinedIcon className="profile-menu-icon" />
+              <span>My Orders</span>
+            </button>
+
+            <button
+              type="button"
+              className="profile-menu-item"
+              onClick={() => handleNavigate("/cart")}
+            >
+              <ShoppingBagOutlinedIcon className="profile-menu-icon" />
+              <span>Shopping Cart</span>
+            </button>
+
+            <div className="profile-menu-divider-subtle" />
+
+            {!isAuthenticated ? (
+              <button
+                type="button"
+                className="profile-menu-item profile-auth-action"
+                onClick={() => handleNavigate("/login")}
+              >
+                <LoginOutlinedIcon className="profile-menu-icon" />
+                <span>Sign In</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="profile-menu-item profile-logout-item"
+                onClick={logoutUserHandler}
+              >
+                <LogoutOutlinedIcon className="profile-menu-icon" />
+                <span>Sign Out</span>
+              </button>
+            )}
           </div>
-        </Modal>
+        </div>
       )}
-    </>
+    </div>
   );
 };
 
 export default ProfileModal;
+

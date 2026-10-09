@@ -1,226 +1,123 @@
 import React from "react";
-import { Link , useNavigate } from "react-router-dom";
-import { Avatar, Typography, Button } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import PostAddIcon from "@mui/icons-material/PostAdd";
-import AddIcon from "@mui/icons-material/Add";
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import RateReviewIcon from "@mui/icons-material/RateReview";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import HomeIcon from "@mui/icons-material/Home";
-import ContactPageIcon from "@mui/icons-material/ContactPage";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Avatar } from "@mui/material";
+import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
+import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
+import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
+import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined";
+import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import { useSelector } from "react-redux";
-const useStyles = makeStyles((theme) => ({
-  sidebar: {
-    backgroundColor: "#fff",
-    padding: "2rem 0",
-    boxShadow: "2px 10px 6px rgba(0, 0, 0, 0.4)",
-    borderRadius: "5px",
-    margin: "0 auto",
-    width: "100%",
-  },
-  avatar11: {
-    width: "80px",
-    height: "80px",
-    border: "5px solid #414141",
-    margin: "0 auto",
-    marginBottom: "1rem",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  name: {
-    fontWeight: "500",
-    textAlign: "center",
-    fontSize: "1rem",
-  },
-  email: {
-    color: "#414141",
-    marginBottom: "1.5rem",
-    textAlign: "center",
-    fontSize: "0.9rem",
-  },
-  divider: {
-    height: "2px",
-    width: "75%",
-    backgroundColor: "#414141",
-    margin: "2rem",
-  },
-  button: {
-    marginLeft: "2rem !important",
-    boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-    backgroundColor: "#292929 !important",
-    color: "white   !important",
-    width: "70%     !important",
-    padding: "0.8rem 2rem   !important",
-    borderRadius: "4px !important",
-    "&:hover": {
-      backgroundColor: "#ed1c24 !important",
-      color: "white !important",
-    },
-  },
-  sideBarMenu: {
-    listStyleType: "none",
-    padding: 0,
-    margin: "3rem  10px",
-    width: "100%",
-  },
-  sideBarMenuItem: {
-    display: "flex",
-    alignItems: "center",
-    padding: "0.9rem 1rem",
-    borderRadius: "2px",
-    marginTop: "1.3rem",
-    width: "75%",
-    boxShadow: " 4px 4px 8px rgba(0, 0, 0, 0.3)",
-    "&:hover": {
-      backgroundColor: "#ed1c24",
-      boxShadow: "2px 2px 6px rgba(0, 0, 0, 0.4)",
-      "& svg": {
-        color: "white",
-      },
-      "& span": {
-        color: "white !important",
-      },
-    },
-    "& svg": {
-      color: "#414141",
-      fontSize: "26px",
-      margin: "0 20px  0 ",
-    },
-    "& span": {
-      color: "#414141",
-      fontSize: "1rem",
-      fontWeight: "500",
-      marginLeft: "1rem",
-      textDecoration: "none",
-      textDecorationLine: "none",
-      transition: "color 0.3s ease",
-    },
-  },
-}));
+import "./Sidebar.css";
 
 function Sidebar() {
-  const classes = useStyles();
-  const { user, loading } = useSelector((state) => state.userData); 
-
-
+  const { user, loading } = useSelector((state) => state.userData);
   const navigate = useNavigate();
+  const location = useLocation();
 
-function accountHandler() {
+  const currentPath = location.pathname;
 
-  navigate("/account");
-}
+  const navLinks = [
+    { label: "Dashboard", to: "/admin/dashboard", icon: <DashboardOutlinedIcon /> },
+    { label: "Products", to: "/admin/products", icon: <Inventory2OutlinedIcon /> },
+    { label: "Add Product", to: "/admin/new/product", icon: <AddCircleOutlineIcon /> },
+    { label: "Categories", to: "/admin/categories", icon: <CategoryOutlinedIcon /> },
+    { label: "Orders", to: "/admin/orders", icon: <ReceiptLongOutlinedIcon /> },
+    { label: "Reviews", to: "/admin/reviews", icon: <RateReviewOutlinedIcon /> },
+    { label: "Users", to: "/admin/users", icon: <PeopleAltOutlinedIcon /> },
+  ];
+
+  const storeLinks = [
+    { label: "Store Front", to: "/", icon: <StorefrontOutlinedIcon /> },
+    { label: "Messages", to: "/contact", icon: <EmailOutlinedIcon /> },
+  ];
 
   return (
-    <>
+    <aside className="admin-sidebar">
       {!loading && (
         <>
-          <div className={classes.sidebar}>
-            <Avatar
-              src={user && user.avatar.url}
-              alt="User Avatar"
-              className={classes.avatar11}
-            />
-            <Typography variant="subtitle1" className={classes.name}>
-              {user && user.name}
-            </Typography>
-            <Typography variant="subtitle2" className={classes.email}>
-              {user && user.email}
-            </Typography>
-            <div className={classes.divider} />
-            <ul className={classes.sideBarMenu}>
-              <Link
-                to="/admin/dashboard"
-                style={{ color: "inherit", textDecoration: "none" }}
+          <div className="admin-sidebar-profile">
+            <div className="admin-sidebar-avatar-wrap">
+              <Avatar
+                src={user && user.avatar && user.avatar.url}
+                alt={user ? user.name : "Admin"}
+                className="admin-sidebar-avatar"
               >
-                <li className={classes.sideBarMenuItem}>
-                  <DashboardIcon fontSize="large" />
-                  <span className={classes.sideBarMenuItem_text}>
-                    {" "}
-                    Dashboard
-                  </span>
-                </li>
-              </Link>
+                {user && user.name ? user.name[0] : "A"}
+              </Avatar>
+              <span className="admin-sidebar-online-indicator" title="Active Console" />
+            </div>
 
-              <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
-                <li className={classes.sideBarMenuItem}>
-                  <HomeIcon fontSize="large" />
-                  <span className={classes.sideBarMenuItem_text}>Home</span>
-                </li>
-              </Link>
+            <h3 className="admin-sidebar-name" title={user ? user.name : "Admin"}>
+              {user ? user.name : "Grandmaster Admin"}
+            </h3>
 
-              <Link
-                to="/admin/products"
-                style={{ color: "inherit", textDecoration: "none" }}
-              >
-                <li className={classes.sideBarMenuItem}>
-                  <PostAddIcon fontSize="large" />
+            <p className="admin-sidebar-email" title={user ? user.email : ""}>
+              {user ? user.email : "admin@the64squares.com"}
+            </p>
 
-                  <span className={classes.sideBarMenuItem_text}>
-                    {" "}
-                    Products
-                  </span>
-                </li>
-              </Link>
-              <Link
-                to="/admin/new/product"
-                style={{ color: "inherit", textDecoration: "none" }}
-              >
-                <li className={classes.sideBarMenuItem}>
-                  <AddIcon fontSize="large" />
-                  <span className={classes.sideBarMenuItem_text}>
-                    Add Product
-                  </span>
-                </li>
-              </Link>
+            <div className="admin-sidebar-badge">
+              <ShieldOutlinedIcon style={{ fontSize: "0.85rem" }} />
+              <span>Grandmaster Admin</span>
+            </div>
+          </div>
 
-              <Link
-                to="/admin/orders"
-                style={{ color: "inherit", textDecoration: "none" }}
-              >
-                <li className={classes.sideBarMenuItem}>
-                  <ListAltIcon fontSize="large" />
-                  <span className={classes.sideBarMenuItem_text}>Orders</span>
+          <div className="admin-sidebar-label">Management</div>
+          <ul className="admin-sidebar-nav">
+            {navLinks.map((item) => {
+              const isActive = currentPath === item.to;
+              return (
+                <li key={item.to}>
+                  <Link
+                    to={item.to}
+                    className={`admin-sidebar-link ${isActive ? "active" : ""}`}
+                  >
+                    {item.icon}
+                    <span>{item.label}</span>
+                  </Link>
                 </li>
-              </Link>
-              <Link
-                to="/admin/reviews"
-                style={{ color: "inherit", textDecoration: "none" }}
-              >
-                <li className={classes.sideBarMenuItem}>
-                  <RateReviewIcon fontSize="large" />
-                  <span className={classes.sideBarMenuItem_text}>Reviews</span>
-                </li>
-              </Link>
+              );
+            })}
+          </ul>
 
-              <Link
-                to="/contact"
-                style={{ color: "inherit", textDecoration: "none" }}
-              >
-                <li className={classes.sideBarMenuItem}>
-                  <ContactPageIcon fontSize="large" />
-                  <span className={classes.sideBarMenuItem_text}>Contact</span>
+          <div className="admin-sidebar-divider" />
+
+          <div className="admin-sidebar-label">Shortcuts</div>
+          <ul className="admin-sidebar-nav">
+            {storeLinks.map((item) => {
+              const isActive = currentPath === item.to;
+              return (
+                <li key={item.to}>
+                  <Link
+                    to={item.to}
+                    className={`admin-sidebar-link ${isActive ? "active" : ""}`}
+                  >
+                    {item.icon}
+                    <span>{item.label}</span>
+                  </Link>
                 </li>
-              </Link>
-            </ul>
-            <div className={classes.divider} />
-            <Button
-              className={classes.button}
-              onClick={accountHandler}
-              variant="contained"
+              );
+            })}
+          </ul>
+
+          <div className="admin-sidebar-footer">
+            <button
+              type="button"
+              className="admin-sidebar-account-btn"
+              onClick={() => navigate("/account")}
             >
-              <ManageAccountsIcon
-                fontSize="large"
-                style={{ marginRight: "10px" }}
-              />
-              Account
-            </Button>
+              <ManageAccountsOutlinedIcon />
+              <span>Admin Profile</span>
+            </button>
           </div>
         </>
       )}
-    </>
+    </aside>
   );
 }
 

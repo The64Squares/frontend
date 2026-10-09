@@ -33,6 +33,18 @@ import InfoIcon from "@mui/icons-material/Info";
 import MenuItem from "@mui/material/MenuItem";
 import Navbar from "./Navbar";
 import useStyles from "../User/LoginFromStyle";
+import { getAllCategories } from "../../actions/categoryAction";
+
+const DEFAULT_CATEGORIES = [
+  "Premium Chess Boards",
+  "Artisanal Chess Sets",
+  "Luxury Wood Sets",
+  "Weighted Chess Pieces",
+  "Tournament Boards",
+  "Collector Editions",
+  "Chess Accessories",
+];
+
 function UpdateProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -45,6 +57,14 @@ function UpdateProduct() {
   const { loading, error: updateError, isUpdated } = useSelector(
     (state) => state.deleteUpdateProduct
   );
+  const { categories: dynamicCategories } = useSelector(
+    (state) => state.categoriesData
+  );
+
+  const categories =
+    dynamicCategories && dynamicCategories.length > 0
+      ? dynamicCategories.map((c) => c.name)
+      : DEFAULT_CATEGORIES;
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
@@ -53,20 +73,16 @@ function UpdateProduct() {
   const [isCategory, setIsCategory] = useState(false);
   const [Stock, setStock] = useState(0);
   const [images, setImages] = useState([]);
-  const [info , setInfo] = useState('');
+  const [info, setInfo] = useState('');
   const [imagesPreview, setImagesPreview] = useState([]);
   const [oldImages, setOldImages] = useState([]);
   const fileInputRef = useRef();
   const [toggle, setToggle] = useState(false);
-  const categories = [
-    "Premium Chess Boards",
-    "Artisanal Chess Sets",
-    "Luxury Wood Sets",
-    "Weighted Chess Pieces",
-    "Tournament Boards",
-    "Collector Editions",
-    "Chess Accessories",
-  ];
+
+  useEffect(() => {
+    dispatch(getAllCategories());
+  }, [dispatch]);
+
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
     setIsCategory(true);
@@ -371,7 +387,6 @@ function UpdateProduct() {
                       <label htmlFor="avatar-input">
                         <Button
                           variant="contained"
-                          color="default"
                           className={classes.uploadAvatarButton}
                           startIcon={
                             <CloudUploadIcon

@@ -1,0 +1,212 @@
+/* =====================================================================
+   THE64SQUARES — Prestige Luxury Admin Sidebar
+   ===================================================================== */
+
+.admin-sidebar {
+  background: #0b0c10;
+  color: #f4f4f5;
+  border-radius: 14px;
+  padding: 1.75rem 1.1rem;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle gold luxury ambient glow in corner */
+.admin-sidebar::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(197, 168, 128, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Profile / Identity Card */
+.admin-sidebar-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+}
+
+.admin-sidebar-avatar-wrap {
+  position: relative;
+  margin-bottom: 0.85rem;
+}
+
+.admin-sidebar-avatar {
+  width: 72px !important;
+  height: 72px !important;
+  border-radius: 50% !important;
+  border: 2px solid #c5a880 !important;
+  background-color: #18181b !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.admin-sidebar-online-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  background: #10b981;
+  border: 2px solid #0b0c10;
+  border-radius: 50%;
+}
+
+.admin-sidebar-name {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  margin: 0 0 0.25rem 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-sidebar-email {
+  font-size: 0.78rem;
+  color: #a1a1aa;
+  margin: 0 0 0.65rem 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-sidebar-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  background: rgba(197, 168, 128, 0.12);
+  border: 1px solid rgba(197, 168, 128, 0.35);
+  color: #e5cb9f;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Nav Menu Group */
+.admin-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 1.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-sidebar-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #71717a;
+  padding: 0.6rem 0.75rem 0.25rem;
+  margin-top: 0.4rem;
+}
+
+.admin-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 8px;
+  color: #d4d4d8;
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.admin-sidebar-link svg {
+  font-size: 1.25rem;
+  color: #a1a1aa;
+  transition: all 0.2s ease;
+}
+
+.admin-sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.admin-sidebar-link:hover svg {
+  color: #e5cb9f;
+  transform: translateX(2px);
+}
+
+/* Active Link State */
+.admin-sidebar-link.active {
+  background: linear-gradient(90deg, rgba(197, 168, 128, 0.18) 0%, rgba(197, 168, 128, 0.04) 100%);
+  color: #ffffff;
+  font-weight: 600;
+  border-left: 3px solid #c5a880;
+  padding-left: calc(0.85rem - 3px);
+}
+
+.admin-sidebar-link.active svg {
+  color: #c5a880;
+}
+
+.admin-sidebar-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 0.85rem 0.5rem;
+}
+
+/* Footer Action */
+.admin-sidebar-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-sidebar-account-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(197, 168, 128, 0.35);
+  background: rgba(197, 168, 128, 0.08);
+  color: #f4f4f5;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-sidebar-account-btn svg {
+  font-size: 1.15rem;
+  color: #c5a880;
+}
+
+.admin-sidebar-account-btn:hover {
+  background: #c5a880;
+  color: #09090b;
+}
+
+.admin-sidebar-account-btn:hover svg {
+  color: #09090b;
+}

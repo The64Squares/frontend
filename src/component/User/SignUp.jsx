@@ -5,46 +5,41 @@ import {
   Checkbox,
   TextField,
   FormControlLabel,
-  Grid,
   Typography,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import The64SquaresBallLoader from "../layouts/loader/Loader";
 import MetaData from "../layouts/MataData/MataData";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signUp, clearErrors } from "../../actions/userAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "../../context/AlertContext";
-import { useNavigate } from "react-router-dom";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import useStyles from "./LoginFromStyle";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import "./AuthForm.css";
 
 function Signup() {
-  const classes = useStyles();
-  const [showPassword, setShowPassword] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setconfirmPassword] = useState("");
-  const [isValidEmail, setIsValidEmail] = useState(true);
-  const [isValidName, setIsValidName] = useState(true);
-  const [isValidPassword, setIsValidPassword] = useState(true);
-  const [avatar, setAvatar] = useState("");
-  const [avatarPreview, setAvatarPreview] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const [areCheckboxesChecked, setAreCheckboxesChecked] = useState({
-    checkbox1: false,
-    checkbox2: false,
-  });
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const alert = useAlert();
 
-  const { isAuthenticated, error } = useSelector((state) => state.userData);
+  const { isAuthenticated, error, loading: authLoading } = useSelector(
+    (state) => state.userData
+  );
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [avatarPreview, setAvatarPreview] = useState("");
+
+  const [errors, setErrors] = useState({});
+  const [termsAccepted, setTermsAccepted] = useState(true);
 
   useEffect(() => {
     if (error) {
@@ -53,257 +48,279 @@ function Signup() {
     }
 
     if (isAuthenticated) {
-      alert.success("User Registered Successfully");
+      alert.success("Account created successfully!");
       navigate("/account");
     }
-  }, [dispatch, isAuthenticated, loading, error, alert , navigate]);
+  }, [dispatch, isAuthenticated, error, alert, navigate]);
 
-  const handleEmailChange = (event) => {
-    const newEmail = event.target.value;
-    setEmail(newEmail);
-    setIsValidEmail(
-      newEmail !== "" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)
-    );
-  };
-
-  const handleAvatarChange = (event) => {
-
-    const file = event.target.files[0];
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.readAsDataURL(file);
       reader.onload = () => {
-        setAvatarPreview(reader.result);
-        setAvatar(reader.result);
-    
+        if (reader.readyState === 2) {
+          setAvatarPreview(reader.result);
+          setAvatar(reader.result);
+        }
       };
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleNameChange = (event) => {
-    const newName = event.target.value;
-    setName(newName);
-    setIsValidName(newName.length >= 4 && newName.length <= 20);
-  };
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-      setIsValidPassword(event.target.value.length >= 8);
-  };
-  const handleConfirmPasswordChange = (event) => {
-    setconfirmPassword(event.target.value);
-  };
-
-  const handleShowPasswordClick = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleCheckboxChange = (checkboxName) => (event) => {
-    setAreCheckboxesChecked((prevState) => ({
-      ...prevState,
-      [checkboxName]: event.target.checked,
-    }));
-  };
-
-  let isSignInDisabled = !(
-    email &&
-    password &&
-    isValidEmail &&
-    confirmPassword &&
-    name &&
-    isValidName &&
-    areCheckboxesChecked.checkbox1 &&
-    areCheckboxesChecked.checkbox2
-  );
-
-  function handleSignUpSubmit(e) {
-      setLoading(true);
+  const handleSignUpSubmit = (e) => {
     e.preventDefault();
-  
 
-    if (password !== confirmPassword) {
-      alert.error("Password and Confirm Password do not match");
-      setLoading(false);
+    const newErrors = {};
+    if (!name.trim()) {
+      newErrors.name = "Full name is required.";
+    } else if (name.trim().length < 3) {
+      newErrors.name = "Name must be at least 3 characters.";
+    }
+
+    if (!email.trim()) {
+      newErrors.email = "Email address is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      newErrors.email = "Please enter a valid email address.";
+    }
+
+    if (!password) {
+      newErrors.password = "Password is required.";
+    } else if (password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters.";
+    }
+
+    if (!confirmPassword) {
+      newErrors.confirmPassword = "Confirm password is required.";
+    } else if (password !== confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match.";
+    }
+
+    if (!termsAccepted) {
+      newErrors.terms = "Please accept the Terms & Conditions.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
     const formData = new FormData();
-    formData.set("name", name);
-    formData.set("email", email);
+    formData.set("name", name.trim());
+    formData.set("email", email.trim());
     formData.set("password", password);
-    formData.set("avatar", avatar);
+    if (avatar) {
+      formData.set("avatar", avatar);
+    }
 
     dispatch(signUp(formData));
-    setLoading(false);
-  }
+  };
 
   return (
     <>
-      <MetaData title={"Sign Up"} />
-      {loading ? (
+      <MetaData title={"Create Account | THE64SQUARES"} />
+      {authLoading ? (
         <The64SquaresBallLoader />
       ) : (
-        <div className={classes.formContainer}>
-          <form className={classes.form}>
-            <Avatar className={classes.avatar}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography variant="h5" component="h1" className={classes.heading}>
-              Sign Up for an Account ! 
-            </Typography>
-            <TextField
-              label="Name"
-              variant="outlined"
-              fullWidth
-              className={`${classes.nameInput} ${classes.textField}`}
-              value={name}
-              onChange={handleNameChange}
-              error={!isValidName && name !== ""}
-              helperText={
-                !isValidName && name !== "" ? "Name must be between 4 and 20 characters." : ""
-              }
-            />
-
-            <TextField
-              label="Email"
-              variant="outlined"
-              fullWidth
-              className={`${classes.emailInput} ${classes.textField}`}
-              value={email}
-              onChange={handleEmailChange}
-              error={!isValidEmail && email !== ""}
-              helperText={
-                !isValidEmail && email !== ""
-                  ? "Please enter a valid email address."
-                  : ""
-              }
-            />
-            <TextField
-              label="Password"
-              variant="outlined"
-              type={showPassword ? "text" : "password"}
-              fullWidth
-              className={`${classes.passwordInput} ${classes.textField}`}
-              error={!isValidPassword && password !== ""}
-               helperText={ !isValidPassword && password !== "" ? "Password must be at least 8 characters." : ""}
-              InputProps={{
-                endAdornment: (
-                  <Button
-                    variant="outlined"
-                    className={classes.showPasswordButton}
-                    onClick={handleShowPasswordClick}
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </Button>
-                ),
-              }}
-              value={password}
-              onChange={handlePasswordChange}
-            />
-            <TextField
-              label="Confirm Password"
-              variant="outlined"
-              type={showPassword ? "text" : "password"}
-              fullWidth
-              className={`${classes.passwordInput} ${classes.textField}`}
-              InputProps={{
-                endAdornment: (
-                  <Button
-                    variant="outlined"
-                    className={classes.showPasswordButton}
-                    onClick={handleShowPasswordClick}
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </Button>
-                ),
-              }}
-              value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
-            />
-
-            <div className={classes.root}>
-              <Avatar
-                alt="Avatar Preview"
-                src={avatarPreview}
-                className={classes.avatar2}
-              />
-              <input
-                accept="image/*"
-                className={classes.input}
-                id="avatar-input"
-                type="file"
-                onChange={handleAvatarChange}
-              />
-              <label htmlFor="avatar-input">
-                <Button
-                  variant="contained"
-                  color="default"
-                  startIcon={<CloudUploadIcon style={{ color: "#FFFFFF" }} />}
-                  component="span"
-                  className={classes.uploadAvatarButton}
-                >
-                  <p className={classes.uploadAvatarText}>Upload Avatar</p>
-                </Button>
-              </label>
+        <div className="auth-page-container">
+          <div className="auth-card">
+            <div className="auth-header">
+              <Link to="/" className="auth-logo-wrap" title="THE64SQUARES Home">
+                <img
+                  src="/logo.png"
+                  alt="THE64SQUARES"
+                  className="auth-brand-logo"
+                />
+              </Link>
+              <h1 className="auth-title">Create Account</h1>
+              <p className="auth-subtitle">
+                Join THE64SQUARES to curate your collection and track bespoke orders.
+              </p>
             </div>
 
-            <Grid
-              container
-              className={classes.gridcheckbox}
-              justify="flex-start"
-              alignItems="center"
-            >
-              <Grid item>
-                <FormControlLabel
-                  control={<Checkbox />}
-                  label="I Accept The The64Squares Terms & Conditions"
-                  className={classes.checkbox}
-                  checked={areCheckboxesChecked.checkbox1}
-                  onChange={handleCheckboxChange("checkbox1")}
+            <form onSubmit={handleSignUpSubmit} noValidate>
+              <div className="auth-fields-stack">
+                <div className="auth-field-group">
+                  <TextField
+                    label="Full Name"
+                    variant="outlined"
+                    fullWidth
+                    value={name}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      if (errors.name) setErrors({ ...errors, name: "" });
+                    }}
+                    error={Boolean(errors.name)}
+                    helperText={errors.name}
+                    autoComplete="name"
+                  />
+                </div>
+
+                <div className="auth-field-group">
+                  <TextField
+                    label="Email Address"
+                    variant="outlined"
+                    fullWidth
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (errors.email) setErrors({ ...errors, email: "" });
+                    }}
+                    error={Boolean(errors.email)}
+                    helperText={errors.email}
+                    autoComplete="email"
+                  />
+                </div>
+
+                <div className="auth-field-group">
+                  <TextField
+                    label="Password"
+                    variant="outlined"
+                    type={showPassword ? "text" : "password"}
+                    fullWidth
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      if (errors.password) setErrors({ ...errors, password: "" });
+                    }}
+                    error={Boolean(errors.password)}
+                    helperText={errors.password}
+                    autoComplete="new-password"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowPassword((prev) => !prev)}
+                            edge="end"
+                            size="small"
+                            className="auth-password-toggle-btn"
+                            aria-label="Toggle password visibility"
+                          >
+                            {showPassword ? (
+                              <VisibilityOff fontSize="small" />
+                            ) : (
+                              <Visibility fontSize="small" />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </div>
+
+                <div className="auth-field-group">
+                  <TextField
+                    label="Confirm Password"
+                    variant="outlined"
+                    type={showConfirmPassword ? "text" : "password"}
+                    fullWidth
+                    value={confirmPassword}
+                    onChange={(e) => {
+                      setConfirmPassword(e.target.value);
+                      if (errors.confirmPassword)
+                        setErrors({ ...errors, confirmPassword: "" });
+                    }}
+                    error={Boolean(errors.confirmPassword)}
+                    helperText={errors.confirmPassword}
+                    autoComplete="new-password"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowConfirmPassword((prev) => !prev)}
+                            edge="end"
+                            size="small"
+                            className="auth-password-toggle-btn"
+                            aria-label="Toggle confirm password visibility"
+                          >
+                            {showConfirmPassword ? (
+                              <VisibilityOff fontSize="small" />
+                            ) : (
+                              <Visibility fontSize="small" />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Avatar Upload Card */}
+              <div className="auth-avatar-card">
+                <div className="auth-avatar-preview-wrap">
+                  <Avatar
+                    alt="Avatar Preview"
+                    src={avatarPreview}
+                    className="auth-avatar-thumb"
+                  />
+                  <span className="auth-avatar-label-text">
+                    {avatarPreview ? "Avatar Selected" : "Optional Profile Avatar"}
+                  </span>
+                </div>
+                <input
+                  accept="image/*"
+                  id="avatar-upload-input"
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={handleAvatarChange}
                 />
-              </Grid>
-              <Grid item>
+                <label htmlFor="avatar-upload-input" style={{ margin: 0 }}>
+                  <Button
+                    variant="contained"
+                    component="span"
+                    startIcon={<CloudUploadIcon style={{ color: "#FFFFFF", fontSize: "1.1rem" }} />}
+                    className="auth-upload-btn"
+                  >
+                    {avatarPreview ? "Change" : "Upload"}
+                  </Button>
+                </label>
+              </div>
+
+              {/* Checkboxes */}
+              <div className="auth-checkboxes-stack">
                 <FormControlLabel
-                  control={<Checkbox />}
-                  label="I Accept The The64Squares Terms Of Use"
-                  className={classes.checkbox}
-                  checked={areCheckboxesChecked.checkbox2}
-                  onChange={handleCheckboxChange("checkbox2")}
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={termsAccepted}
+                      onChange={(e) => {
+                        setTermsAccepted(e.target.checked);
+                        if (errors.terms) setErrors({ ...errors, terms: "" });
+                      }}
+                    />
+                  }
+                  label="I accept THE64SQUARES Terms of Use & Conditions"
+                  className="auth-checkbox-item"
                 />
-              </Grid>
-            </Grid>
+                {errors.terms && (
+                  <span style={{ color: "#d32f2f", fontSize: "0.75rem", marginLeft: "14px" }}>
+                    {errors.terms}
+                  </span>
+                )}
+              </div>
 
-            <Typography
-              variant="body2"
-              className={classes.termsAndConditionsText}
-            >
-              I acknowledge The64Squares will use my information in accordance
-              with its
-              <Link href="#" className={classes.privacyText}>
-                Privacy Policy.
-              </Link>
-            </Typography>
+              <Button
+                type="submit"
+                variant="contained"
+                className="auth-submit-btn"
+                fullWidth
+              >
+                Create Account
+              </Button>
 
-            <Button
-              variant="contained"
-              className={classes.loginButton}
-              fullWidth
-              onClick={handleSignUpSubmit}
-              disabled={isSignInDisabled || loading}
-            >
-              Create Account
-            </Button>
+              <Typography variant="body2" className="auth-terms-note">
+                By creating an account, you agree to our{" "}
+                <Link to="/policy/privacy">Privacy Policy</Link>.
+              </Typography>
 
-            <Typography
-              variant="body1"
-              align="center"
-              style={{ marginTop: "1rem" }}
-            >
-              Already have an account?
-              <Link to="/login" className={classes.createAccount}>
-                Login
-              </Link>
-            </Typography>
-          </form>
+              <div className="auth-switch-note">
+                Already have an account?
+                <Link to="/login" className="auth-switch-link">
+                  Sign In
+                </Link>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </>
@@ -311,3 +328,5 @@ function Signup() {
 }
 
 export default Signup;
+
+

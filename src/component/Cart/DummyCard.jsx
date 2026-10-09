@@ -27,8 +27,7 @@ const useStyles = makeStyles({
     color: "white",
     cursor: "pointer",
     "&:hover": {
-      color: "#ed1c24",
-      
+      color: "#c5a880",
     },
 
   },
@@ -92,8 +91,8 @@ const useStyles = makeStyles({
     padding: "4px 8px",
     transform: "translateX(-50%)",
     fontSize: 16,
-    color: "#ed1c24",
-    fontWeight: "400",
+    color: "#c5a880",
+    fontWeight: "500",
     cursor: "pointer",
     textDecoration: "underline",
   },

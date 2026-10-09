@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import "./Cart.css";
-import TextField from "@mui/material/TextField";
 import { useSelector, useDispatch } from "react-redux";
 import { addItemToCart, removeItemFromCart } from "../../actions/cartAction";
-import { Button } from "@mui/material";
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import VerifiedIcon from "@mui/icons-material/Verified";
 import { Link, useNavigate } from "react-router-dom";
 import MetaData from "../layouts/MataData/MataData";
 import CartItem from "./CartItem";
+import { useAlert } from "../../context/AlertContext";
 import {
   dispalyMoney,
   generateDiscountedPrice,
@@ -16,14 +17,20 @@ import {
 const Cart = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const alert = useAlert();
   const { cartItems } = useSelector((state) => state.cart);
+  const { isAuthenticated } = useSelector((state) => state.userData);
 
   const [couponCode, setCouponCode] = useState("");
-  const [isValid, setIsValid] = useState(true);
+  const [couponApplied, setCouponApplied] = useState(false);
+  const [couponError, setCouponError] = useState("");
 
   const increaseQuantity = (id, quantity, stock) => {
     const newQty = quantity + 1;
-    if (stock <= quantity) return;
+    if (stock <= quantity) {
+      alert.error("Maximum available stock reached");
+      return;
+    }
     dispatch(addItemToCart(id, newQty));
   };
 
@@ -34,49 +41,66 @@ const Cart = () => {
   };
 
   const handleApplyCoupon = () => {
-    if (couponCode.toUpperCase() === "CHESS10" || couponCode.toUpperCase() === "THE64SQUARES") {
-      setIsValid(true);
+    if (!couponCode.trim()) {
+      setCouponError("Please enter a promo code");
+      return;
+    }
+
+    const code = couponCode.trim().toUpperCase();
+    if (code === "CHESS10" || code === "THE64SQUARES" || code === "GRANDMASTER") {
+      setCouponApplied(true);
+      setCouponError("");
+      alert.success(`Privilege Code '${code}' successfully activated!`);
     } else {
-      setIsValid(false);
+      setCouponApplied(false);
+      setCouponError("Invalid promo code");
+      alert.error("Invalid privilege code. Try 'CHESS10' or 'THE64SQUARES'");
     }
   };
 
   const deleteCartItems = (id) => {
     dispatch(removeItemFromCart(id));
+    alert.info("Piece removed from shopping bag");
   };
 
   const checkoutHandler = () => {
-    navigate("/login?redirect=/shipping");
+    if (isAuthenticated) {
+      navigate("/shipping");
+    } else {
+      navigate("/login?redirect=/shipping");
+    }
   };
 
-  let totalPrice = cartItems.reduce(
+  const totalPrice = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   );
-  let discountedPrice = generateDiscountedPrice(totalPrice);
-  let totalDiscount = totalPrice - discountedPrice;
-  let final = totalPrice - totalDiscount;
-  let finalDisplay = dispalyMoney(final);
-  let totalDiscountDisplay = dispalyMoney(totalDiscount);
-  let totalPriceDisplay = dispalyMoney(totalPrice);
+  let couponDiscount = 0;
+  if (couponApplied) {
+    couponDiscount = Math.round(totalPrice * 0.1);
+  }
+
+  const final = Math.max(0, totalPrice - couponDiscount);
+  const finalDisplay = dispalyMoney(final);
+  const totalPriceDisplay = dispalyMoney(totalPrice);
 
   return (
     <>
       <MetaData title="Shopping Bag | The64Squares" />
       <div className="the64squares-cart-page">
         <div className="cart-header-banner">
-          <span className="cart-sub-tag">YOUR BAG</span>
-          <h1 className="cart-title">Shopping Bag</h1>
+          <span className="cart-sub-tag">CURATED ACQUISITIONS</span>
+          <h1 className="cart-title">Your Shopping Bag</h1>
           <p className="cart-count">
-            {cartItems.length} {cartItems.length === 1 ? "Item" : "Items"} in your bag • Total: {finalDisplay}
+            {cartItems.length} {cartItems.length === 1 ? "Piece" : "Pieces"} reserved • Total: {finalDisplay}
           </p>
         </div>
 
         {cartItems.length === 0 ? (
           <div className="empty-cart-state">
-            <RemoveShoppingCartIcon sx={{ fontSize: 56, color: "#8A6A43" }} />
+            <RemoveShoppingCartIcon sx={{ fontSize: 60, color: "#c5a880" }} />
             <h2>Your Bag is Empty</h2>
-            <p>You haven't selected any chess boards or artisanal sets yet.</p>
+            <p>You haven't selected any chess boards or artisanal pieces yet.</p>
             <Link to="/products" className="empty-cart-btn">
               Explore Collection
             </Link>
@@ -92,7 +116,6 @@ const Cart = () => {
                   deleteCartItems={deleteCartItems}
                   decreaseQuantity={decreaseQuantity}
                   increaseQuantity={increaseQuantity}
-                  length={cartItems.length}
                   id={item.productId}
                 />
               ))}
@@ -108,13 +131,15 @@ const Cart = () => {
                   <span>{totalPriceDisplay}</span>
                 </div>
 
-                <div className="summary-row">
-                  <span>Privilege Discount</span>
-                  <span className="discount-val">-{totalDiscountDisplay}</span>
-                </div>
+                {couponDiscount > 0 && (
+                  <div className="summary-row">
+                    <span>Coupon Discount (10%)</span>
+                    <span className="discount-val">-{dispalyMoney(couponDiscount)}</span>
+                  </div>
+                )}
 
                 <div className="summary-row">
-                  <span>Worldwide Express Shipping</span>
+                  <span>Delivery Charges</span>
                   <span className="shipping-free">FREE</span>
                 </div>
 
@@ -124,27 +149,72 @@ const Cart = () => {
                   <span>Estimated Total</span>
                   <span className="total-val">{finalDisplay}</span>
                 </div>
-                <span className="tax-inclusive-txt">(Inclusive of all taxes & duties)</span>
+                <span className="tax-inclusive-txt">
+                  (Inclusive of all packaging & taxes)
+                </span>
 
-                <div className="coupon-box">
-                  <TextField
-                    label="Promo Code (e.g. CHESS10)"
-                    value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value)}
-                    error={!isValid}
-                    helperText={!isValid && "Invalid code"}
-                    variant="outlined"
-                    size="small"
-                    sx={{ flex: 1 }}
-                  />
-                  <Button className="coupon-apply-btn" onClick={handleApplyCoupon}>
-                    Apply
-                  </Button>
+                <div className="coupon-box" style={{ flexDirection: "column", gap: "0.5rem" }}>
+                  <div style={{ display: "flex", gap: "0.5rem", width: "100%" }}>
+                    <input
+                      type="text"
+                      className="shipping-input"
+                      style={{ padding: "0.65rem 0.85rem", fontSize: "0.85rem" }}
+                      placeholder="Promo Code (e.g. CHESS10)"
+                      value={couponCode}
+                      onChange={(e) => {
+                        setCouponCode(e.target.value);
+                        setCouponError("");
+                      }}
+                    />
+                    <button
+                      type="button"
+                      className="coupon-apply-btn"
+                      style={{
+                        padding: "0 1.25rem",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                        fontWeight: 600,
+                      }}
+                      onClick={handleApplyCoupon}
+                    >
+                      Apply
+                    </button>
+                  </div>
+                  {couponError && (
+                    <span style={{ fontSize: "0.78rem", color: "#ef4444" }}>
+                      {couponError}
+                    </span>
+                  )}
+                  {couponApplied && (
+                    <span
+                      style={{
+                        fontSize: "0.78rem",
+                        color: "#059669",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.35rem",
+                      }}
+                    >
+                      <VerifiedIcon sx={{ fontSize: 14 }} /> 10% Extra Privilege Discount Applied
+                    </span>
+                  )}
                 </div>
 
-                <Button className="proceed-checkout-btn" onClick={checkoutHandler}>
-                  Proceed to Checkout
-                </Button>
+                <button
+                  type="button"
+                  className="proceed-checkout-btn"
+                  onClick={checkoutHandler}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "0.5rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  <span>Proceed to Checkout</span>
+                  <ArrowForwardIcon sx={{ fontSize: 18 }} />
+                </button>
               </div>
             </div>
           </div>

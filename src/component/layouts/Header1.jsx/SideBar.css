@@ -180,10 +180,16 @@
 }
 
 .sidebar-login-item {
-  color: #F59E0B;
+  color: #FFFFFF;
 }
 
 .sidebar-login-item .sidebar-item-icon {
-  color: #F59E0B;
+  color: #C5A880;
 }
+
+.sidebar-login-item:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+}
+
 

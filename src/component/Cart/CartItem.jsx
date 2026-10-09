@@ -1,261 +1,233 @@
-import React  from "react";
+import React from "react";
 import { makeStyles } from "@mui/styles";
-import {
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
-  IconButton,
-  Input,
-} from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import { Link } from "react-router-dom";
 import {
   dispalyMoney,
   generateDiscountedPrice,
-
 } from "../DisplayMoney/DisplayMoney";
 
-
 const useStyles = makeStyles((theme) => ({
-  roots11: {
+  itemCard: {
     display: "flex",
     alignItems: "center",
-    padding: "1.25rem",
-    width: "100%",
-    boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.05)",
-    margin: "0 0 1rem 0",
-    borderRadius: "8px",
-    backgroundColor: "#FFFFFF",
-    border: "1px solid #E4E4E7",
-    boxSizing: "border-box",
-
-    [theme.breakpoints.down(600)]: {
-      padding: "0.85rem",
+    padding: "1.25rem 1.5rem",
+    backgroundColor: "#ffffff",
+    border: "1px solid rgba(0, 0, 0, 0.08)",
+    borderRadius: "12px",
+    boxShadow: "0 2px 10px rgba(0, 0, 0, 0.03)",
+    transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+    "&:hover": {
+      borderColor: "rgba(0, 0, 0, 0.16)",
+      boxShadow: "0 4px 16px rgba(0, 0, 0, 0.06)",
+    },
+    [theme.breakpoints.down(640)]: {
+      padding: "1rem",
+      flexDirection: "column",
+      alignItems: "stretch",
+      gap: "1rem",
     },
   },
-  root11: {
-    display: "flex",
-    alignItems: "center",
-    padding: "1.25rem",
-    width: "100%",
-    boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.05)",
-    margin: "0 0 1rem 0",
+  thumbWrap: {
+    width: "100px",
+    height: "100px",
     borderRadius: "8px",
-    backgroundColor: "#FFFFFF",
-    border: "1px solid #E4E4E7",
-    boxSizing: "border-box",
-
-    [theme.breakpoints.down(600)]: {
-      padding: "0.85rem",
-    },
-  },
-  media: {
-    width: "110px",
-    height: "110px",
-    marginRight: "16px",
-    borderRadius: "6px",
-    objectFit: "cover",
+    overflow: "hidden",
+    border: "1px solid rgba(0, 0, 0, 0.06)",
+    backgroundColor: "#f4f4f5",
     flexShrink: 0,
-
-    [theme.breakpoints.down(600)]: {
-      width: "80px",
-      height: "80px",
-      marginRight: "12px",
+    marginRight: "1.5rem",
+    "& img": {
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+      transition: "transform 0.3s ease",
+    },
+    "&:hover img": {
+      transform: "scale(1.05)",
+    },
+    [theme.breakpoints.down(640)]: {
+      width: "100%",
+      height: "140px",
+      marginRight: 0,
     },
   },
-  content: {
+  itemBody: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between",
     flex: 1,
-    padding: "0 !important",
+    gap: "0.5rem",
   },
-  cartHeader: {
+  headerRow: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "flex-start",
-  },
-  title: {
-    fontSize: "1rem",
-    fontWeight: 600,
-    [theme.breakpoints.down(600)]: {
-      fontSize: "0.875rem",
-    },
-  },
-
-  cartDeleteIcon: {
-    color: "#71717A",
-    "&:hover": {
-      color: "#ed1c24",
-    },
-    [theme.breakpoints.down(499)]: {
-      marginRight: "-2rem",
-    },
-  },
-
-  priceItem: {
-    display: "flex",
-    alignItems: "baseline",
     gap: "1rem",
-    marginLeft: "1.2rem",
-    [theme.breakpoints.down(599)]: {
-      marginLeft: "0rem",
-      marginRight: "-1rem",
+  },
+  titleLink: {
+    fontFamily: "var(--font-serif, 'Cormorant Garamond', serif)",
+    fontSize: "1.15rem",
+    fontWeight: 700,
+    color: "#09090b",
+    textDecoration: "none",
+    lineHeight: 1.3,
+    "&:hover": {
+      color: "#c5a880",
     },
   },
-
-  cartSubHeadings: {
-    fontSize: "16px",
-    fontWeight: 500,
-    textTransform: "uppercase",
-    color: "#414141",
-    [theme.breakpoints.down(599)]: {
-      fontSize: "14px",
-    },
-    [theme.breakpoints.down(499)]: {
-      fontSize: "12px",
-    },
-  },
-  itemPrice: {
-    fontSize: "16px",
-    fontWeight: 400,
-    [theme.breakpoints.down(599)]: {
-      fontSize: "14px",
-    },
-    [theme.breakpoints.down(499)]: {
-      fontSize: "13px",
+  deleteBtn: {
+    background: "transparent",
+    border: "none",
+    color: "#71717a",
+    padding: "6px",
+    borderRadius: "6px",
+    cursor: "pointer",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    transition: "all 0.2s ease",
+    "&:hover": {
+      color: "#09090b",
+      backgroundColor: "rgba(0, 0, 0, 0.05)",
     },
   },
-  itemOldPrice: {
-    marginLeft: "-8px",
-    fontSize: "14px",
-    fontWeight: 400,
-
-    [theme.breakpoints.down(499)]: {
-      fontSize: "12px",
-    },
-  },
-
-  contentBottom: {
+  metaRow: {
     display: "flex",
-    justifyContent: "space-around",
-    marginTop: "1rem",
-    alignItems: "baseline",
-    width: "fit-content",
-    flexDirection: "column",
-    [theme.breakpoints.down(599)]: {
-      marginLeft: "0rem",
-      marginRight: "-1rem",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: "0.5rem",
+    gap: "1rem",
+  },
+  qtyStepper: {
+    display: "inline-flex",
+    alignItems: "center",
+    border: "1px solid rgba(0, 0, 0, 0.12)",
+    borderRadius: "8px",
+    backgroundColor: "#fcfcfd",
+    overflow: "hidden",
+  },
+  stepperBtn: {
+    width: "32px",
+    height: "32px",
+    background: "transparent",
+    border: "none",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    color: "#27272a",
+    transition: "background-color 0.15s ease",
+    "&:hover": {
+      backgroundColor: "rgba(0, 0, 0, 0.06)",
     },
-    [theme.breakpoints.down(550)]: {
-      position: "relative",
-      marginLeft: "0rem",
+    "&:disabled": {
+      opacity: 0.35,
+      cursor: "not-allowed",
     },
   },
- 
+  qtyDisplay: {
+    minWidth: "34px",
+    textAlign: "center",
+    fontSize: "0.9rem",
+    fontWeight: 600,
+    color: "#09090b",
+    userSelect: "none",
+  },
+  pricingWrap: {
+    display: "flex",
+    alignItems: "baseline",
+    gap: "0.75rem",
+  },
+  unitPrice: {
+    fontSize: "0.86rem",
+    color: "#71717a",
+  },
+  lineTotal: {
+    fontFamily: "var(--font-sans, sans-serif)",
+    fontSize: "1.1rem",
+    fontWeight: 700,
+    color: "#09090b",
+  },
 }));
-
-
-
 
 function CartItem({
   deleteCartItems,
   item,
   decreaseQuantity,
   increaseQuantity,
-  length,
+  id,
 }) {
   const classes = useStyles();
-
-  /// calculate price after discount
-
-  let finalPrice = generateDiscountedPrice(item.price);
-  let discountedPrice = item.price - finalPrice;
-  discountedPrice = dispalyMoney(discountedPrice);
-  let total = finalPrice * item.quantity;
-  total = dispalyMoney(total);
-  finalPrice = dispalyMoney(finalPrice);
+  const unitPrice = item.price;
+  const total = unitPrice * item.quantity;
 
   return (
-    <Card className={length < 2 ? classes.root11 : classes.roots11}>
-      <CardMedia
-        className={classes.media}
-        image={item.image}
-        title={item.name}
-      />
-      <CardContent className={classes.content}>
-        <div className={classes.contentTop}>
-          <div className={classes.cartHeader}>
-            <Typography variant="subtitle1" className={classes.title}>
-              {item.name}
-            </Typography>
+    <div className={classes.itemCard}>
+      <Link to={`/product/${id || item.productId}`} className={classes.thumbWrap}>
+        <img src={item.image} alt={item.name} />
+      </Link>
 
-            <IconButton
-              aria-label="delete"
-              className={classes.cartDeleteIcon}
-              onClick={() => deleteCartItems(item.productId)}
+      <div className={classes.itemBody}>
+        <div className={classes.headerRow}>
+          <Link
+            to={`/product/${id || item.productId}`}
+            className={classes.titleLink}
+          >
+            {item.name}
+          </Link>
+
+          <button
+            type="button"
+            className={classes.deleteBtn}
+            onClick={() => deleteCartItems(id || item.productId)}
+            title="Remove piece"
+            aria-label="Remove item"
+          >
+            <DeleteOutlineIcon sx={{ fontSize: 20 }} />
+          </button>
+        </div>
+
+        <div className={classes.metaRow}>
+          <div className={classes.qtyStepper}>
+            <button
+              type="button"
+              className={classes.stepperBtn}
+              onClick={() => decreaseQuantity(id || item.productId, item.quantity)}
+              disabled={item.quantity <= 1}
+              aria-label="Decrease quantity"
             >
-              <DeleteIcon />
-            </IconButton>
+              <RemoveIcon sx={{ fontSize: 16 }} />
+            </button>
+
+            <span className={classes.qtyDisplay}>{item.quantity}</span>
+
+            <button
+              type="button"
+              className={classes.stepperBtn}
+              onClick={() =>
+                increaseQuantity(id || item.productId, item.quantity, item.stock)
+              }
+              disabled={item.stock <= item.quantity}
+              aria-label="Increase quantity"
+            >
+              <AddIcon sx={{ fontSize: 16 }} />
+            </button>
           </div>
 
-          <div className={classes.priceItem}>
-            <Typography className={classes.cartSubHeadings} variant="body2">
-              Price:
-            </Typography>
-            <Typography variant="subtitle1" className={classes.itemPrice}>
-              {finalPrice}
-            </Typography>
-            <Typography
-              variant="caption"
-              component="span"
-              color="black"
-              className={classes.itemOldPrice}
-            >
-              <del>{discountedPrice}</del>
-            </Typography>
+          <div className={classes.pricingWrap}>
+            <span className={classes.unitPrice}>
+              {dispalyMoney(unitPrice)} each
+            </span>
+            <span className={classes.lineTotal}>
+              {dispalyMoney(total)}
+            </span>
           </div>
         </div>
-        <div className={classes.contentBottom}>
-          <div className="prod_details_additem">
-            <h5>QTY:</h5>
-            <div className="additem">
-              <IconButton
-                onClick={() => decreaseQuantity(item.productId, item.quantity)}
-                className="additem_decrease"
-              >
-                <RemoveIcon />
-              </IconButton>
-              <Input
-                readOnly
-                type="number"
-                value={item.quantity}
-                className="input"
-              />
-              <IconButton
-                onClick={() =>
-                  increaseQuantity(item.productId, item.quantity, item.stock)
-                }
-                className="additem_increase"
-              >
-                <AddIcon />
-              </IconButton>
-            </div>
-          </div>
-
-          <div className={classes.priceItem}>
-            <Typography variant="body2" className={classes.cartSubHeadings}>
-              TOTAL:
-            </Typography>
-            <Typography variant="subtitle1" className={classes.price}>
-              {total}
-            </Typography>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 

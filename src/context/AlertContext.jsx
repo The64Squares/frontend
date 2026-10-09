@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./Alert.css";
 
 const AlertContext = createContext();
 
@@ -25,7 +26,18 @@ export const AlertProvider = ({ children }) => {
   return (
     <AlertContext.Provider value={alert}>
       {children}
-      <ToastContainer position="bottom-center" autoClose={4000} />
+      <ToastContainer
+        position="top-right"
+        autoClose={3500}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </AlertContext.Provider>
   );
 };

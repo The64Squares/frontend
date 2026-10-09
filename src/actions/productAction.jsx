@@ -125,9 +125,10 @@ export function createProduct(productData) {
         type: NEW_PRODUCT_REQUEST,
       });
          
-      const config = {
-        headers: { "Content-Type": "multipart/form-data" },
-      };
+      const isFormData = typeof FormData !== "undefined" && productData instanceof FormData;
+      const config = isFormData
+        ? {} // Let browser/axios calculate multipart boundary automatically
+        : { headers: { "Content-Type": "application/json" } };
 
       const { data } = await axios.post(
         `/api/v1/admin/product/new`,
@@ -142,7 +143,10 @@ export function createProduct(productData) {
     } catch (error) {
       dispatch({
         type: NEW_PRODUCT_FAIL,
-        payload: error.message,
+        payload:
+          error.response && error.response.data && error.response.data.message
+            ? error.response.data.message
+            : error.message,
       });
     }
   };

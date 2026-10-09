@@ -16,8 +16,9 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import TuneIcon from "@mui/icons-material/Tune";
 import CloseIcon from "@mui/icons-material/Close";
+import { getAllCategories } from "../../actions/categoryAction";
 
-const categories = [
+const DEFAULT_CATEGORIES = [
   "Premium Chess Boards",
   "Artisanal Chess Sets",
   "Luxury Wood Sets",
@@ -40,12 +41,24 @@ function Products() {
     error,
     resultPerPage,
   } = useSelector((state) => state.products);
+  const { categories: dynamicCategories } = useSelector(
+    (state) => state.categoriesData
+  );
+
+  const categories =
+    dynamicCategories && dynamicCategories.length > 0
+      ? dynamicCategories.map((c) => c.name)
+      : DEFAULT_CATEGORIES;
 
   const [currentPage, setCurrentPage] = useState(1);
   const [price, setPrice] = useState([0, 100000]);
   const [category, setCategory] = useState("");
   const [ratings, setRatings] = useState(0);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  useEffect(() => {
+    dispatch(getAllCategories());
+  }, [dispatch]);
 
   const hasActiveFilters = Boolean(category || ratings > 0 || price[0] > 0 || price[1] < 100000);
 

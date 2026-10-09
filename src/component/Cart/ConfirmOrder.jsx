@@ -3,131 +3,138 @@ import CheckoutSteps from "./CheckoutSteps ";
 import { useSelector } from "react-redux";
 import MetaData from "../layouts/MataData/MataData";
 import "./ConfirmOrder.css";
-import { Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import The64SquaresBallLoader from "../layouts/loader/Loader";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { dispalyMoney } from "../DisplayMoney/DisplayMoney";
 
-import Loader from "../layouts/loader/Loader"
 function ConfirmOrder() {
-
-
+  const navigate = useNavigate();
   const { shippingInfo, cartItems } = useSelector((state) => state.cart);
-
-  const { user , loading} = useSelector((state) => state.userData);
+  const { user, loading } = useSelector((state) => state.userData);
 
   const subTotal = cartItems.reduce((acc, currItem) => {
     return acc + currItem.quantity * currItem.price;
   }, 0);
 
-  const shippingCharges = subTotal > 1000 ? 0 : 99;
+  const shippingCharges = 0;
+  const totalFinalPrice = subTotal;
 
-  const gst = subTotal * 0.18;
-
-  const totalFinalPrice = subTotal + gst + shippingCharges;
-  
-
-  const address = `${shippingInfo.address} , ${shippingInfo.city} ${shippingInfo.state} , ${shippingInfo.pinCode} , ${shippingInfo.country}`;
+  const address = `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.state} - ${shippingInfo.pinCode}, ${shippingInfo.country}`;
 
   function proceedToPayment() {
     const data = {
       subTotal,
       shippingCharges,
-      gst,
       totalFinalPrice,
     };
-    // session storage allowd save data untill  browser tab is opend
     sessionStorage.setItem("orderInfo", JSON.stringify(data));
-
-   
+    navigate("/process/payment");
   }
 
   return (
     <>
       {loading ? (
-        <Loader />
+        <The64SquaresBallLoader />
       ) : (
-        <>
-          <MetaData title="Confirm Order" />
-          <CheckoutSteps activeStep={1} />
-          <div className="confirmOrderPage">
-            {/* left container  */}
-            <div>
-              {/* Shoping area container  */}
-              <div className="confirmshippingArea">
-                <Typography>Shipping Info</Typography>
-                <div className="confirmshippingAreaBox">
-                  <div>
-                    <p>Name:</p>
-                    <span>{user.name}</span>
-                  </div>
+        <div className="confirm-order-page-root">
+          <MetaData title="Review & Confirm Acquisition | The64Squares" />
+          <div className="confirm-order-container">
+            <CheckoutSteps activeStep={2} />
 
-                  <div>
-                    <p>Phone:</p>
-                    <span>{shippingInfo.phoneNo}</span>
-                  </div>
+            <div className="confirm-order-grid">
+              {/* Left Column: Details & Items */}
+              <div className="confirm-details-card">
+                <div>
+                  <h3 className="confirm-section-title">Shipping Destination</h3>
+                  <div className="confirm-shipping-info-block">
+                    <div className="confirm-info-row">
+                      <span className="confirm-info-label">Recipient</span>
+                      <span className="confirm-info-val">
+                        {shippingInfo.firstName
+                          ? `${shippingInfo.firstName} ${shippingInfo.lastName || ""}`
+                          : user?.name}
+                      </span>
+                    </div>
 
-                  <div>
-                    <p>Address:</p>
-                    <span>{address}</span>
+                    <div className="confirm-info-row">
+                      <span className="confirm-info-label">Contact Number</span>
+                      <span className="confirm-info-val">
+                        +91 {shippingInfo.phoneNo}
+                      </span>
+                    </div>
+
+                    <div className="confirm-info-row" style={{ gridColumn: "1 / -1" }}>
+                      <span className="confirm-info-label">Address</span>
+                      <span className="confirm-info-val">{address}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              {/* confirm cartItem  */}
-
-              <div className="confirmCartItems">
-                <Typography>Your Cart Items:</Typography>
-                <div className="confirmCartItemsContainer">
-                  {cartItems &&
-                    cartItems.map((item) => (
-                      <div key={item.productId}>
-                        <img src={item.image} alt="product" />
-                        <Link to={`/product/${item.productId}`}>
-                          {" "}
-                          {item.name}
-                        </Link>
-                        <span>
-                          {item.quantity} X ₹{item.price}={" "}
-                          <b>₹{item.price * item.quantity}</b>
-                        </span>
-                      </div>
-                    ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Order Summery --> right side */}
-
-            <div>
-              <div className="orderSummary">
-                <Typography>Order Summery</Typography>
 
                 <div>
-                  <div>
-                    <p>Subtotal : </p>
-                    <span>₹{subTotal}</span>
-                  </div>
-
-                  <div>
-                    <p>Shipping Charges:</p>
-                    <span>₹{shippingCharges}</span>
-                  </div>
-
-                  <div>
-                    <p>GST :</p>
-                    <span>₹{gst}</span>
+                  <h3 className="confirm-section-title">Pieces in Acquisition</h3>
+                  <div className="confirm-items-list">
+                    {cartItems &&
+                      cartItems.map((item) => (
+                        <div key={item.productId} className="confirm-item-row">
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="confirm-item-thumb"
+                          />
+                          <Link
+                            to={`/product/${item.productId}`}
+                            className="confirm-item-name"
+                          >
+                            {item.name}
+                          </Link>
+                          <span className="confirm-item-meta">
+                            {item.quantity} × {dispalyMoney(item.price)}
+                          </span>
+                          <span className="confirm-item-total">
+                            {dispalyMoney(item.price * item.quantity)}
+                          </span>
+                        </div>
+                      ))}
                   </div>
                 </div>
-                <div className="orderSummaryTotal">
-                  <p>
-                    <b>Total:</b>
-                  </p>
-                  <span>₹{totalFinalPrice}</span>
+              </div>
+
+              {/* Right Column: Order Summary Card */}
+              <div className="confirm-summary-card">
+                <h3 className="confirm-summary-title">Acquisition Total</h3>
+
+                <div className="confirm-breakdown-list">
+                  <div className="confirm-breakdown-row">
+                    <span>Items Subtotal</span>
+                    <span>{dispalyMoney(subTotal)}</span>
+                  </div>
+
+                  <div className="confirm-breakdown-row">
+                    <span>Delivery Charges</span>
+                    <span style={{ color: "#059669", fontWeight: 700 }}>
+                      FREE
+                    </span>
+                  </div>
+
+                  <div className="confirm-breakdown-row total">
+                    <span>Grand Total</span>
+                    <span>{dispalyMoney(totalFinalPrice)}</span>
+                  </div>
                 </div>
-                <button onClick={proceedToPayment}>Proceed To Payment</button>
+
+                <button
+                  type="button"
+                  className="confirm-pay-btn"
+                  onClick={proceedToPayment}
+                >
+                  <span>Proceed to Payment</span>
+                  <ArrowForwardIcon sx={{ fontSize: 18 }} />
+                </button>
               </div>
             </div>
           </div>
-        </>
+        </div>
       )}
     </>
   );

@@ -1,62 +1,231 @@
-.productReviewsContainer {
+/* =====================================================================
+   THE64SQUARES — Product Reviews Management CSS
+   ===================================================================== */
+
+.admin-reviews-root {
+  display: flex;
+  align-items: flex-start;
+  background-color: #f8f9fb;
+  justify-content: center;
   width: 100%;
+  gap: 1.5rem;
+  overflow: hidden;
+  margin: 0;
+  padding: 1.5rem 1.25rem;
+  min-height: 100vh;
   box-sizing: border-box;
-  background-color: rgb(255, 255, 255);
-  border-left: 1px solid rgba(0, 0, 0, 0.158);
-  height: 100vh;
 }
 
-.productReviewsForm {
-  width: 20rem;
+.admin-reviews-sidebar-wrap {
+  width: 260px;
+  min-width: 260px;
+  margin: 0;
+  height: fit-content;
+  display: block;
+}
+
+.admin-reviews-sidebar-toggle {
+  width: 270px;
+  margin: 0;
+  height: fit-content;
+  display: block;
+  z-index: 1000;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+  border-radius: 14px;
+}
+
+@media only screen and (max-width: 999px) {
+  .admin-reviews-sidebar-wrap {
+    display: none;
+  }
+}
+
+.admin-reviews-main {
+  flex: 1;
+  max-width: calc(100% - 280px);
+  min-width: 0;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+@media only screen and (max-width: 999px) {
+  .admin-reviews-main {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+/* Header */
+.admin-reviews-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 0.25rem;
+}
+
+.admin-reviews-title {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #09090b;
+  margin: 0 0 0.25rem 0;
+  letter-spacing: -0.01em;
+}
+
+.admin-reviews-subtitle {
+  font-size: 0.88rem;
+  color: #71717a;
+  margin: 0;
+}
+
+/* Search & Selector Card */
+.admin-reviews-selector-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-reviews-selector-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin-reviews-select-group {
+  flex: 1;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.admin-reviews-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #3f3f46;
+}
+
+.admin-reviews-select,
+.admin-reviews-input {
+  width: 100%;
+  padding: 0.75rem 0.95rem;
+  font-size: 0.92rem;
+  color: #18181b;
+  background-color: #fcfcfd;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.admin-reviews-select:focus,
+.admin-reviews-input:focus {
+  background-color: #ffffff;
+  border-color: #09090b;
+  box-shadow: 0 0 0 3px rgba(9, 9, 11, 0.08);
+}
+
+.admin-reviews-search-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #09090b;
+  background: #09090b;
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-end;
+  transition: all 0.2s ease;
+}
+
+.admin-reviews-search-btn:hover {
+  background: #27272a;
+}
+
+/* Product Info Banner */
+.admin-reviews-product-banner {
+  background: #fafafa;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.admin-reviews-product-name {
+  font-weight: 700;
+  color: #09090b;
+  font-size: 1rem;
+}
+
+.admin-reviews-product-meta {
+  font-size: 0.82rem;
+  color: #71717a;
+}
+
+/* Results Card */
+.admin-reviews-results-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-reviews-empty {
+  text-align: center;
+  padding: 3rem 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: auto;
-  padding: 3vmax;
-  background-color: white;
+  gap: 0.75rem;
 }
 
-.productReviewsFormHeading {
-  color: rgba(0, 0, 0, 0.733);
-  font: 300 2rem "Roboto";
-  text-align: center;
-}
-
-.productReviewsForm > div {
+.admin-reviews-empty-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #f4f4f5;
+  color: #a1a1aa;
   display: flex;
-  width: 100%;
   align-items: center;
-  margin: 2rem;
-}
-.productReviewsForm > div > input {
-  padding: 1vmax 4vmax;
-  padding-right: 1vmax;
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.267);
-  border-radius: 4px;
-  font: 300 0.9vmax cursive;
-  outline: none;
+  justify-content: center;
 }
 
-.productReviewsForm > div > svg {
-  position: absolute;
-  transform: translateX(1vmax);
-  font-size: 1.6vmax;
-  color: rgba(0, 0, 0, 0.623);
+.admin-reviews-empty-title {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #09090b;
+  margin: 0;
 }
 
-@media screen and (max-width: 600px) {
-  .productReviewsContainer {
-    border-left: none;
-    border-top: 1px solid rgba(0, 0, 0, 0.158);
-  }
-  .productReviewsForm > div > input {
-    padding: 2.5vmax 5vmax;
-    font: 300 1.7vmax cursive;
-  }
-
-  .productReviewsForm > div > svg {
-    font-size: 2.8vmax;
-  }
+.admin-reviews-empty-text {
+  font-size: 0.88rem;
+  color: #71717a;
+  max-width: 400px;
+  margin: 0;
 }

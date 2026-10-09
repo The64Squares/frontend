@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import "./ProductList.css";
+import "./AdminOrders.css";
 import { useSelector, useDispatch } from "react-redux";
 import {
   updateOrder,
@@ -10,342 +12,50 @@ import Sidebar from "./Siderbar";
 import MetaData from "../layouts/MataData/MataData";
 import Loader from "../layouts/loader/Loader";
 import { useAlert } from "../../context/AlertContext";
-import { Typography, Divider } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-import AccountTreeIcon from "@mui/icons-material/AccountTree";
-import { Button } from "@mui/material";
 import { UPDATE_ORDER_RESET } from "../../constants/orderConstant";
-import { Link, useParams } from "react-router-dom";
-import OrderDetailsSection from "../Cart/OrderDetails";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
-
-const useStyles = makeStyles((theme) => ({
-  prodcessOrder: {
-    display: "flex",
-    alignItems: "flex-start",
-    backgroundColor: "#f1f1f1",
-    justifyContent: "center",
-    width: "97%",
-    gap: "1rem",
-
-    overflow: "hidden",
-    marginTop: "-1rem",
-  },
-  firstBox_prodcessOrder: {
-    width: "20%",
-    margin: "0rem",
-    height: "fit-content",
-    backgroundColor: "white",
-    marginTop: "-1rem",
-    borderRadius: "5px",
-    boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
-    display: "block",
-    [theme.breakpoints.down("999")]: {
-      display: "none",
-    },
-  },
-
-  toggleBox_prodcessOrder: {
-    width: "16rem",
-    margin: "0rem",
-    height: "fit-content",
-    backgroundColor: "white",
-    borderRadius: "5px",
-    boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
-    display: "block",
-    zIndex: "100",
-    position: "absolute",
-    top: "58px",
-    left: "17px",
-  },
-  secondBox__prodcessOrder: {
-    width: "75%",
-    height: "fit-content",
-    display: "flex",
-
-    flexDirection: "column",
-    gap: "1rem",
-    justifyContent: "center",
-    [theme.breakpoints.down("999")]: {
-      width: "100%",
-    },
-  },
-  navBar__prodcessOrder: {
-    margin: "0rem",
-  },
-
-  mainInfo__prodcessOrder: {
-    backgroundColor: "white !important",
-    display: "flex",
-    flexDirection: "column",
-    gap: "1rem",
-    justifyContent: "center",
-    width: "92%",
-    margin: "0 auto",
-    padding: "0rem 3rem 2rem 3rem",
-    [theme.breakpoints.down("sm")]: {
-      width: "100%",
-      padding: "0rem 1rem 2rem 1rem",
-    },
-
-    [theme.breakpoints.down("xs")]: {
-      width: "100%",
-      padding: "0rem 0.5rem 2rem 0.5rem",
-    },
-  },
-  order_Details__prodcessOrder: {
-    display: "flex",
-    flexDirection: "column",
-    width: "100%",
-    marginLeft: "3rem",
-    padding: "2rem 0.5rem 2rem 0.5rem",
-    [theme.breakpoints.down("sm")]: {
-      width: "80%",
-      padding: "1rem",
-      marginLeft: "1rem",
-    },
-
-    [theme.breakpoints.down("xs")]: {
-      width: "90%",
-      padding: "0 0.5rem",
-      marginLeft: "0rem",
-    },
-  },
-  orderSub_heading__prodcessOrder: {
-    fontWeight: "600",
-    fontSize: "1.5rem",
-    marginBottom: "10px",
-
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "1.2rem",
-      padding: "0 2rem",
-    },
-
-    [theme.breakpoints.down("xs")]: {
-      fontSize: "1rem",
-      padding: "0 1rem",
-    },
-  },
-
-  boldDivider__prodcessOrder: {
-    borderBottom: `0.3px solid #3A3E3A`,
-    margin: "0 0 0 3rem",
-    width: "52%",
-    [theme.breakpoints.down("sm")]: {
-      width: "90%",
-      margin: "0 0 0 1rem",
-    },
-
-    [theme.breakpoints.down("xs")]: {
-      width: "90%",
-      margin: "0 0 0 0.5rem",
-    },
-  },
-  boldDivider__prodcessOrder2: {
-    borderBottom: `0.8px solid #f5f5f5`,
-    margin: "0 0 0 3rem",
-    width: "52%",
-    [theme.breakpoints.down("sm")]: {
-      width: "90%",
-      margin: "0 0 0 1rem",
-    },
-
-    [theme.breakpoints.down("xs")]: {
-      width: "90%",
-      margin: "0 0 0 0.5rem",
-    },
-  },
-
-  shipping_Deatils__prodcessOrder: {
-    display: "flex",
-    flexDirection: "column",
-    width: "50%",
-    marginLeft: "3rem",
-    // padding: "1rem 1px",
-    [theme.breakpoints.down("sm")]: {
-      width: "90%",
-      padding: "0 2rem",
-      marginLeft: "1rem",
-    },
-
-    [theme.breakpoints.down("xs")]: {
-      width: "90%",
-      padding: "0 1.5rem",
-      marginLeft: "0rem",
-    },
-  },
-  shipping_Address__prodcessOrder: {
-    display: "flex",
-    justifyContent: "space-between",
-    width: "100%",
-
-    [theme.breakpoints.down("sm")]: {
-      width: "90%",
-      padding: "0 2rem",
-      marginLeft: "1rem",
-      marginTop: "-1rem",
-    },
-
-    [theme.breakpoints.down("xs")]: {
-      width: "90%",
-      padding: "0 1.5rem",
-      marginLeft: "0rem",
-      marginTop: "-1rem",
-    },
-  },
-  shipping_Address_Details__prodcessOrder: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    fontWeight: "300",
-    width: "50%",
-    padding: "1rem 0px",
-  },
-  shipping_heading__prodcessOrder: {
-    fontWeight: "800",
-    fontSize: "1.5rem",
-
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "1.2rem",
-    },
-
-    [theme.breakpoints.down("xs")]: {
-      fontSize: "1rem",
-    },
-  },
-
-  total_price__prodcessOrder: {
-    display: "flex",
-    gap: "18rem",
-    marginLeft: "3.1rem",
-    marginTop: "-1rem",
-    marginBottom: "-1rem",
-
-    [theme.breakpoints.down("sm")]: {
-      gap: "10rem",
-      marginLeft: "2rem",
-    },
-
-    [theme.breakpoints.down("xs")]: {
-      gap: "7rem",
-      padding: "0rem 1.2rem",
-    },
-  },
-  total_price_span__prodcessOrder: {
-    fontSize: "16px",
-    fontWeight: 600,
-    color: "#414141",
-  },
-  total_price_p__prodcessOrder: {
-    fontSize: "16px",
-    fontWeight: 500,
-  },
-  total_price_h4__prodcessOrder: {
-    fontSize: "16px",
-    fontWeight: 800,
-  },
-  greenFont: {
-    color: "green",
-  },
-  redFont: {
-    color: "red",
-  },
-  updateOrderForm__prodcessOrder: {
-    backgroundColor: "white",
-    marginLeft: "3rem",
-
-    "& > div": {
-      display: "flex",
-      width: "100%",
-      alignItems: "center",
-      "& > select": {
-        padding: "1vmax 4vmax",
-        margin: "2rem 0",
-        width: "50%",
-        boxSizing: "border-box",
-        border: "1px solid rgba(0, 0, 0, 0.267)",
-        borderRadius: "4px",
-        font: "300 0.9vmax cursive",
-        outline: "none",
-      },
-      "& > svg": {
-        position: "absolute",
-        transform: "translateX(1vmax)",
-        fontSize: "1.6vmax",
-        color: "rgba(0, 0, 0, 0.623)",
-      },
-    },
-    [theme.breakpoints.down("799")]: {
-      width: "100%",
-      padding: "1rem",
-      marginLeft: "0rem",
-      "& > div > select": {
-        padding: "2.5vmax 2.5vmax",
-        font: "300 1.7vmax cursive",
-      },
-      "& > div > svg": {
-        fontSize: "2.8vmax",
-      },
-    },
-  },
-
-  placeOrderBtn_prodcessOrder: {
-    backgroundColor: "#000",
-    color: "#fff",
-    fontWeight: "500",
-    fontSize: "1rem",
-    padding: "0.5rem 1rem",
-    borderRadius: "0.5rem",
-    width: "50%",
-    marginBottom: "1rem",
-    marginTop: "-1rem",
-    "&:hover": {
-      backgroundColor: "#00000080",
-    },
-    [theme.breakpoints.down("799")]: {
-      width: "50%",
-      padding: "0.5rem 1rem",
-      marginLeft: "0rem",
-    },
-  },
-
-  image: {
-    width: "155px",
-    height: "140px",
-    objectFit: "cover",
-    [theme.breakpoints.down(899)]: {
-      width: "255px",
-      height: "240px",
-    },
-
-    [theme.breakpoints.down(599)]: {
-      width: "155px",
-      height: "140px",
-    },
-  },
-}));
+// Icons
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import PrintOutlinedIcon from "@mui/icons-material/PrintOutlined";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import PaymentOutlinedIcon from "@mui/icons-material/PaymentOutlined";
+import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 
 function ProcessOrder() {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const alert = useAlert();
+  const navigate = useNavigate();
+
   const { order, error, loading } = useSelector((state) => state.orderDetails);
-  const { error: updateError, isUpdated } = useSelector(
+  const { error: updateError, isUpdated, loading: updateLoading } = useSelector(
     (state) => state.deleteUpdateOrder
   );
 
-  const dispatch = useDispatch();
-  const alert = useAlert();
-  const classes = useStyles();
-  const params = useParams();
-  const productId = params.id;
-
-
-  // for order status
   const [status, setStatus] = useState("");
   const [toggle, setToggle] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  // togle handler =>
   const toggleHandler = () => {
     setToggle(!toggle);
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 999 && toggle) {
+        setToggle(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [toggle]);
 
   useEffect(() => {
     if (error) {
@@ -357,247 +67,428 @@ function ProcessOrder() {
       dispatch(clearErrors());
     }
     if (isUpdated) {
-      
-      alert.success("Order Updated Successfully");  
+      alert.success("Order status updated successfully");
       dispatch({ type: UPDATE_ORDER_RESET });
+      dispatch(getOrderDetails(id));
     }
-    dispatch(getOrderDetails(productId)); 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, alert, error, isUpdated, updateError, productId]);
+    dispatch(getOrderDetails(id));
+  }, [dispatch, alert, error, isUpdated, updateError, id]);
 
   const updateOrderSubmitHandler = (e) => {
     e.preventDefault();
-    const myForm = new FormData();
-
-    myForm.set("status", status);
-    dispatch(updateOrder(productId, myForm));
+    if (!status) {
+      alert.error("Please select a target status");
+      return;
+    }
+    dispatch(updateOrder(id, { status }));
   };
+
+  const copyOrderId = () => {
+    navigator.clipboard.writeText(id);
+    setCopied(true);
+    alert.success("Order ID copied to clipboard");
+    setTimeout(() => setCopied(false), 2500);
+  };
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "N/A";
+    const d = new Date(dateStr);
+    return d.toLocaleString("en-IN", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+  };
+
+  // Determine active step index: 0 = Placed, 1 = Processing, 2 = Shipped, 3 = Delivered
+  const currentStatus = ((order && order.orderStatus) || "Processing").toLowerCase();
+  let stepIndex = 1;
+  if (currentStatus === "shipped") stepIndex = 2;
+  if (currentStatus === "delivered") stepIndex = 3;
+
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          <MetaData title="Process Order" />
-          <div className={classes.prodcessOrder}>
-            <div
-              className={
-                !toggle
-                  ? `${classes.firstBox_prodcessOrder}`
-                  : `${classes.toggleBox_prodcessOrder}`
-              }
-            >
-              <Sidebar />
+      <MetaData title={`Manage Order #${id ? id.substring(0, 8) : ""} — Admin Console`} />
+
+      <div className="product-list" style={{ marginTop: 0 }}>
+        <div className={!toggle ? "listSidebar" : "toggleBox"}>
+          <Sidebar />
+        </div>
+
+        <div className="list-table">
+          <Navbar toggleHandler={toggleHandler} />
+
+          <div className="admin-orders-inner" style={{ padding: "0.5rem 0 3rem" }}>
+            {/* Top Navigation */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem", flexWrap: "wrap", gap: "0.75rem" }}>
+              <Link to="/admin/orders" className="back-to-orders-btn">
+                <ArrowBackIcon style={{ fontSize: "1rem" }} /> Back to All Orders
+              </Link>
+              <button
+                type="button"
+                className="filter-tab-pill"
+                onClick={() => window.print()}
+                style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", border: "1px solid rgba(0,0,0,0.1)", background: "#ffffff" }}
+              >
+                <PrintOutlinedIcon style={{ fontSize: "1.05rem" }} /> Print Invoice
+              </button>
             </div>
 
-            <div className={classes.secondBox__prodcessOrder}>
-              <div className={classes.navBar__prodcessOrder}>
-                <Navbar toggleHandler={toggleHandler} />
+            {loading || !order ? (
+              <div style={{ padding: "4rem", textAlign: "center" }}>
+                <Loader />
               </div>
-              <div className={classes.mainInfo__prodcessOrder}>
-                <div className={classes.order_Details__prodcessOrder}>
-                  <h5 className={classes.shipping_heading__prodcessOrder}>
-                    USER ORDER DETAILS
-                  </h5>
-                  {order.orderItems &&
-                    order.orderItems.map((item, idx) => (
-                      <Link
-                        to={`/product/${item.productId}`}
+            ) : (
+              <>
+                {/* Header Section */}
+                <div className="admin-page-header" style={{ marginBottom: "1.5rem" }}>
+                  <div className="admin-page-title-wrap">
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <span className="admin-page-subtag">Fulfilment Order #{id}</span>
+                      <button
+                        type="button"
+                        onClick={copyOrderId}
+                        title="Copy Order ID"
                         style={{
-                          textDecoration: "none",
-                          color: "inherit",
-                          textDecorationColor: "none",
+                          border: "none",
+                          background: "none",
+                          cursor: "pointer",
+                          color: copied ? "#059669" : "#71717a",
+                          padding: 0,
+                          display: "inline-flex",
+                          alignItems: "center",
                         }}
                       >
-                        <OrderDetailsSection
-                          key={idx}
-                          item={item}
-                          totalDiscount={
-                            `₹${(item.price * item.quantity * 20) / 100}` // random discount between 1 to 30
-                          }
-                          totalPrice={`₹${item.price * item.quantity}`}
-                        />
-                      </Link>
-                    ))}
-                </div>
-
-                <div className={classes.shipping_Deatils__prodcessOrder}>
-                  <Typography
-                    variant="h6"
-                    className={classes.orderSub_heading__prodcessOrder}
-                  >
-                    DELIVERY ADDRESS
-                  </Typography>
-
-                  <div className={classes.shipping_Address__prodcessOrder}>
-                    <div
-                      className={
-                        classes.shipping_Address_Details__prodcessOrder
-                      }
-                    >
-                      <Typography
-                        variant="subtitle2"
-                        style={{
-                          fontSize: "16px",
-                          fontWeight: 400,
-                        }}
-                      >
-                        {order.user && order.user.name}
-                      </Typography>
-                      <Typography
-                        variant="subtitle2"
-                        style={{
-                          fontSize: "16px",
-                          fontWeight: 400,
-                        }}
-                      >
-                        {order.shippingInfo &&
-                          `${order.shippingInfo.address}, ${order.shippingInfo.city}, ${order.shippingInfo.state}, ${order.shippingInfo.pinCode}, ${order.shippingInfo.country}`}
-                      </Typography>
-
-                      <Typography
-                        variant="subtitle2"
-                        className={classes.mobileNo__prodcessOrder}
-                        style={{
-                          fontWeight: 400,
-                          marginTop: "-5px",
-                          fontSize: "16px",
-                        }}
-                      >
-                        {order.shippingInfo && order.shippingInfo.phoneNo}
-                      </Typography>
-
-                      <Typography
-                        variant="subtitle2"
-                        className={classes.emailAddress__prodcessOrder}
-                        style={{
-                          fontWeight: 400,
-                          fontSize: "16px",
-                        }}
-                      >
-                        {order.user && order.user.email}
-                      </Typography>
+                        <ContentCopyIcon style={{ fontSize: "0.95rem" }} />
+                      </button>
                     </div>
+                    <h1 className="admin-page-title">Order Processing Console</h1>
+                    <span style={{ fontSize: "0.85rem", color: "#71717a" }}>
+                      Placed on {formatDate(order.createdAt)}
+                    </span>
                   </div>
-                </div>
 
-                <Divider className={classes.boldDivider__prodcessOrder} />
-                <div
-                  className={`${classes.total_price__prodcessOrder} ${classes.order_Summary_Item__prodcessOrder}`}
-                >
-                  <div>
-                    <h4>Total Price</h4>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+                    {currentStatus === "delivered" ? (
+                      <span className="status-pill delivered">
+                        <span className="status-dot"></span> Delivered
+                      </span>
+                    ) : currentStatus === "shipped" ? (
+                      <span className="status-pill shipped">
+                        <span className="status-dot"></span> In Transit (Shipped)
+                      </span>
+                    ) : (
+                      <span className="status-pill processing">
+                        <span className="status-dot"></span> Processing
+                      </span>
+                    )}
 
-                    <p
+                    <span
                       style={{
-                        fontSize: "14px",
-                        marginTop: "-10px",
-                        color: "#414141",
+                        padding: "0.35rem 0.85rem",
+                        borderRadius: "20px",
+                        fontSize: "0.76rem",
+                        fontWeight: 700,
+                        backgroundColor:
+                          order.paymentInfo && order.paymentInfo.status === "succeeded"
+                            ? "#ecfdf5"
+                            : "#fefce8",
+                        color:
+                          order.paymentInfo && order.paymentInfo.status === "succeeded"
+                            ? "#047857"
+                            : "#b45309",
+                        border:
+                          order.paymentInfo && order.paymentInfo.status === "succeeded"
+                            ? "1px solid #a7f3d0"
+                            : "1px solid #fde68a",
                       }}
                     >
-                      (Inclusive of all taxes)
-                    </p>
+                      {order.paymentInfo && order.paymentInfo.status === "succeeded"
+                        ? "PAID (Razorpay)"
+                        : "PAYMENT PENDING"}
+                    </span>
                   </div>
-                  <p>
-                    <b style={{ marginLeft: "-2rem" }}>
-                      ₹{order.totalPrice && order.totalPrice}
-                    </b>
-                  </p>
                 </div>
 
-                <div
-                  className={`${classes.total_price__prodcessOrder} ${classes.order_Summary_Item__prodcessOrder}`}
-                >
-                  <div>
-                    <h4>Order Status</h4>
-                  </div>
-                  <p
-                    className={
-                      order.orderStatus && order.orderStatus === "Delivered"
-                        ? "greenColor"
-                        : "redColor"
-                    }
-                  >
-                    <b> {order.orderStatus && order.orderStatus}</b>
-                  </p>
-                </div>
+                {/* Main 2-Column Grid */}
+                <div className="process-order-grid">
+                  {/* Left Column: Details */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                    {/* Ordered Items */}
+                    <div className="process-card">
+                      <h3 className="process-card-title">
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+                          <Inventory2OutlinedIcon style={{ fontSize: "1.2rem", color: "#c5a880" }} />
+                          Ordered Items ({order.orderItems ? order.orderItems.length : 0})
+                        </span>
+                        <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "#71717a" }}>
+                          Total Qty: {order.orderItems ? order.orderItems.reduce((acc, i) => acc + (i.quantity || 1), 0) : 0}
+                        </span>
+                      </h3>
 
-                <div
-                  className={`${classes.total_price__prodcessOrder} ${classes.order_Summary_Item__prodcessOrder}`}
-                >
-                  <div>
-                    <h4>Payment Status</h4>
-                  </div>
-                  <p
-                    className={
-                      order.orderStatus && order.orderStatus === "Delivered"
-                        ? `${classes.greenFont}`
-                        : `${classes.redFont}`
-                    }
-                  >
-                    <b className={classes.greenFont}>
-                      {" "}
-                      {order.paymentInfo &&
-                      order.paymentInfo.status === "succeeded"
-                        ? "PAID"
-                        : "NOT PAID"}
-                    </b>
-                  </p>
-                </div>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+                        {order.orderItems &&
+                          order.orderItems.map((item, idx) => (
+                            <div key={idx} className="process-item-row">
+                              <img
+                                src={item.image || "https://placehold.co/100x100?text=Chess"}
+                                alt={item.name}
+                                className="process-item-thumb"
+                                onError={(e) => {
+                                  e.target.src = "https://placehold.co/100x100?text=Chess";
+                                }}
+                              />
+                              <div className="process-item-info">
+                                <Link
+                                  to={`/product/${item.productId || item.product}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="process-item-name"
+                                >
+                                  {item.name}
+                                </Link>
+                                <span className="process-item-meta">
+                                  Quantity: <strong>{item.quantity}</strong> × ₹{(item.price || 0).toLocaleString("en-IN")}
+                                </span>
+                              </div>
+                              <div style={{ textAlign: "right" }}>
+                                <span className="process-item-price">
+                                  ₹{((item.price || 0) * (item.quantity || 1)).toLocaleString("en-IN")}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                      </div>
+                    </div>
 
-                {order.orderStatus && (
-                  <>
-                    <div
-                      style={{
-                        display:
-                          order.orderStatus === "Delivered" ? "none" : "block",
-                        padding: " 0 1rem 0 0",
-                      }}
-                    >
-                      <Divider
-                        className={classes.boldDivider__prodcessOrder2}
-                      />
-                      <form className={classes.updateOrderForm__prodcessOrder}>
-                        <h1>Process Order</h1>
+                    {/* Customer & Delivery Address Card */}
+                    <div className="process-card">
+                      <h3 className="process-card-title">
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+                          <LocationOnOutlinedIcon style={{ fontSize: "1.2rem", color: "#c5a880" }} />
+                          Delivery & Recipient Details
+                        </span>
+                      </h3>
 
-                        <div style={{ marginTop: "-1rem" }}>
-                          <AccountTreeIcon />
-                          <select onChange={(e) => setStatus(e.target.value)}>
-                            <option value="">Choose Category</option>
-                            {order.orderStatus === "Processing" && (
-                              <option value="Shipped">Shipped</option>
-                            )}
-
-                            {order.orderStatus === "Shipped" && (
-                              <option value="Delivered">Delivered</option>
-                            )}
-                          </select>
+                      <div className="process-info-grid">
+                        <div className="process-info-unit">
+                          <label style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
+                            <PersonOutlineIcon style={{ fontSize: "0.95rem" }} /> Customer Name
+                          </label>
+                          <span>{(order.user && order.user.name) || "Direct Customer"}</span>
                         </div>
 
-                        <Button
-                          variant="contained"
-                          className={classes.placeOrderBtn_prodcessOrder}
-                          fullWidth
-                          onClick={updateOrderSubmitHandler}
-                          disabled={
-                            loading
-                              ? true
-                              : false || status === ""
-                              ? true
-                              : false
-                          }
-                        >
-                          Process
-                        </Button>
-                      </form>
+                        <div className="process-info-unit">
+                          <label style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
+                            <EmailOutlinedIcon style={{ fontSize: "0.95rem" }} /> Email Address
+                          </label>
+                          <span>{(order.user && order.user.email) || "N/A"}</span>
+                        </div>
+
+                        <div className="process-info-unit">
+                          <label style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
+                            <PhoneOutlinedIcon style={{ fontSize: "0.95rem" }} /> Contact Phone
+                          </label>
+                          <span>{(order.shippingInfo && order.shippingInfo.phoneNo) || "N/A"}</span>
+                        </div>
+
+                        <div className="process-info-unit">
+                          <label>Postal Code / PIN</label>
+                          <span>{(order.shippingInfo && order.shippingInfo.pinCode) || "N/A"}</span>
+                        </div>
+
+                        <div className="process-info-unit full">
+                          <label>Full Delivery Address</label>
+                          <span style={{ lineHeight: 1.5 }}>
+                            {(order.shippingInfo && order.shippingInfo.address) || ""},{" "}
+                            {(order.shippingInfo && order.shippingInfo.city) || ""},{" "}
+                            {(order.shippingInfo && order.shippingInfo.state) || ""},{" "}
+                            {(order.shippingInfo && order.shippingInfo.country) || "India"} - {(order.shippingInfo && order.shippingInfo.pinCode) || ""}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </>
-                )}
-              </div>
-            </div>
+
+                    {/* Financial Summary */}
+                    <div className="process-card">
+                      <h3 className="process-card-title">
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+                          <PaymentOutlinedIcon style={{ fontSize: "1.2rem", color: "#c5a880" }} />
+                          Financial Breakdown
+                        </span>
+                      </h3>
+
+                      <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.9rem", color: "#52525b" }}>
+                          <span>Items Subtotal</span>
+                          <span style={{ fontWeight: 600, color: "#18181b" }}>
+                            ₹{order.itemsPrice ? order.itemsPrice.toLocaleString("en-IN") : (order.totalPrice || 0).toLocaleString("en-IN")}
+                          </span>
+                        </div>
+
+                        <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.9rem", color: "#52525b" }}>
+                          <span>White-Glove Shipping</span>
+                          <span style={{ fontWeight: 600, color: "#047857" }}>
+                            Complimentary
+                          </span>
+                        </div>
+
+                        {order.taxPrice > 0 && (
+                          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.9rem", color: "#52525b" }}>
+                            <span>GST / Taxes</span>
+                            <span style={{ fontWeight: 600, color: "#18181b" }}>
+                              ₹{order.taxPrice.toLocaleString("en-IN")}
+                            </span>
+                          </div>
+                        )}
+
+                        <div
+                          style={{
+                            borderTop: "1px solid rgba(0,0,0,0.08)",
+                            paddingTop: "0.85rem",
+                            marginTop: "0.25rem",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "baseline",
+                          }}
+                        >
+                          <div>
+                            <span style={{ fontSize: "1rem", fontWeight: 700, color: "#09090b" }}>
+                              Grand Total
+                            </span>
+                            <p style={{ margin: 0, fontSize: "0.76rem", color: "#71717a" }}>
+                              Inclusive of all applicable duties
+                            </p>
+                          </div>
+                          <span style={{ fontFamily: "monospace", fontSize: "1.35rem", fontWeight: 800, color: "#09090b" }}>
+                            ₹{(order.totalPrice || 0).toLocaleString("en-IN")}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Fulfilment Workflow & Controls */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                    {/* Visual Lifecycle Stepper */}
+                    <div className="process-card">
+                      <h3 className="process-card-title">Fulfilment Progress</h3>
+
+                      <div className="workflow-stepper">
+                        <div className={`workflow-step-node ${stepIndex >= 0 ? (stepIndex > 0 ? "completed" : "active") : ""}`}>
+                          <div className="workflow-node-circle">
+                            {stepIndex > 0 ? "✓" : "1"}
+                          </div>
+                          <span className="workflow-step-label">Placed</span>
+                        </div>
+
+                        <div className={`workflow-step-node ${stepIndex >= 1 ? (stepIndex > 1 ? "completed" : "active") : ""}`}>
+                          <div className="workflow-node-circle">
+                            {stepIndex > 1 ? "✓" : "2"}
+                          </div>
+                          <span className="workflow-step-label">Processing</span>
+                        </div>
+
+                        <div className={`workflow-step-node ${stepIndex >= 2 ? (stepIndex > 2 ? "completed" : "active") : ""}`}>
+                          <div className="workflow-node-circle">
+                            {stepIndex > 2 ? "✓" : "3"}
+                          </div>
+                          <span className="workflow-step-label">Shipped</span>
+                        </div>
+
+                        <div className={`workflow-step-node ${stepIndex >= 3 ? "completed" : ""}`}>
+                          <div className="workflow-node-circle">
+                            {stepIndex >= 3 ? "✓" : "4"}
+                          </div>
+                          <span className="workflow-step-label">Delivered</span>
+                        </div>
+                      </div>
+
+                      <div style={{ background: "#fafafa", borderRadius: "8px", padding: "0.85rem 1rem", fontSize: "0.82rem", color: "#52525b", border: "1px solid rgba(0,0,0,0.06)" }}>
+                        Current status: <strong style={{ textTransform: "capitalize", color: "#09090b" }}>{order.orderStatus}</strong>
+                        {order.deliveredAt && (
+                          <div style={{ marginTop: "0.25rem", color: "#047857" }}>
+                            Delivered at: {formatDate(order.deliveredAt)}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Fulfilment Status Action Form */}
+                    <div className="process-card">
+                      <h3 className="process-card-title">Manage Fulfilment</h3>
+
+                      {currentStatus === "delivered" ? (
+                        <div
+                          style={{
+                            background: "#ecfdf5",
+                            border: "1px solid #a7f3d0",
+                            borderRadius: "12px",
+                            padding: "1.5rem",
+                            textAlign: "center",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            gap: "0.5rem",
+                          }}
+                        >
+                          <CheckCircleIcon style={{ color: "#059669", fontSize: "2.5rem" }} />
+                          <h4 style={{ margin: 0, color: "#065f46", fontSize: "1rem" }}>
+                            Order Completed
+                          </h4>
+                          <p style={{ margin: 0, fontSize: "0.82rem", color: "#047857" }}>
+                            This order has already been marked as Delivered. No further status changes are required.
+                          </p>
+                        </div>
+                      ) : (
+                        <form onSubmit={updateOrderSubmitHandler} className="status-update-control-box">
+                          <div>
+                            <label
+                              htmlFor="order-status-select"
+                              style={{ display: "block", fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "#71717a", marginBottom: "0.45rem" }}
+                            >
+                              Advance Order To Next Stage
+                            </label>
+                            <select
+                              id="order-status-select"
+                              className="status-select-input"
+                              value={status}
+                              onChange={(e) => setStatus(e.target.value)}
+                            >
+                              <option value="">— Select Target Status —</option>
+                              {currentStatus === "processing" && (
+                                <>
+                                  <option value="Shipped">Shipped (Dispatch Order)</option>
+                                  <option value="Delivered">Delivered (Direct Fulfilment)</option>
+                                </>
+                              )}
+                              {currentStatus === "shipped" && (
+                                <option value="Delivered">Delivered (Mark as Received)</option>
+                              )}
+                            </select>
+                          </div>
+
+                          <button
+                            type="submit"
+                            className="status-update-btn"
+                            disabled={updateLoading || !status}
+                          >
+                            <LocalShippingOutlinedIcon style={{ fontSize: "1.1rem" }} />
+                            {updateLoading ? "Updating..." : "Update Order Status"}
+                          </button>
+
+                          <span style={{ fontSize: "0.75rem", color: "#71717a", textAlign: "center", lineHeight: 1.4 }}>
+                            Updating to "Shipped" automatically adjusts warehouse inventory and records shipping timeline.
+                          </span>
+                        </form>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
-        </>
-      )}
+        </div>
+      </div>
     </>
   );
 }

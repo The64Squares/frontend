@@ -1,0 +1,344 @@
+/* ==========================================================================
+   THE64SQUARES Authentication (Sign In & Sign Up) UI & UX Styles
+   ========================================================================== */
+
+.auth-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 120px);
+  padding: 6.5rem 1.25rem 4rem 1.25rem;
+  background-color: var(--bg-primary, #FAFAFA);
+  background-image: radial-gradient(circle at 50% 0%, rgba(0, 0, 0, 0.03) 0%, transparent 70%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  border-radius: 16px;
+  padding: 2.5rem 2.25rem;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-logo-wrap {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+.auth-brand-logo {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  display: block;
+}
+
+.auth-title {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif) !important;
+  font-size: 2.1rem !important;
+  font-weight: 700 !important;
+  color: #09090B !important;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.35rem 0 !important;
+  line-height: 1.2 !important;
+}
+
+.auth-subtitle {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif) !important;
+  font-size: 0.85rem !important;
+  color: #71717A !important;
+  margin: 0 !important;
+  line-height: 1.5 !important;
+}
+
+/* Stack of Input Fields with guaranteed vertical breathing room */
+.auth-fields-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%;
+  margin-bottom: 1.25rem;
+}
+
+/* Field Group wrapper */
+.auth-field-group {
+  width: 100%;
+}
+
+.auth-field-group .MuiFormControl-root {
+  width: 100%;
+}
+
+.auth-field-group .MuiOutlinedInput-root {
+  border-radius: 10px !important;
+  background-color: #FAFAFA !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.auth-field-group .MuiOutlinedInput-root fieldset {
+  border-color: #E4E4E7 !important;
+  transition: border-color 0.2s ease, border-width 0.2s ease;
+}
+
+.auth-field-group .MuiOutlinedInput-root:hover fieldset {
+  border-color: #A1A1AA !important;
+}
+
+.auth-field-group .MuiOutlinedInput-root.Mui-focused {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 0 0 3px rgba(9, 9, 11, 0.06) !important;
+}
+
+.auth-field-group .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #09090B !important;
+  border-width: 1.5px !important;
+}
+
+.auth-field-group .MuiInputLabel-root {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif) !important;
+  color: #71717A !important;
+  font-size: 0.9rem !important;
+}
+
+.auth-field-group .MuiInputLabel-root.Mui-focused {
+  color: #09090B !important;
+  font-weight: 600 !important;
+}
+
+.auth-field-group .MuiOutlinedInput-input {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif) !important;
+  color: #09090B !important;
+  font-size: 0.925rem !important;
+  padding: 14px 14px !important;
+}
+
+/* Password Eye Toggle Icon */
+.auth-password-toggle-btn {
+  color: #71717A !important;
+  padding: 6px !important;
+  transition: color 0.2s ease !important;
+}
+
+.auth-password-toggle-btn:hover {
+  color: #09090B !important;
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Remember Me & Forgot Password Row */
+.auth-options-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  width: 100%;
+}
+
+.auth-checkbox-label .MuiFormControlLabel-label {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif) !important;
+  font-size: 0.85rem !important;
+  color: #52525B !important;
+}
+
+.auth-checkbox-label .MuiCheckbox-root {
+  color: #D4D4D8 !important;
+  padding: 4px 8px 4px 0 !important;
+}
+
+.auth-checkbox-label .MuiCheckbox-root.Mui-checked {
+  color: #09090B !important;
+}
+
+.auth-forgot-link {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.825rem;
+  color: #52525B;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.auth-forgot-link:hover {
+  color: #09090B;
+  text-decoration: underline;
+}
+
+/* Primary Action Button (Sign In / Create Account) */
+.auth-submit-btn {
+  width: 100% !important;
+  background-color: #09090B !important;
+  color: #FFFFFF !important;
+  border: 1px solid #09090B !important;
+  border-radius: 10px !important;
+  padding: 13px 0 !important;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif) !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.02em !important;
+  text-transform: none !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer !important;
+}
+
+.auth-submit-btn:hover {
+  background-color: #27272A !important;
+  border-color: #27272A !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+}
+
+.auth-submit-btn:active {
+  transform: translateY(0) !important;
+}
+
+.auth-submit-btn.disabled-btn {
+  background-color: #E4E4E7 !important;
+  border-color: #E4E4E7 !important;
+  color: #71717A !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* Terms & Privacy Note */
+.auth-terms-note {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif) !important;
+  color: #71717A !important;
+  text-align: center !important;
+  line-height: 1.5 !important;
+  font-size: 0.775rem !important;
+  margin-top: 1rem !important;
+  margin-bottom: 0 !important;
+}
+
+.auth-terms-note a {
+  color: #09090B;
+  font-weight: 600;
+  text-decoration: underline;
+  transition: opacity 0.2s ease;
+}
+
+.auth-terms-note a:hover {
+  opacity: 0.75;
+}
+
+/* Switch between Sign In / Sign Up */
+.auth-switch-note {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif) !important;
+  font-size: 0.875rem !important;
+  color: #71717A !important;
+  text-align: center !important;
+  margin-top: 1.5rem !important;
+  padding-top: 1.25rem !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+.auth-switch-link {
+  color: #09090B !important;
+  font-weight: 600 !important;
+  margin-left: 6px !important;
+  text-decoration: none !important;
+  transition: opacity 0.2s ease !important;
+}
+
+.auth-switch-link:hover {
+  text-decoration: underline !important;
+}
+
+/* Avatar Upload Card in SignUp */
+.auth-avatar-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background-color: #FAFAFA;
+  border: 1px dashed #D4D4D8;
+  border-radius: 12px;
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.auth-avatar-preview-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.auth-avatar-thumb {
+  width: 44px !important;
+  height: 44px !important;
+  background-color: #09090B !important;
+  color: #FFFFFF !important;
+  border: 2px solid #E4E4E7 !important;
+}
+
+.auth-avatar-label-text {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.825rem;
+  color: #52525B;
+  font-weight: 500;
+}
+
+.auth-upload-btn {
+  background-color: #09090B !important;
+  color: #FFFFFF !important;
+  border-radius: 8px !important;
+  padding: 6px 14px !important;
+  text-transform: none !important;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif) !important;
+  font-size: 0.825rem !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+}
+
+.auth-upload-btn:hover {
+  background-color: #27272A !important;
+  transform: translateY(-1px);
+}
+
+.auth-checkboxes-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.auth-checkbox-item .MuiFormControlLabel-label {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif) !important;
+  font-size: 0.8rem !important;
+  color: #52525B !important;
+  line-height: 1.35 !important;
+}
+
+.auth-checkbox-item .MuiCheckbox-root {
+  color: #D4D4D8 !important;
+  padding: 2px 6px 2px 0 !important;
+}
+
+.auth-checkbox-item .MuiCheckbox-root.Mui-checked {
+  color: #09090B !important;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 1.75rem 1.25rem;
+    border-radius: 12px;
+  }
+
+  .auth-title {
+    font-size: 1.75rem !important;
+  }
+}

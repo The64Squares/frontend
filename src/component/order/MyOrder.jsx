@@ -1,38 +1,16 @@
 import React, { useEffect } from "react";
-import { makeStyles } from "@mui/styles";
-import { Typography } from "@mui/material";
+import "./Myorder.css";
 import { useSelector, useDispatch } from "react-redux";
 import { myOrders, clearErrors } from "../../actions/orderAction";
 import MetaData from "../layouts/MataData/MataData";
 import The64SquaresBallLoader from "../layouts/loader/Loader";
 import { useAlert } from "../../context/AlertContext";
 import OrderCard from "./OrderCard";
-
-const useStyles = makeStyles((theme) => ({
-  orderPageContainer: {
-    backgroundColor: "#fff",
-    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-    padding: "2rem",
-    marginBottom: "1rem",
-   flexDirection: "column",
-   alignItems: "center",
-    justifyContent: "center",
-    display: "flex",
-    marginTop: "7rem",
-   
-  },
-  orderPageTitle: {
-    fontSize: "1.2rem",
-    fontWeight: "bold",
-  },
-  orderPageText: {
-    color: "#6c757d",
-    marginTop: "1rem",
-  },
-}));
+import { Link } from "react-router-dom";
+import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const MyOrder = () => {
-  const classes = useStyles();
   const currentYear = new Date().getFullYear();
   const dispatch = useDispatch();
   const alert = useAlert();
@@ -48,30 +26,48 @@ const MyOrder = () => {
 
     dispatch(myOrders());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-
   }, [dispatch, alert, error]);
 
   return (
     <>
+      <MetaData title="My Orders & Acquisitions | The64Squares" />
       {loading ? (
         <The64SquaresBallLoader />
       ) : (
-        <div>
-          <MetaData title="My Orders" />
-          <div className={classes.orderPageContainer}>
-            <Typography variant="h6" className={classes.orderPageTitle}>
-              Your Order
-            </Typography>
-            <Typography variant="body1" className={classes.orderPageText}>
-              {orders.length} order placed in {currentYear}
-            </Typography>
+        <div className="orders-page-root">
+          <div className="orders-header-banner">
+            <span className="orders-sub-tag">CLIENT ARCHIVE</span>
+            <h1 className="orders-title">Your Acquisitions</h1>
+            <p className="orders-count">
+              {orders ? orders.length : 0}{" "}
+              {orders && orders.length === 1 ? "Order" : "Orders"} recorded in{" "}
+              {currentYear}
+            </p>
           </div>
 
-          {orders.map((item) => (
-            <div className={classes.orderCard} key={item._id}>
-              <OrderCard item={item} user={user} />
-            </div>
-          ))}
+          <div className="orders-main-container">
+            {!orders || orders.length === 0 ? (
+              <div className="orders-empty-state">
+                <div className="orders-empty-icon-ring">
+                  <Inventory2OutlinedIcon sx={{ fontSize: 38, color: "#c5a880" }} />
+                </div>
+                <h2>No Orders in Your Archive</h2>
+                <p>
+                  You haven't commissioned or ordered any chess pieces yet.
+                  Explore our collection of handcrafted tournament sets and
+                  heirloom boards.
+                </p>
+                <Link to="/products" className="orders-explore-btn">
+                  <span>Explore Chess Collection</span>
+                  <ArrowForwardIcon sx={{ fontSize: 16 }} />
+                </Link>
+              </div>
+            ) : (
+              orders.map((item) => (
+                <OrderCard key={item._id} item={item} user={user} />
+              ))
+            )}
+          </div>
         </div>
       )}
     </>

@@ -161,7 +161,18 @@
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
+}
+
+.search-bar-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.header-profile-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .header-cart-link {
@@ -175,6 +186,13 @@
   color: #0A0A0A;
   transform: scale(1.08);
 }
+
+@media (max-width: 1140px) {
+  .header-nav-menu.search-active {
+    display: none;
+  }
+}
+
 
 .header-mobile-toggle {
   display: none;

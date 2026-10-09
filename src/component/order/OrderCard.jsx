@@ -1,445 +1,168 @@
-import React,{useState} from "react";
-import {
-  Card,
-  Typography,
-  Button,
-  Divider,
-  useMediaQuery,
-} from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import React, { useState } from "react";
+import "./Myorder.css";
 import ReplayIcon from "@mui/icons-material/Replay";
-import EditIcon from "@mui/icons-material/Edit";
+import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { useDispatch } from "react-redux";
 import { useAlert } from "../../context/AlertContext";
 import { addItemToCart } from "../../actions/cartAction";
-import {useNavigate} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import DialogBox from "../Product/DialogBox";
+import { dispalyMoney } from "../DisplayMoney/DisplayMoney";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: "1rem",
-  },
-  orderCard: {
-    display: "flex",
-    flexDirection: "column",
+const formatOrderDate = (dateString) => {
+  if (!dateString) return "";
+  const d = new Date(dateString);
+  return new Intl.DateTimeFormat("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(d);
+};
 
-    justifyContent: "space-between",
+const OrderCard = ({ item, user }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const alert = useAlert();
+  const [openReviewId, setOpenReviewId] = useState(null);
 
-    borderRadius: 2,
+  const { shippingInfo, orderItems, orderStatus, totalPrice, createdAt, _id } = item;
 
-    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-    transition: "box-shadow 0.3s ease-in-out",
-    "&:hover": {
-      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-    },
-  },
-  firstBlock: {
-    height: "fit-content",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "1rem",
-    width: "100%",
-    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-    marginTop:"1rem",
-  },
-  leftSide: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-    justifyContent: "center",
-  },
-  rightSide: {
-    display: "flex",
-    flexDirection: "column",
+  const addToCartHandler = (id, qty = 1) => {
+    dispatch(addItemToCart(id, qty));
+    alert.success("Piece added to shopping bag");
+    navigate("/cart");
+  };
 
-    padding: "0rem 0rem  1rem",
-    justifyContent: "center",
-  },
-  orderPlaced: {
-    fontWeight: "bold",
-  },
-  orderDate: {
-    color: "#141414",
-  },
-  totalPrice: {
-    fontWeight: "bold",
-    paddingRight: "5rem",
-  },
-  orderId: {
-    paddingTop: "10px",
-    fontWeight: "800",
-  },
-  divider: {
-    margin: "1.5rem 0rem",
-    width: "50%",
-  },
-  secondBlock: {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: 2,
-    marginBottom: 2,
-    padding: "0rem 1rem",
-  },
-  secondBlock_left: {
-    width: "fit-content",
-    display: "flex",
-    flexDirection: "column",
-  },
-  secondBlock_right: {
-    width: "fit-content",
-    display: "flex",
-    justifyContent: "flex-end   ",
-    padding: "1rem 0rem",
-  },
-
-  productDetailsContainer: {
-    display: "flex",
-    gap: "2rem",
-    alignItems: "center",
-    padding: "1rem 0rem",
-
-    marginBottom: 1,
-  },
-  productName: {
-    fontWeight: "bold",
-    marginBottom: 1,
-  },
-  productQty: {
-    marginBottom: 1,
-  },
-  deliveryStatus: {
-    marginBottom: 1,
-  },
-
-  button: {
-    marginRight: 1,
-    color: "rgb(37, 37, 37) !important",
-    cursor: "pointer",
-    backgroundColor: "transparent !important",
-
-    border: "1px solid rgb(37, 37, 37) !important",
-    "&:hover": {
-      backgroundColor: "#E8E8E8 !important",
-      borderColor: "#E8E8E8 !important",
-    },
-  },
-  leftSide2: {
-    display: "flex",
-    flexDirection: "column",
-    marginBottom: 2,
-  },
-  shipTo: {
-    fontWeight: "bold",
-    marginBottom: 1,
-  },
-  address: {
-    marginBottom: 1,
-  },
-
-  buttonsContainer: {
-    display: "flex",
-    gap: "1rem",
-    padding: "10px 0px",
-    [theme.breakpoints.down("sm")]: {
-      justifyContent: "center",
-    },
-  },
-  buyAgainButton: {
-    color: "#fff !important",
-    cursor: "pointer",
-    padding: "0px 16px",
-    fontSize: "16px",
-    backgroundColor: "rgb(37, 37, 37) !important",
-    minHeight: "48px",
-    borderRadius: "8px",
-    border: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    "&:hover": {
-      backgroundColor: "#ed1c24 !important",
-      borderColor: "#ed1c24 !important",
-    },
-    [theme.breakpoints.down("sm")]: {
-      width: "100%",
-      fontSize: "14px",
-    },
-  },
-  reviewButton: {
-    color: "#fff !important",
-    width: "50vmin",
-    cursor: "pointer",
-    padding: "0px 4px",
-    fontSize: "16px",
-    backgroundColor: "rgb(37, 37, 37) !important",
-    minHeight: "48px",
-    borderRadius: "8px",
-    border: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    "&:hover": {
-      backgroundColor: "#ed1c24 !important",
-      borderColor: "#ed1c24 !important",
-    },
-    [theme.breakpoints.down("sm")]: {
-      width: "100%",
-      fontSize: "14px",
-    },
-  },
-  [theme.breakpoints.down("sm")]: {
-    root: {
-      width: "100%",
-    },
-    orderCard: {
-      flexDirection: "column",
-    },
-    firstBlock: {
-      flexDirection: "column",
-      alignItems: "center",
-    },
-    rightSide: {
-      width: "100%",
-      padding: "1rem",
-      marginTop: "1rem",
-      justifyContent: "center",
-    },
-    secondBlock: {
-      flexDirection: "column",
-    },
-    secondBlock_left: {
-      width: "100%",
-      alignItems: "center",
-    },
-    secondBlock_right: {
-      width: "100%",
-      padding: "1rem",
-      justifyContent: "center",
-    },
-    buttonsContainer: {
-      justifyContent: "center",
-    },
-    buyAgainButton: {
-      width: "100%",
-    },
-    reviewButton: {
-      width: "100%",
-    },
-    leftSide2: {
-      marginBottom: 0,
-    },
-  },
-  addressText: {
-    fontSize: "14px",
-    fontWeight: "400",
-    lineHeight: "20px",
-    color: "#141414",
-  },
-  dialog: {
-    width: "80vw",
-    height: "70vh",
-    marginT: 0,
-    padding: "3rem",
-    overflow: "hidden",
-  },
-}));
-
-
- const createdAt = (user) => {
-   const createdAt = new Date(user.createdAt);
-   const options = {
-     year: "numeric",
-     month: "2-digit",
-     day: "2-digit",
-     hour: "2-digit",
-     minute: "2-digit",
-     hour12: true,
-     timeZone: "Asia/Kolkata",
-   };
-
-   const formatter = new Intl.DateTimeFormat("en-IN", options);
-   const formattedDate = formatter.format(createdAt);
-   return formattedDate;
- };
-
-
-const OrderCard = ({item , user}) => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const alert = useAlert();
-    const [open, setOpen] = useState(false);
-   
-const classes = useStyles();
-  const isSmallScreen = useMediaQuery("(max-width: 999px)");
-  const { shippingInfo, orderItems } = item;
-   
-  const addToCartHandler = (id , qty = 0) => {
-    dispatch(addItemToCart(id , qty))
-    alert.success("Item Added to Cart")
-    navigate("/cart")
-  }
-
-   const handleClickOpen = () => {
-     setOpen(true);
-   };
-
-   const handleClose = () => {
-     console.log("called");
-     setOpen(false);
-   };
+  const isDelivered = orderStatus?.toLowerCase() === "delivered";
 
   return (
-    <div className={classes.root}>
-      {orderItems.map((product) => (
-        <Card className={classes.orderCard}>
-          <div className={classes.firstBlock}>
-            {/* Left side */}
-            <div className={classes.leftSide}>
-              <Typography
-                variant="subtitle1"
-                className={classes.orderPlaced}
-                style={{ fontWeight: "500" }}
-              >
-                ORDER PLACED
-              </Typography>
-              <Typography
-                variant="body2"
-                className={classes.orderDate}
-                color="#141414"
-              >
-                {createdAt(item)}
-              </Typography>
-              <Typography
-                variant="body2"
-                className={classes.orderId}
-                style={{ fontWeight: "500" }}
-              >
-                ORDER-ID: #{item._id}
-              </Typography>
-            </div>
+    <div className="order-card-root">
+      {/* Top Bar with Meta */}
+      <div className="order-card-topbar">
+        <div className="order-meta-group">
+          <span className="order-meta-label">Order Reference</span>
+          <span className="order-id-badge">#{_id}</span>
+        </div>
 
-            {/* Right side */}
-            {!isSmallScreen && (
-              <div className={classes.rightSide}>
-                <Typography
-                  variant="subtitle1"
-                  className={classes.totalPrice}
-                  style={{ fontWeight: "500" }}
-                >
-                  Total:
-                </Typography>
-                <Typography variant="body2" color="141414">
-                  <strong> ₹</strong>
-                  {product.price * product.quantity}
-                </Typography>
-              </div>
+        <div className="order-meta-group">
+          <span className="order-meta-label">Date Placed</span>
+          <span className="order-meta-value">{formatOrderDate(createdAt)}</span>
+        </div>
+
+        <div className="order-meta-group">
+          <span className="order-meta-label">Total Amount</span>
+          <span className="order-meta-value" style={{ fontWeight: 700 }}>
+            {dispalyMoney(totalPrice)}
+          </span>
+        </div>
+
+        <div className="order-meta-group">
+          <span className="order-meta-label">Status</span>
+          <span
+            className={`order-status-badge ${
+              isDelivered ? "delivered" : "processing"
+            }`}
+          >
+            {isDelivered ? (
+              <CheckCircleOutlineIcon sx={{ fontSize: 14 }} />
+            ) : (
+              <AccessTimeIcon sx={{ fontSize: 14 }} />
             )}
-          </div>
+            {orderStatus || "Processing"}
+          </span>
+        </div>
+      </div>
 
-          {/* Second block */}
-          <div className={classes.secondBlock}>
-            {/* Left side */}
-            <div className={classes.secondBlock_left}>
-              <div className={classes.productDetailsContainer}>
-                <div style={{ width: "25%" }}>
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    style={{ width: "100%", height: "160px" }}
-                  />
-                </div>
+      {/* Main Content */}
+      <div className="order-card-content">
+        {/* Left Column: Items */}
+        <div className="order-items-sublist">
+          {orderItems &&
+            orderItems.map((product) => (
+              <div key={product.productId} className="order-item-unit">
+                <img src={product.image} alt={product.name} />
 
-                <div>
-                  <Typography
-                    variant="subtitle1"
-                    className={classes.productName}
-                    style={{ fontWeight: "500" }}
+                <div className="order-item-details">
+                  <Link
+                    to={`/product/${product.productId}`}
+                    className="order-item-name"
                   >
                     {product.name}
-                  </Typography>
-                  <Typography variant="body2" className={classes.productQty}>
-                    <strong>QTY:</strong> {product.quantity}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    className={classes.deliveryStatus}
-                  >
-                    <strong>Delivery Status:</strong>{" "}
-                    <span
-                      style={{
-                        color:
-                          item.orderStatus === "Delivered" ? "green" : "red",
-                      }}
-                    >
-                      {item.orderStatus}
-                    </span>
-                  </Typography>
-                  <div className={classes.buttonsContainer}>
-                    <Button
-                      variant="outlined"
-                      className={classes.buyAgainButton}
+                  </Link>
+
+                  <span className="order-item-meta">
+                    Quantity: {product.quantity}
+                  </span>
+
+                  <span className="order-item-price">
+                    {dispalyMoney(product.price * product.quantity)}
+                  </span>
+
+                  <div className="order-actions-bar">
+                    <button
+                      type="button"
+                      className="order-action-btn primary"
                       onClick={() => addToCartHandler(product.productId, 1)}
                     >
-                      <ReplayIcon style={{ marginRight: "8px" }} />
-                      Buy Again
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      className={classes.button}
-                      onClick={() =>
-                        navigate(`/product/${product.productId}`)
-                      }
+                      <ReplayIcon sx={{ fontSize: 15 }} />
+                      <span>Order Again</span>
+                    </button>
+
+                    <Link
+                      to={`/product/${product.productId}`}
+                      className="order-action-btn"
                     >
-                      View item
-                    </Button>
+                      <VisibilityOutlinedIcon sx={{ fontSize: 15 }} />
+                      <span>View Details</span>
+                    </Link>
+
+                    <button
+                      type="button"
+                      className="order-action-btn"
+                      onClick={() => setOpenReviewId(product.productId)}
+                    >
+                      <RateReviewOutlinedIcon sx={{ fontSize: 15 }} />
+                      <span>Write Review</span>
+                    </button>
+
+                    {openReviewId === product.productId && (
+                      <DialogBox
+                        open={Boolean(openReviewId)}
+                        handleClose={() => setOpenReviewId(null)}
+                        id={product.productId}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
-              <Divider className={classes.divider} />
-              <div style={{ padding: "1rem" }}>
-                <Button
-                  variant="outlined"
-                  className={classes.reviewButton}
-                  onClick={handleClickOpen}
-                >
-                  <EditIcon style={{ marginRight: "8px" }} />
-                  Write A Product Review
-                </Button>
+            ))}
+        </div>
 
-                <DialogBox
-                  open={open}
-                  handleClose={handleClose}
-                  id={product.productId}
-                  className={classes.dialog}
-                />
-              </div>
-            </div>
-
-            {/* Right side */}
-            {!isSmallScreen && (
-              <div className={classes.secondBlock_right}>
-                <div className={classes.addressBlock}>
-                  <Typography variant="h6">{user.name}</Typography>
-                  <Typography variant="subtitle1" style={{ fontWeight: 400 }}>
-                    Delivery Address :
-                  </Typography>
-                  <Typography variant="body2" className={classes.addressText}>
-                    {shippingInfo.address}
-                  </Typography>
-                  <Typography variant="body2" className={classes.addressText}>
-                    {shippingInfo.city}, {shippingInfo.state},{" "}
-                    {shippingInfo.country} - {shippingInfo.pinCode}
-                  </Typography>
-                  <Typography variant="body2" className={classes.addressText}>
-                    Phone: {shippingInfo.phoneNo}
-                  </Typography>
-                </div>
-              </div>
+        {/* Right Column: Destination Summary */}
+        {shippingInfo && (
+          <div className="order-shipping-dest">
+            <h4>Destination Address</h4>
+            <span className="order-dest-name">
+              {shippingInfo.firstName
+                ? `${shippingInfo.firstName} ${shippingInfo.lastName || ""}`
+                : user?.name}
+            </span>
+            <span className="order-dest-addr">
+              {shippingInfo.address}, {shippingInfo.city}, {shippingInfo.state}{" "}
+              - {shippingInfo.pinCode}
+            </span>
+            <span className="order-dest-addr">{shippingInfo.country}</span>
+            {shippingInfo.phoneNo && (
+              <span className="order-dest-phone">
+                Contact: +91 {shippingInfo.phoneNo}
+              </span>
             )}
           </div>
-        </Card>
-      ))}
+        )}
+      </div>
     </div>
   );
 };

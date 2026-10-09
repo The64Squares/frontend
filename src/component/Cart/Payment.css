@@ -1,0 +1,324 @@
+/* =====================================================================
+   THE64SQUARES — Luxury Razorpay Payment Experience CSS
+   ===================================================================== */
+
+.payment-page-root {
+  background-color: #f8f9fb;
+  min-height: 100vh;
+  padding: 2.5rem 1.5rem 5rem;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+
+.payment-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* 2-Column Responsive Checkout Layout */
+.payment-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 2.25rem;
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .payment-layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Left Column: Payment Form Card */
+.payment-form-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 2.25rem 2.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+}
+
+.payment-header-wrap {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.payment-title {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #09090b;
+  margin: 0 0 0.35rem 0;
+  letter-spacing: -0.01em;
+}
+
+.payment-subtitle {
+  font-size: 0.88rem;
+  color: #71717a;
+  margin: 0;
+}
+
+/* Security Assurance Pill */
+.payment-ssl-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: #fcfcfd;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  padding: 0.85rem 1.15rem;
+  margin-bottom: 1.75rem;
+  font-size: 0.84rem;
+  color: #52525b;
+}
+
+.payment-ssl-banner strong {
+  color: #18181b;
+}
+
+/* Payment Method Tabs */
+.payment-methods-tabs {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+}
+
+.payment-method-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  background-color: #fafafa;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #52525b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.payment-method-tab:hover {
+  background-color: #ffffff;
+  border-color: #09090b;
+  color: #09090b;
+}
+
+.payment-method-tab.active {
+  background-color: #09090b;
+  color: #ffffff;
+  border-color: #09090b;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Razorpay Details Container */
+.razorpay-method-box {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 14px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+.razorpay-badge-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.razorpay-logo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0c2340;
+  letter-spacing: -0.02em;
+}
+
+.razorpay-logo-badge span.accent {
+  color: #3399cc;
+}
+
+/* Accepted Payment Modes Badges */
+.accepted-modes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin: 0.5rem 0;
+}
+
+@media (max-width: 580px) {
+  .accepted-modes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mode-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  background-color: #fafafa;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.mode-icon-ring {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #18181b;
+}
+
+.mode-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.mode-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #18181b;
+}
+
+.mode-sub {
+  font-size: 0.74rem;
+  color: #71717a;
+}
+
+/* Pay CTA Button */
+.payment-submit-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 1.05rem 1.75rem;
+  border-radius: 10px;
+  border: 1px solid #09090b;
+  background: #09090b;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.payment-submit-btn:hover:not(:disabled) {
+  background: #27272a;
+  border-color: #27272a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+.payment-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Right Column: Order Summary Card */
+.payment-summary-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: sticky;
+  top: 6rem;
+}
+
+.payment-summary-title {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #09090b;
+  margin: 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Destination Recap */
+.payment-destination-box {
+  background-color: #fafafa;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  padding: 0.95rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: #52525b;
+}
+
+.payment-destination-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.payment-destination-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #71717a;
+}
+
+.payment-edit-link {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #c5a880;
+  text-decoration: none;
+}
+
+.payment-edit-link:hover {
+  text-decoration: underline;
+}
+
+.payment-summary-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.payment-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.88rem;
+  color: #52525b;
+}
+
+.payment-breakdown-row.total {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #09090b;
+  margin-top: 0.35rem;
+}

@@ -1,137 +1,271 @@
 
-.profile-icon {
+/* Profile Dropdown - THE64SQUARES Design System */
+.profile-dropdown-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
-  position: relative;
+}
+
+/* Trigger Button */
+.profile-trigger-btn {
+  background: transparent;
+  border: none;
   cursor: pointer;
-  border: none;
-  margin-left: 2px;
-  margin-bottom: 7px;
-
-}
-
-.css-tzssek-MuiSvgIcon-root{
-  font-size: 28px !important;
-}
-.arrow-icon{
-  font-size: 20px !important;
-  
-}
-.profile-icon > svg {
-  font-size: 2rem;
-}
-
-.modal-container {
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
-
+  align-items: center;
+  gap: 2px;
+  padding: 4px 6px;
+  border-radius: 999px;
+  color: #18181B;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
 }
 
-.modal-container .modal-content {
-  background-color: #121212;
-  color: #f2f2f2;
-  padding: 20px 5px;
-  width: 220px;
+.profile-trigger-btn:hover,
+.profile-trigger-btn.active {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #09090B;
+}
+
+.profile-trigger-btn:active {
+  transform: scale(0.96);
+}
+
+.profile-trigger-icon {
+  font-size: 1.65rem !important;
+  color: inherit;
+}
+
+.profile-trigger-chevron {
+  font-size: 1.15rem !important;
+  color: #71717A;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
+}
+
+.profile-trigger-btn:hover .profile-trigger-chevron {
+  color: #09090B;
+}
+
+.profile-trigger-chevron.chevron-rotated {
+  transform: rotate(180deg);
+}
+
+/* Floating Card Dropdown */
+.profile-dropdown-card {
   position: absolute;
-  top: 110px;
-  right: 2.5rem;
-  border: none;
-  outline: none; 
-  box-shadow: none;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2), 0px 4px 12px rgba(0, 0, 0, 0.1);
- 
-
-    
+  top: calc(100% + 10px);
+  right: 0;
+  width: 275px;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  z-index: 1050;
+  animation: profileDropdownFade 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top right;
 }
 
+@keyframes profileDropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
-.avatar {
-  border-radius: 50%;
-  object-fit: cover;
+/* Guest State */
+.profile-guest-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-welcome-badge {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #71717A;
   margin-bottom: 2px;
 }
 
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 14px;
+.profile-guest-title {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #09090B;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.01em;
 }
 
-.welcome-message {
-  text-align: center;
-  margin-bottom: 20px;
-   font-size: 14px;
+.profile-guest-desc {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.8rem;
+  color: #71717A;
+  line-height: 1.45;
+  margin: 0 0 12px 0;
 }
 
-.welcome-message strong {
-  font-weight: bold;
-   font-size: 14px !important;
-}
-
-.welcome-message p {
-  margin: 10px 0;
-  font-size: 14px !important;
-  
-}
-
-.user-id,
-.user-name,
-.user-email,
-.created-at {
-  margin-bottom: -8px;
-  font-size: 14px;
-  font-weight: 400px;
-
-}
-
-.divider {
-  height: 2px;
-  background-color: rgba(145, 142, 142, 0.168);
-  margin-bottom: 10px;
-  margin-top: 20px;
+.profile-signin-btn {
   width: 100%;
-}
-
-.profile-menu {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.menu-item {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 10px 0px;
-  gap: 1rem;
+  background: #09090B;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.825rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   cursor: pointer;
-  transition: background-color 0.3s, box-shadow 0.3s;
-
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.menu-item:hover {
-  background-color: #ed1c24;
-  /* box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2), 0px 4px 12px rgba(0, 0, 0, 0.1); */
-
+.profile-signin-btn:hover {
+  background: #27272A;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.menu-icon {
-  color: #f2f2f2;
-  font-size: 26px;
-  margin-right: 0.5rem;
+.profile-signin-btn:active {
+  transform: translateY(0);
 }
 
-.menu-item span {
-  color: #f2f2f2;
-  font-size: 16px;
+/* User Card State */
+.profile-user-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.25rem 0 0.25rem 0;
+}
+
+.profile-user-meta {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.profile-user-name {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-weight: 600;
+  font-size: 0.925rem;
+  color: #09090B;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.profile-user-email {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.75rem;
+  color: #71717A;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-top: 1px;
+}
+
+.profile-user-role {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #09090B;
+  background: #F4F4F5;
+  padding: 2px 8px;
+  border-radius: 999px;
+  display: inline-block;
+  width: fit-content;
+  margin-top: 4px;
+}
+
+/* Dividers */
+.profile-menu-divider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.06);
+  margin: 0.75rem 0;
+}
+
+.profile-menu-divider-subtle {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.04);
+  margin: 0.35rem 0;
+}
+
+/* Menu Items */
+.profile-menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.profile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #27272A;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.865rem;
   font-weight: 500;
-  text-decoration: none;
-  text-decoration-line: none;
+  text-align: left;
+  transition: all 0.18s ease;
+  outline: none;
 }
 
-.profile-icon > .css-tzssek-MuiSvgIcon-root:hover {
-background: white !important;
+.profile-menu-item:hover {
+  background-color: #F4F4F5;
+  color: #09090B;
+  transform: translateX(3px);
 }
+
+.profile-menu-icon {
+  font-size: 1.25rem !important;
+  color: #71717A;
+  transition: color 0.18s ease;
+}
+
+.profile-menu-item:hover .profile-menu-icon {
+  color: #09090B;
+}
+
+.profile-menu-item.profile-auth-action {
+  color: #09090B;
+  font-weight: 600;
+}
+
+.profile-menu-item.profile-auth-action .profile-menu-icon {
+  color: #09090B;
+}
+
+.profile-menu-item.profile-logout-item {
+  color: #71717A;
+}
+
+.profile-menu-item.profile-logout-item:hover {
+  background-color: rgba(239, 68, 68, 0.08);
+  color: #DC2626;
+}
+
+.profile-menu-item.profile-logout-item:hover .profile-menu-icon {
+  color: #DC2626;
+}
+
+/* Mobile responsive constraints */
+@media (max-width: 600px) {
+  .profile-dropdown-card {
+    right: -10px;
+    width: calc(100vw - 2rem);
+    max-width: 280px;
+  }
+}
+
 

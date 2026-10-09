@@ -162,7 +162,6 @@ function UpdateProfile() {
               <label htmlFor="avatar-input">
                 <Button
                   variant="contained"
-                  color="default"
                   startIcon={<CloudUploadIcon style={{ color: "#FFFFFF" }} />}
                   component="span"
                   className={classes.uploadAvatarButton}

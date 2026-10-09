@@ -1,31 +1,55 @@
-/* Cart Icon Styles */
+/* Cart Icon Styles - THE64SQUARES Design System */
 .cartIconWrapper {
   position: relative;
-  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cartIcon {
-  font-size: 1.8rem;
   cursor: pointer;
-
-  color: #000; /* Initial icon color (black) */
+  color: #18181B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
 }
+
 .cartIcon > svg {
-  font-size: 1.7rem;
+  font-size: 1.65rem;
+  color: #18181B;
+  transition: color 0.2s ease;
 }
 
 .cartIcon:hover {
-  color: #ed1c24; /* Hover icon color (red) */
+  color: #09090B;
+  transform: scale(1.08);
 }
+
+.cartIcon:hover > svg {
+  color: #09090B;
+}
+
 .cartItemCount {
   position: absolute;
-  top: -2px;
-  right: -8px;
-  background-color: #ed1c24;
-  color: #fff;
-  font-size: 12px;
-  line-height: 18px;
-  border-radius: 50%;
-  padding: 0 5px;
+  top: -6px;
+  right: -9px;
+  background-color: #09090B;
+  color: #FFFFFF;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  line-height: 1;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  border: 1.5px solid #FFFFFF;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
 }
+

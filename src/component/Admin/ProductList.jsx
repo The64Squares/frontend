@@ -89,23 +89,26 @@ const columns = [
     minWidth: 230,
     headerClassName: "column-header1",
     renderCell: (params) => {
+      const productId = params.row?.id || params.id;
       return (
-        <>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
           <Link
-            to={`/admin/product/${params.getValue(params.id, "id")}`}
-            style={{ marginLeft: "1rem" }}
+            to={`/admin/product/${productId}`}
+            className="table-action-btn edit"
+            title="Edit Product"
           >
-            <EditIcon className="icon-" />
+            <EditIcon fontSize="small" />
           </Link>
 
-          <div
-            onClick={() =>
-              deleteProductHandler(params.getValue(params.id, "id"))
-            }
+          <button
+            type="button"
+            className="table-action-btn delete"
+            onClick={() => deleteProductHandler(productId)}
+            title="Delete Product"
           >
-            <DeleteIcon className="iconbtn" />
-          </div>
-        </>
+            <DeleteIcon fontSize="small" />
+          </button>
+        </div>
       );
     },
   },

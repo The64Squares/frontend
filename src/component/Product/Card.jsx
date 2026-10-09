@@ -1,197 +1,145 @@
-import React, { useState  } from "react";
-import Avatar from "@mui/material/Avatar";
+import React, { useState } from "react";
+import "./Reviews.css";
 import Rating from "@mui/material/Rating";
-import Typography from "@mui/material/Typography";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import { makeStyles } from "@mui/styles";
+import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 
-const useStyles = makeStyles((theme) => ({
-  cardRoot: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    width: 455,
-    minHeight: "50vh",
-    padding: theme.spacing(2),
-    margin: theme.spacing(2),
-    boxShadow: "0px 3px 6px #00000029",
-    borderRadius: "4px",
-    background: "white",
-  },
-  cardheader: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    marginBottom: theme.spacing(2),
-  },
-  avatar: {
-    marginRight: theme.spacing(1),
-  },
-
-  title: {
-    marginBottom: "1rem",
-    fontWeight: 700,
-  },
-  commentTxt: {
-    marginBottom: "1.5rem",
-    fontSize: "14px",
-    color: "#414141",
-  },
-  recommend: {
-    fontWeight: 700,
-  },
-  helpful: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    marginTop: theme.spacing(2),
-  },
-
-  thumbIcon: {
-    marginRight: "5px",
-    marginLeft: "2rem",
-    cursor: "pointer",
-    fontSize: "1.5rem",
-    "&:hover": {
-      color: "red",
-    },
-  },
-
-  subHeadings: {
-    fontSize: "16px",
-    color: "#414141",
-    fontWeight: 700,
-  },
-  bodyText: {
-    fontSize: "14px",
-    color: "#414141",
-    fontWeight: 500,
-  },
-
-  star: {
-    color: "black",
-    fontSize: 24,
-    marginTop: "2px",
-  },
-  clicked: {
-    color: "red",
-  },
-  yes: {
-    color: "green",
-  },
-  no: {
-    color: "red",
-  },
-}));
+function formatDate(dateString) {
+  if (!dateString) return "Recent Patron";
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
+}
 
 const MyCard = ({ review }) => {
-  const classes = useStyles();
+  const [upvotes, setUpvotes] = useState(12);
+  const [downvotes, setDownvotes] = useState(2);
+  const [userVoted, setUserVoted] = useState(null); // 'up' | 'down' | null
 
-  const [helpful, setHelpful] = useState(10);
-  const [unhelpful, setUnHelpful] = useState(5);
-  const [helpfulClicked, setHelpfulClicked] = useState(false);
-  const [unhelpfulClicked, setUnhelpfulClicked] = useState(false);
-
-  const helpfulHandler = (type) => {
-    if (type === "up" && !helpfulClicked) {
-      setHelpful(helpful + 1);
-      setHelpfulClicked(true);
-
-      if (unhelpfulClicked) {
-        setUnHelpful(unhelpful - 1);
-        setUnhelpfulClicked(false);
+  const handleVote = (type) => {
+    if (userVoted === type) {
+      // Toggle off
+      if (type === "up") setUpvotes((v) => v - 1);
+      if (type === "down") setDownvotes((v) => v - 1);
+      setUserVoted(null);
+    } else {
+      if (type === "up") {
+        setUpvotes((v) => v + 1);
+        if (userVoted === "down") setDownvotes((v) => v - 1);
+      } else {
+        setDownvotes((v) => v + 1);
+        if (userVoted === "up") setUpvotes((v) => v - 1);
       }
-    } else if (type === "down" && !unhelpfulClicked) {
-      setUnHelpful(unhelpful + 1);
-      setUnhelpfulClicked(true);
-
-      if (helpfulClicked) {
-        setHelpful(helpful - 1);
-        setHelpfulClicked(false);
-      }
+      setUserVoted(type);
     }
   };
 
-  function formateDate(dateString){
-    const date = new Date(dateString);
-
-    const formattedDate = new Intl.DateTimeFormat("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    }).format(date);
-    return formattedDate;
-  }
+  const ratingVal = review.ratings !== undefined ? Number(review.ratings) : 5;
 
   return (
-    <div className={classes.cardRoot}>
-      <div className={classes.cardheader}>
-        <Avatar
-          alt="User Avatar"
-          src={review.avatar || "https://i.imgur.com/JSW6mEk.png"}
-          className={classes.avatar}
-        />
-        <Typography variant="body1" className={classes.subHeadings}>
-          {review.name}
-        </Typography>
-        <Typography
-          variant="body1"
-          color="textSecondary"
-          style={{ marginLeft: "12rem" }}
-          className={classes.bodyText}
-        >
-          {formateDate(review.createdAt)}
-        </Typography>
-      </div>
+    <div className="review-item-card">
       <div>
-        <Rating
-          value={4}
-          precision={0.5}
-          size="midium"
-          readOnly
-          className={classes.star}
-        />
+        <div className="review-card-header">
+          <div className="review-avatar-wrap">
+            <img
+              src={
+                review.avatar ||
+                `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+                  review.name || "Client"
+                )}`
+              }
+              alt={review.name}
+            />
+          </div>
+
+          <div className="review-author-meta">
+            <span className="review-author-name">
+              {review.name}
+              <span className="verified-buyer-tag">
+                <VerifiedOutlinedIcon sx={{ fontSize: 13 }} />
+                Verified Patron
+              </span>
+            </span>
+            <span className="review-date-txt">
+              {formatDate(review.createdAt)}
+            </span>
+          </div>
+        </div>
+
+        <div style={{ margin: "1rem 0 0.65rem 0" }}>
+          <Rating
+            value={ratingVal}
+            precision={0.5}
+            readOnly
+            size="small"
+            sx={{
+              color: "#c5a880",
+              "& .MuiRating-iconEmpty": { color: "#e4e4e7" },
+            }}
+          />
+        </div>
+
+        {review.title && (
+          <h4 className="review-title-txt" style={{ marginBottom: "0.5rem" }}>
+            {review.title}
+          </h4>
+        )}
+
+        <p className="review-comment-body">{review.comment}</p>
       </div>
-      <Typography variant="h6" className={classes.title}>
-        {review.title}
-      </Typography>
-      <Typography variant="body1" className={classes.commentTxt}>
-        {review.comment}
-      </Typography>
-      <Typography variant="body1" className={classes.recommend}>
-        Would you recommend this product?{" "}
-        <span className={review.recommend ? classes.yes : classes.no}>
-          {review.recommend ? "Yes!" : "No!"}
-        </span>
-      </Typography>
-      <div className={classes.helpful}>
-        <Typography
-          variant="body2"
-          color="textSecondary "
-          className={classes.subHeadings}
-        >
-          Helpful?
-        </Typography>
-        <ThumbUpIcon
-          className={`${classes.thumbIcon} ${
-            helpfulClicked ? classes.clicked : ""
-          }`}
-          onClick={() => helpfulHandler("up")}
-        />
-        <Typography>{helpful}</Typography>
-        <ThumbDownIcon
-          className={`${classes.thumbIcon} ${
-            unhelpfulClicked ? classes.clicked : ""
-          }`}
-          onClick={() => helpfulHandler("down")}
-        />
-        <Typography>{unhelpful}</Typography>
+
+      <div>
+        {review.recommend !== false && (
+          <div className="review-recommend-pill" style={{ marginBottom: "1rem" }}>
+            <CheckCircleIcon sx={{ fontSize: 16 }} />
+            <span>Recommends this acquisition</span>
+          </div>
+        )}
+
+        <div className="review-footer-actions">
+          <span className="review-helpful-label">Was this feedback helpful?</span>
+          <div className="review-helpful-btns">
+            <button
+              type="button"
+              className={`helpful-toggle-btn ${
+                userVoted === "up" ? "active" : ""
+              }`}
+              onClick={() => handleVote("up")}
+            >
+              {userVoted === "up" ? (
+                <ThumbUpIcon sx={{ fontSize: 14 }} />
+              ) : (
+                <ThumbUpOutlinedIcon sx={{ fontSize: 14 }} />
+              )}
+              <span>{upvotes}</span>
+            </button>
+
+            <button
+              type="button"
+              className={`helpful-toggle-btn ${
+                userVoted === "down" ? "active" : ""
+              }`}
+              onClick={() => handleVote("down")}
+            >
+              {userVoted === "down" ? (
+                <ThumbDownIcon sx={{ fontSize: 14 }} />
+              ) : (
+                <ThumbDownOutlinedIcon sx={{ fontSize: 14 }} />
+              )}
+              <span>{downvotes}</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
+
 export default MyCard;

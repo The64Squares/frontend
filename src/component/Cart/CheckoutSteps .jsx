@@ -76,8 +76,9 @@ const useColorlibStepIconStyles = makeStyles((theme) => ({
     },
   },
   active: {
-    backgroundColor: "#ed1c24",
-    boxShadow: "0 4px 10px 0 rgba(0,0,0,.25)",
+    backgroundColor: "#09090b",
+    border: "2px solid #c5a880 !important",
+    boxShadow: "0 4px 14px rgba(197, 168, 128, 0.35)",
     marginTop: "0rem",
   },
   completed: {

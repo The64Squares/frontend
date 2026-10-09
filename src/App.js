@@ -1,10 +1,7 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useEffect, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { load_UserProfile } from "./actions/userAction";
-import axios from "axios";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
 import The64SquaresBallLoader from "./component/layouts/loader/Loader";
 import PrivateRoute from "./component/Route/PrivateRoute";
 import { SpeedInsights } from '@vercel/speed-insights/react';
@@ -44,42 +41,15 @@ const LazyUpdateProduct = React.lazy(() => import("./component/Admin/UpdateProdu
 const LazyProcessOrder = React.lazy(() => import("./component/Admin/ProcessOrder"));
 const LazyUpdateUser = React.lazy(() => import("./component/Admin/UpdateUser"));
 const LazyNewProduct = React.lazy(() => import("./component/Admin/NewProduct"));
+const LazyCategoryList = React.lazy(() => import("./component/Admin/CategoryList"));
 const LazyProductReviews = React.lazy(() => import("./component/Admin/ProductReviews"));
 
 function App() {
-  const [stripeApiKey, setStripeApiKey] = useState("");
   const dispatch = useDispatch();
-
-  async function getStripeApiKey() {
-    try {
-      const { data } = await axios.get("/api/v1/stripeapikey");
-      if (data && data.stripeApiKey) {
-        sessionStorage.setItem("stripeApiKey", JSON.stringify(data.stripeApiKey));
-        setStripeApiKey(data.stripeApiKey);
-      }
-    } catch (error) {
-      console.error("Error fetching Stripe API key:", error);
-    }
-  }
-
-  useEffect(() => {
-    const savedApiKey = sessionStorage.getItem("stripeApiKey");
-    if (savedApiKey) {
-      try {
-        setStripeApiKey(JSON.parse(savedApiKey));
-      } catch (e) {
-        setStripeApiKey(savedApiKey);
-      }
-    } else {
-      getStripeApiKey();
-    }
-  }, []);
 
   useEffect(() => {
     dispatch(load_UserProfile());
   }, [dispatch]);
-
-  const stripePromise = stripeApiKey ? loadStripe(stripeApiKey) : null;
 
   return (
     <>
@@ -111,21 +81,17 @@ function App() {
           <Route path="/order/confirm" element={<><Header /><PrivateRoute><ConfirmOrder /></PrivateRoute><Services /><Footer /></>} />
           <Route path="/success" element={<><Header /><PrivateRoute><OrderSuccess /></PrivateRoute><Services /><Footer /></>} />
 
-          {/* Stripe Payment Protected Route */}
+          {/* Payment Gateway Route (Razorpay & COD) */}
           <Route
             path="/process/payment"
             element={
-              stripePromise ? (
-                <Elements stripe={stripePromise}>
-                  <Header />
-                  <PrivateRoute><Payment /></PrivateRoute>
-                </Elements>
-              ) : (
-                <>
-                  <Header />
-                  <PrivateRoute><Payment /></PrivateRoute>
-                </>
-              )
+              <>
+                <Header />
+                <PrivateRoute>
+                  <Payment />
+                </PrivateRoute>
+                <Footer />
+              </>
             }
           />
 
@@ -133,6 +99,7 @@ function App() {
           <Route path="/admin/dashboard" element={<PrivateRoute isAdmin={true}><LazyDashboard /></PrivateRoute>} />
           <Route path="/admin/products" element={<PrivateRoute isAdmin={true}><LazyProductList /></PrivateRoute>} />
           <Route path="/admin/product/:id" element={<PrivateRoute isAdmin={true}><LazyUpdateProduct /></PrivateRoute>} />
+          <Route path="/admin/categories" element={<PrivateRoute isAdmin={true}><LazyCategoryList /></PrivateRoute>} />
           <Route path="/admin/reviews" element={<PrivateRoute isAdmin={true}><LazyProductReviews /></PrivateRoute>} />
           <Route path="/admin/orders" element={<PrivateRoute isAdmin={true}><LazyOrderList /></PrivateRoute>} />
           <Route path="/admin/order/:id" element={<PrivateRoute isAdmin={true}><LazyProcessOrder /></PrivateRoute>} />

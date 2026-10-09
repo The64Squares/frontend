@@ -63,11 +63,13 @@ function Header() {
   const handleSearchFormSubmit = (event) => {
     event.preventDefault();
     if (searchValue.trim()) {
-      navigate(`/products/${searchValue}`);
+      navigate(`/products/${encodeURIComponent(searchValue.trim())}`);
     } else {
       navigate("/products");
     }
+    setSearchBarActive(false);
   };
+
 
   const handleCrossButtonClick = () => {
     setSearchValue("");
@@ -106,35 +108,32 @@ function Header() {
           </div>
 
           {/* Brand Logo */}
-          {!searchBarActive && (
-            <Link to="/" className="header-brand-logo">
-              <img src="/logo.png" alt="THE64SQUARES Logo" className="brand-logo-img" />
-              <span className="brand-logo-text">THE64SQUARES</span>
-            </Link>
-          )}
+          <Link to="/" className="header-brand-logo">
+            <img src="/logo.png" alt="THE64SQUARES Logo" className="brand-logo-img" />
+            <span className="brand-logo-text">THE64SQUARES</span>
+          </Link>
 
           {/* Desktop Navigation Links */}
-          {!searchBarActive && (
-            <nav className="header-nav-menu">
-              <ul>
-                <li>
-                  <Link to="/">Home</Link>
-                </li>
-                <li>
-                  <Link to="/products">Chess Boards</Link>
-                </li>
-                <li>
-                  <Link to="/products?category=Artisanal+Chess+Sets">Chess Sets</Link>
-                </li>
-                <li>
-                  <Link to="/about_us">Our Story</Link>
-                </li>
-                <li>
-                  <Link to="/contact">Contact</Link>
-                </li>
-              </ul>
-            </nav>
-          )}
+          <nav className={`header-nav-menu ${searchBarActive ? "search-active" : ""}`}>
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/products">Chess Boards</Link>
+              </li>
+              <li>
+                <Link to="/products?category=Artisanal+Chess+Sets">Chess Sets</Link>
+              </li>
+              <li>
+                <Link to="/about_us">Our Story</Link>
+              </li>
+              <li>
+                <Link to="/contact">Contact</Link>
+              </li>
+            </ul>
+          </nav>
+
 
           {/* Action Icons: Search, Cart, Account */}
           <div className="header-actions">

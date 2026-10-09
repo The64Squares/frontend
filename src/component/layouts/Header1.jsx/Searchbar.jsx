@@ -1,43 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-
+import React, { useEffect, useRef } from "react";
 import { SearchOutlined, CloseOutlined } from "@mui/icons-material";
-
 import "./Searchbar.css";
-
-const SearchBar = styled.div`
-  display: flex;
-  align-items: center;
-  width: auto;
-  background-color: #f2f2f2;
-  border-radius: 25px;
-  padding: 5px;
-
-  @media (max-width: 768px) {
-    width: 90%;
-  }
-`;
-
-const SearchInput = styled.input`
-  width: 100%;
-  outline: none;
-  background-color: transparent;
-  margin-left: 10px;
-  margin-right: 10px;
-  font-size: 1.1rem;
-  padding: 5px 8px 0px 8px;
-  border: none;
-`;
-
-const SearchButton = styled.button`
-  border: none;
-  outline: none;
-  background-color: transparent;
-  cursor: pointer;
-`;
-
-
-
 
 const Search = ({
   handleSearchButtonClick,
@@ -47,33 +10,94 @@ const Search = ({
   handleSearchInputChange,
   searchValue,
 }) => {
+  const inputRef = useRef(null);
+  const containerRef = useRef(null);
+
+  // Auto-focus input when search bar opens
+  useEffect(() => {
+    if (searchBarActive && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [searchBarActive]);
+
+  // Close search bar on Escape key or outside click
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape" && searchBarActive) {
+        handleCrossButtonClick();
+      }
+    };
+
+    const handleClickOutside = (event) => {
+      if (
+        searchBarActive &&
+        containerRef.current &&
+        !containerRef.current.contains(event.target)
+      ) {
+        handleCrossButtonClick();
+      }
+    };
+
+    if (searchBarActive) {
+      window.addEventListener("keydown", handleKeyDown);
+      window.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [searchBarActive, handleCrossButtonClick]);
+
   return (
-    <>
-      {!searchBarActive && (
-        <SearchButton onClick={handleSearchButtonClick}>
-          <SearchOutlined fontSize="large" className="closeIcon" />
-        </SearchButton>
-      )}
-      {searchBarActive && (
-        <SearchBar>
-          <SearchButton onClick={handleSearchFormSubmit}>
-            <SearchOutlined fontSize="large" className="closeIcon" />
-          </SearchButton>
-          <form onSubmit={handleSearchFormSubmit} className="search_from">
-            <SearchInput
+    <div className="search-component-root" ref={containerRef}>
+      {!searchBarActive ? (
+        <button
+          type="button"
+          className="search-trigger-btn"
+          onClick={handleSearchButtonClick}
+          aria-label="Search products"
+          title="Search"
+        >
+          <SearchOutlined className="search-trigger-icon" />
+        </button>
+      ) : (
+        <div className="searchbar-expanded-container">
+          <button
+            type="button"
+            className="search-icon-btn"
+            onClick={handleSearchFormSubmit}
+            aria-label="Submit search"
+          >
+            <SearchOutlined className="search-input-icon" />
+          </button>
+
+          <form onSubmit={handleSearchFormSubmit} className="searchbar-form">
+            <input
+              ref={inputRef}
               type="text"
-              placeholder="Search........."
+              className="searchbar-input"
+              placeholder="Search chess boards, pieces, sets..."
               value={searchValue}
               onChange={handleSearchInputChange}
+              aria-label="Search query"
             />
           </form>
-          <SearchButton onClick={handleCrossButtonClick}>
-            <CloseOutlined fontSize="large" className="closeIcon" />
-          </SearchButton>
-        </SearchBar>
+
+          <button
+            type="button"
+            className="search-close-btn"
+            onClick={handleCrossButtonClick}
+            aria-label="Close search"
+            title="Close (Esc)"
+          >
+            <CloseOutlined className="search-close-icon" />
+          </button>
+        </div>
       )}
-    </>
+    </div>
   );
 };
 
 export default Search;
+

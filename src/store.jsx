@@ -25,9 +25,12 @@ import {
   orderDetialsReducer,
   allOrdersReducer,
   deletUpdateOrderReducer,
-  
-
 } from "./reducers/orderReducer";
+
+import {
+  categoriesReducer,
+  categoryOperationReducer,
+} from "./reducers/categoryReducer";
 
 const rootReducer = combineReducers({
   products: productsReducer,
@@ -46,8 +49,10 @@ const rootReducer = combineReducers({
   deleteUpdateOrder: deletUpdateOrderReducer,
   allUsers: allUsersReducer,
   userDetails: userDetailsReducer,
-  deleteReview :deleteReviewReducer,
-  getAllReview : getALLReviewReducer
+  deleteReview: deleteReviewReducer,
+  getAllReview: getALLReviewReducer,
+  categoriesData: categoriesReducer,
+  categoryOperation: categoryOperationReducer,
 });
 
 // get all Cart values from local storage and pass this initial state into store

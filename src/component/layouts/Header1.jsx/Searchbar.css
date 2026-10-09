@@ -1,22 +1,166 @@
-.search_from{
-    width: 70vw;
-    height: 25px;
-    padding: auto;
-}
-@media (max-width: 899px){
- .search_from{
-     width: 40vw;
- }  
+/* Search Component - THE64SQUARES Design System */
+.search-component-root {
+  display: flex;
+  align-items: center;
+  position: relative;
 }
 
-.closeIcon  {
-  color: #000000;
-  font-size: 1.8rem;
-  transition: color 0.2s ease-in-out;
+/* Collapsed Trigger Button */
+.search-trigger-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: #18181B;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0;
 }
 
-/* Apply the hover effect on the CloseOutlined icon */
-.closeIcon:hover {
-  color: #e30605;
+.search-trigger-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #09090B;
+  transform: scale(1.06);
 }
+
+.search-trigger-btn:active {
+  transform: scale(0.96);
+}
+
+.search-trigger-icon {
+  font-size: 1.55rem !important;
+  color: inherit;
+}
+
+/* Expanded Search Bar Container */
+.searchbar-expanded-container {
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 999px;
+  padding: 4px 6px 4px 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  width: 320px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: searchBarExpand 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.searchbar-expanded-container:focus-within {
+  border-color: #09090B;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 0 0 2px rgba(9, 9, 11, 0.08);
+}
+
+@keyframes searchBarExpand {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
+}
+
+.search-icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  color: #71717A;
+  border-radius: 50%;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.search-icon-btn:hover {
+  color: #09090B;
+  transform: scale(1.08);
+}
+
+.search-input-icon {
+  font-size: 1.35rem !important;
+  color: inherit;
+}
+
+.searchbar-form {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.searchbar-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #09090B;
+  padding: 5px 8px;
+  letter-spacing: 0.01em;
+}
+
+.searchbar-input::placeholder {
+  color: #A1A1AA;
+  font-weight: 400;
+}
+
+.search-close-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: #71717A;
+  transition: all 0.2s ease;
+  padding: 0;
+  margin-left: 2px;
+}
+
+.search-close-btn:hover {
+  background-color: rgba(0, 0, 0, 0.07);
+  color: #09090B;
+}
+
+.search-close-btn:active {
+  transform: scale(0.92);
+}
+
+.search-close-icon {
+  font-size: 1.25rem !important;
+  color: inherit;
+}
+
+/* Responsive adjustments */
+@media (max-width: 960px) {
+  .searchbar-expanded-container {
+    width: 250px;
+  }
+}
+
+@media (max-width: 600px) {
+  .searchbar-expanded-container {
+    width: 210px;
+    padding: 3px 4px 3px 8px;
+  }
+
+  .searchbar-input {
+    font-size: 0.82rem;
+  }
+}
+
 

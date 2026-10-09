@@ -1,80 +1,75 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import CloseIcon from "@mui/icons-material/Close";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+
 import { useAlert } from "../../context/AlertContext";
 import MetaData from "../layouts/MataData/MataData";
 import Loader from "../layouts/loader/Loader";
 import Sidebar from "./Siderbar";
-import { createProduct, clearErrors } from "../../actions/productAction";
-import { useNavigate } from "react-router-dom";
-import { NEW_PRODUCT_RESET } from "../../constants/productsConstatns";
-import InputAdornment from "@mui/material/InputAdornment";
-import Box from "@mui/material/Box";
-import DescriptionIcon from "@mui/icons-material/Description";
-import StorageIcon from "@mui/icons-material/Storage";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import CollectionsIcon from "@mui/icons-material/Collections";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InfoIcon from "@mui/icons-material/Info";
-
 import Navbar from "./Navbar";
+import { createProduct, clearErrors } from "../../actions/productAction";
+import { getAllCategories } from "../../actions/categoryAction";
+import { NEW_PRODUCT_RESET } from "../../constants/productsConstatns";
+import "./NewProduct.css";
 
-import useStyles from "../User/LoginFromStyle";
-import {
-  Avatar,
-  TextField,
-  Typography,
-  FormControl,
-  Button,
-} from "@mui/material";
+const DEFAULT_CATEGORIES = [
+  "Artisanal Chess Sets",
+  "Premium Chess Boards",
+  "Luxury Wood Sets",
+  "Weighted Chess Pieces",
+  "Tournament Boards",
+  "Collector Editions",
+  "Chess Accessories",
+];
 
 function NewProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const alert = useAlert();
+  const fileInputRef = useRef();
 
-  const { loading, error, success } = useSelector(
-    (state) => state.addNewProduct
+  const { loading, error, success } = useSelector((state) => state.addNewProduct);
+  const { categories: dynamicCategories } = useSelector(
+    (state) => state.categoriesData
   );
+
+  const categories =
+    dynamicCategories && dynamicCategories.length > 0
+      ? dynamicCategories.map((c) => c.name)
+      : DEFAULT_CATEGORIES;
+
   const [name, setName] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
-  const [Stock, setStock] = useState(0);
-  const [info , setInfo] = useState("")
+  const [Stock, setStock] = useState("");
+  const [info, setInfo] = useState("");
   const [images, setImages] = useState([]);
   const [imagesPreview, setImagesPreview] = useState([]);
-  const [isCategory, setIsCategory] = useState(false);
-  const fileInputRef = useRef();
   const [toggle, setToggle] = useState(false);
 
-  const classes = useStyles();
-  // togle handler =>
   const toggleHandler = () => {
-    console.log("toggle");
-    setToggle(!toggle);
+    setToggle((prev) => !prev);
   };
 
-  const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
-    setIsCategory(true);
-  };
+  useEffect(() => {
+    dispatch(getAllCategories());
+  }, [dispatch]);
 
-  const handleImageUpload = () => {
-    fileInputRef.current.click();
-  };
-  const categories = [
-    "Premium Chess Boards",
-    "Artisanal Chess Sets",
-    "Luxury Wood Sets",
-    "Weighted Chess Pieces",
-    "Tournament Boards",
-    "Collector Editions",
-    "Chess Accessories",
-  ];
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 999 && toggle) {
+        setToggle(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [toggle]);
+
   useEffect(() => {
     if (error) {
       alert.error(error);
@@ -83,31 +78,17 @@ function NewProduct() {
 
     if (success) {
       alert.success("Product Created Successfully");
-      navigate("/admin/dashboard");
+      navigate("/admin/products");
       dispatch({ type: NEW_PRODUCT_RESET });
     }
   }, [dispatch, alert, error, navigate, success]);
 
-  const createProductSubmitHandler = (e) => {
-    e.preventDefault();
-    const myForm = new FormData();
-    myForm.set("name", name);
-    myForm.set("price", price);
-    myForm.set("description", description);
-    myForm.set("category", category);
-    myForm.set("Stock", Stock);
-    myForm.set("info", info);
-    images.forEach((currImg) => {
-      myForm.append("images", currImg);
-    });
-
-    dispatch(createProduct(myForm));
+  const handleImageUploadClick = () => {
+    fileInputRef.current.click();
   };
 
-  const createProductImagesChange = (e) => {
+  const handleImagesChange = (e) => {
     const files = Array.from(e.target.files);
-    setImages([]);
-    setImagesPreview([]);
 
     files.forEach((file) => {
       const reader = new FileReader();
@@ -121,264 +102,263 @@ function NewProduct() {
     });
   };
 
+  const removeImage = (indexToRemove) => {
+    setImagesPreview((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+    setImages((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  const createProductSubmitHandler = (e) => {
+    e.preventDefault();
+
+    if (!name.trim()) {
+      alert.error("Please enter a product name");
+      return;
+    }
+    if (!category) {
+      alert.error("Please select a category");
+      return;
+    }
+    if (!price || Number(price) <= 0) {
+      alert.error("Please enter a valid price");
+      return;
+    }
+    if (images.length === 0) {
+      alert.error("Please upload at least one image");
+      return;
+    }
+
+    const productData = {
+      name: name.trim(),
+      price: Number(price),
+      description: description.trim(),
+      category,
+      Stock: Number(Stock) || 0,
+      info: info && info.trim() ? info.trim() : name.trim(),
+      images,
+    };
+
+    dispatch(createProduct(productData));
+  };
+
   return (
     <>
       {loading ? (
         <Loader />
       ) : (
         <>
-          <MetaData title={"New Product"} />
-          <div className={classes.updateProduct}>
-            <div
-              className={
-                !toggle ? `${classes.firstBox1}` : `${classes.toggleBox1}`
-              }
-            >
+          <MetaData title="Craft New Product - Admin" />
+
+          <div className="admin-editor-root">
+            <div className={!toggle ? "admin-editor-sidebar-wrap" : "admin-editor-sidebar-toggle"}>
               <Sidebar />
             </div>
 
-            <div className={classes.secondBox1}>
-              <div className={classes.navBar1}>
-                <Navbar toggleHandler={toggleHandler} />
+            <main className="admin-editor-main">
+              <Navbar toggleHandler={toggleHandler} />
+
+              <div className="admin-editor-header">
+                <div>
+                  <h1 className="admin-editor-title">Craft New Product</h1>
+                  <p className="admin-editor-subtitle">
+                    Publish an artisanal chess masterpiece to the catalog with high-resolution imagery.
+                  </p>
+                </div>
               </div>
 
-              <div
-                className={`${classes.formContainer} ${classes.formContainer2}`}
+              <form
+                className="admin-editor-form"
+                encType="multipart/form-data"
+                onSubmit={createProductSubmitHandler}
               >
-                <form
-                  className={`${classes.form} ${classes.form2}`}
-                  encType="multipart/form-data"
-                  onSubmit={createProductSubmitHandler}
-                >
-                  <Avatar className={classes.avatar}>
-                    <AddCircleOutlineIcon />
-                  </Avatar>
-                  <Typography
-                    variant="h5"
-                    component="h1"
-                    className={classes.heading}
-                  >
-                    Create Product
-                  </Typography>
-                  <TextField
-                    variant="outlined"
-                    fullWidth
-                    className={`${classes.nameInput} ${classes.textField}`}
-                    label="Product Name"
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <ShoppingCartOutlinedIcon
-                            style={{
-                              fontSize: 20,
-                              color: "#414141",
-                            }}
-                          />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-
-                  <TextField
-                    variant="outlined"
-                    label="Price"
-                    value={price}
-                    required
-                    fullWidth
-                    className={`${classes.passwordInput} ${classes.textField}`}
-                    onChange={(e) => setPrice(e.target.value)}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment
-                          position="end"
-                          style={{
-                            fontSize: 20,
-                            color: "#414141",
-                          }}
-                        >
-                          <AttachMoneyIcon />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                  <TextField
-                    variant="outlined"
-                    label="Stock"
-                    value={Stock}
-                    required
-                    className={`${classes.passwordInput} ${classes.textField}`}
-                    onChange={(e) => setStock(e.target.value)}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment
-                          position="end"
-                          style={{
-                            fontSize: 20,
-                            color: "#414141",
-                          }}
-                        >
-                          <StorageIcon />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                  <TextField
-                    variant="outlined"
-                    label="Product info"
-                    value={info}
-                    required
-                    className={`${classes.passwordInput} ${classes.textField}`}
-                    onChange={(e) => setInfo(e.target.value)}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment
-                          position="end"
-                          style={{
-                            fontSize: 20,
-                            color: "#414141",
-                          }}
-                        >
-                          <InfoIcon />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-
-                  <div className={classes.selectOption}>
-                    {!isCategory && (
-                      <Typography variant="body2" className={classes.labelText}>
-                        Choose Category
-                      </Typography>
-                    )}
-                    <FormControl className={classes.formControl}>
-                      <Select
-                        variant="outlined"
-                        fullWidth
-                        value={category}
-                        onChange={handleCategoryChange}
-                        className={classes.select}
-                        inputProps={{
-                          name: "category",
-                          id: "category-select",
-                        }}
-                        MenuProps={{
-                          classes: {
-                            paper: classes.menu,
-                          },
-                          anchorOrigin: {
-                            vertical: "bottom",
-                            horizontal: "left",
-                          },
-                          transformOrigin: {
-                            vertical: "top",
-                            horizontal: "left",
-                          },
-                          getContentAnchorEl: null,
-                        }}
-                      >
-                        {!category && (
-                          <MenuItem value="">
-                            <em>Choose Category</em>
-                          </MenuItem>
-                        )}
-                        {categories.map((cate) => (
-                          <MenuItem key={cate} value={cate}>
-                            {cate}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
+                {/* 1. Essential Details Card */}
+                <div className="admin-editor-card">
+                  <div className="admin-editor-card-header">
+                    <h2 className="admin-editor-card-title">Product Details</h2>
+                    <p className="admin-editor-card-desc">
+                      Core catalog attributes, pricing, and stock inventory.
+                    </p>
                   </div>
-                  <TextField
-                    variant="outlined"
-                    fullWidth
-                    className={classes.descriptionInput}
-                    label="Product Description"
-                    multiline
-                    rows={1}
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <DescriptionIcon
-                            className={classes.descriptionIcon}
-                          />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
 
-                  <div className={classes.root}>
-                    <div className={classes.imgIcon}>
-                      <CollectionsIcon
-                        fontSize="large"
-                        style={{ fontSize: 40 }}
+                  <div className="admin-editor-grid">
+                    <div className="admin-form-group full-width">
+                      <label className="admin-form-label">Product Name *</label>
+                      <input
+                        type="text"
+                        className="admin-form-input"
+                        placeholder="e.g. The Zagreb 1959 Grandmaster Artisan Set"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
                       />
                     </div>
 
-                    <input
-                      type="file"
-                      name="avatar"
-                      className={classes.input}
-                      accept="image/*"
-                      onChange={createProductImagesChange}
-                      multiple
-                      style={{ display: "none" }}
-                      ref={fileInputRef}
-                    />
-                    <label htmlFor="avatar-input">
-                      <Button
-                        variant="contained"
-                        color="default"
-                        className={classes.uploadAvatarButton}
-                        startIcon={
-                          <CloudUploadIcon
-                            style={{
-                              color: "#FFFFFF",
-                            }}
-                          />
-                        }
-                        onClick={handleImageUpload}
+                    <div className="admin-form-group">
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <label className="admin-form-label" style={{ margin: 0 }}>Category *</label>
+                        <Link
+                          to="/admin/categories"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ fontSize: "0.74rem", color: "#c5a880", textDecoration: "none", fontWeight: 600 }}
+                        >
+                          + Manage Categories
+                        </Link>
+                      </div>
+                      <select
+                        className="admin-form-select"
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        required
                       >
-                        <p className={classes.uploadAvatarText}>
-                          Upload Images
-                        </p>
-                      </Button>
-                    </label>
+                        <option value="">Select a Category</option>
+                        {categories.map((cat) => (
+                          <option key={cat} value={cat}>
+                            {cat}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="admin-form-group">
+                      <label className="admin-form-label">Price (INR ₹) *</label>
+                      <input
+                        type="number"
+                        min="0"
+                        className="admin-form-input"
+                        placeholder="e.g. 14999"
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="admin-form-group">
+                      <label className="admin-form-label">Stock Quantity *</label>
+                      <input
+                        type="number"
+                        min="0"
+                        className="admin-form-input"
+                        placeholder="e.g. 15"
+                        value={Stock}
+                        onChange={(e) => setStock(e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="admin-form-group">
+                      <label className="admin-form-label">Subtitle / Key Highlight</label>
+                      <input
+                        type="text"
+                        className="admin-form-input"
+                        placeholder="e.g. Hand-carved in Bud Rosewood & Boxwood (4.0'' King)"
+                        value={info}
+                        onChange={(e) => setInfo(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Detailed Description Card */}
+                <div className="admin-editor-card">
+                  <div className="admin-editor-card-header">
+                    <h2 className="admin-editor-card-title">Story & Specifications</h2>
+                    <p className="admin-editor-card-desc">
+                      Provide a compelling description of the chess pieces, craftsmanship, and materials.
+                    </p>
                   </div>
 
-                  <Box className={classes.imageArea}>
-                    {imagesPreview &&
-                      imagesPreview.map((image, index) => (
-                        <img
-                          key={index}
-                          src={image}
-                          alt="Product Preview"
-                          className={classes.image}
-                        />
-                      ))}
-                  </Box>
+                  <div className="admin-form-group">
+                    <label className="admin-form-label">Detailed Description *</label>
+                    <textarea
+                      className="admin-form-textarea"
+                      placeholder="Describe the historical heritage, weight distribution, lacquer finish, board dimensions, and collectible value..."
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
 
-                  <Button
-                    variant="contained"
-                    className={classes.loginButton}
-                    fullWidth
-                    type="submit"
-                    disabled={loading ? true : false}
+                {/* 3. Product Photography Card */}
+                <div className="admin-editor-card">
+                  <div className="admin-editor-card-header">
+                    <h2 className="admin-editor-card-title">Product Imagery</h2>
+                    <p className="admin-editor-card-desc">
+                      Upload high-resolution photography showcasing the chess set from multiple angles.
+                    </p>
+                  </div>
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    style={{ display: "none" }}
+                    ref={fileInputRef}
+                    onChange={handleImagesChange}
+                  />
+
+                  <div
+                    className="admin-upload-dropzone"
+                    onClick={handleImageUploadClick}
+                    role="button"
+                    tabIndex={0}
                   >
-                    Create
-                  </Button>
-                </form>
-              </div>
-            </div>
+                    <div className="admin-upload-icon-wrap">
+                      <CloudUploadOutlinedIcon fontSize="large" />
+                    </div>
+                    <p className="admin-upload-prompt">
+                      Click to browse or drop images here
+                    </p>
+                    <p className="admin-upload-help">
+                      High-quality JPEG, PNG, or WEBP (Multiple images supported)
+                    </p>
+                  </div>
+
+                  {imagesPreview.length > 0 && (
+                    <div className="admin-previews-grid">
+                      {imagesPreview.map((img, index) => (
+                        <div key={index} className="admin-preview-item">
+                          <img
+                            src={img}
+                            alt={`Preview ${index + 1}`}
+                            className="admin-preview-img"
+                          />
+                          <button
+                            type="button"
+                            className="admin-preview-remove"
+                            onClick={() => removeImage(index)}
+                            title="Remove image"
+                          >
+                            <CloseIcon style={{ fontSize: "14px" }} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Actions Bar */}
+                <div className="admin-editor-actions">
+                  <Link to="/admin/products" className="admin-btn-cancel">
+                    Cancel
+                  </Link>
+
+                  <button
+                    type="submit"
+                    className="admin-btn-publish"
+                    disabled={loading}
+                  >
+                    <AddCircleOutlineIcon fontSize="small" />
+                    <span>Publish Product to Boutique</span>
+                  </button>
+                </div>
+              </form>
+            </main>
           </div>
         </>
       )}
     </>
   );
 }
+
 export default NewProduct;

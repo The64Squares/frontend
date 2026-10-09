@@ -1,0 +1,70 @@
+/* =====================================================================
+   THE64SQUARES — Luxury Toast Notifications (Top-Right)
+   ===================================================================== */
+
+.Toastify__toast-container--top-right {
+  top: 1.5rem !important;
+  right: 1.5rem !important;
+  width: 360px !important;
+  max-width: 90vw !important;
+  z-index: 999999 !important;
+}
+
+.Toastify__toast {
+  background: #0d0e12 !important;
+  color: #f4f4f5 !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(197, 168, 128, 0.25) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+  padding: 1rem 1.15rem !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif !important;
+  font-size: 0.88rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.01em !important;
+  line-height: 1.4 !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.Toastify__toast--error {
+  border-color: rgba(220, 38, 38, 0.4) !important;
+}
+
+.Toastify__toast--success {
+  border-color: rgba(16, 185, 129, 0.4) !important;
+}
+
+.Toastify__toast--info {
+  border-color: rgba(197, 168, 128, 0.4) !important;
+}
+
+.Toastify__toast-body {
+  padding: 0 !important;
+  margin: 0 !important;
+  color: #ffffff !important;
+}
+
+.Toastify__close-button {
+  color: #a1a1aa !important;
+  opacity: 0.7 !important;
+  align-self: center !important;
+  transition: opacity 0.2s ease, color 0.2s ease !important;
+}
+
+.Toastify__close-button:hover {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Custom Luxury Progress Bars */
+.Toastify__progress-bar {
+  height: 3px !important;
+  background: linear-gradient(90deg, #c5a880, #e5cb9f) !important;
+}
+
+.Toastify__progress-bar--error {
+  background: linear-gradient(90deg, #ef4444, #f87171) !important;
+}
+
+.Toastify__progress-bar--success {
+  background: linear-gradient(90deg, #10b981, #34d399) !important;
+}

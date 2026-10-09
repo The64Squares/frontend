@@ -1,65 +1,161 @@
+/* =====================================================================
+   THE64SQUARES — Prestige Luxury Brand Loader
+   ===================================================================== */
+
 .chess-loader-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 50vh;
-  gap: 1.5rem;
-  padding: 4rem 0;
+  min-height: 55vh;
+  gap: 1.75rem;
+  padding: 4rem 1rem;
+  box-sizing: border-box;
+  width: 100%;
 }
 
-.chess-loader-logo-wrapper {
+.chess-loader-medallion {
   position: relative;
-  width: 76px;
-  height: 76px;
+  width: 96px;
+  height: 96px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.chess-loader-logo {
-  width: 58px;
-  height: 58px;
-  border-radius: 10px;
-  object-fit: cover;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  animation: logoBreath 2s ease-in-out infinite;
+/* Ambient luxury gold glow */
+.chess-loader-glow {
+  position: absolute;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(197, 168, 128, 0.3) 0%, transparent 70%);
+  animation: glowPulse 2.4s ease-in-out infinite;
+  pointer-events: none;
 }
 
-.chess-loader-ring {
+/* Faint gold circular track */
+.chess-loader-track {
   position: absolute;
   top: 0;
   left: 0;
-  width: 76px;
-  height: 76px;
-  border-radius: 14px;
-  border: 2px solid transparent;
-  border-top-color: #0A0A0A;
-  border-bottom-color: #0A0A0A;
-  animation: spinRing 1.5s linear infinite;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(197, 168, 128, 0.22);
+  box-sizing: border-box;
 }
 
-@keyframes logoBreath {
-  0%, 100% {
-    transform: scale(0.96);
-    opacity: 0.85;
-  }
-  50% {
-    transform: scale(1.04);
-    opacity: 1;
-  }
+/* Outer smooth spinning arc */
+.chess-loader-arc-outer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 2.5px solid transparent;
+  border-top-color: #c5a880;
+  border-right-color: #09090b;
+  box-sizing: border-box;
+  animation: spinSmooth 1.35s cubic-bezier(0.5, 0.15, 0.5, 0.85) infinite;
 }
 
-@keyframes spinRing {
+/* Counter-rotating dashed gold ring */
+.chess-loader-arc-inner {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(197, 168, 128, 0.45);
+  box-sizing: border-box;
+  animation: spinCounter 4s linear infinite;
+}
+
+/* Center circular emblem */
+.chess-loader-badge {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 2px solid #c5a880;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08), 0 0 12px rgba(197, 168, 128, 0.25);
+  z-index: 2;
+  animation: logoPulse 2.4s ease-in-out infinite;
+}
+
+.chess-loader-badge img {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+}
+
+/* Brand Typography & Shimmer */
+.chess-loader-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chess-loader-text {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  color: #09090b;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.chess-loader-shimmer-bar {
+  width: 68px;
+  height: 2px;
+  border-radius: 9999px;
+  background: rgba(197, 168, 128, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.chess-loader-shimmer-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #c5a880, transparent);
+  animation: shimmerSweep 1.8s ease-in-out infinite;
+}
+
+/* Keyframes */
+@keyframes spinSmooth {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-.loader-brand-text {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.25rem;
-  letter-spacing: 0.25em;
-  color: #0A0A0A;
-  font-weight: 700;
-  text-transform: uppercase;
+@keyframes spinCounter {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { transform: scale(0.92); opacity: 0.5; }
+  50% { transform: scale(1.15); opacity: 0.95; }
+}
+
+@keyframes logoPulse {
+  0%, 100% { transform: scale(0.97); }
+  50% { transform: scale(1.03); }
+}
+
+@keyframes shimmerSweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
 }

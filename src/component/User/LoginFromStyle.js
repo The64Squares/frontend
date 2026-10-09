@@ -1,227 +1,289 @@
 import { makeStyles } from "@mui/styles";
+
 const useStyles = makeStyles((theme) => ({
   formContainer: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: "7rem",
-    paddingBottom: "3rem",
-    height: "auto",
-
-    backgroundColor: "white",
+    minHeight: "calc(100vh - 120px)",
+    paddingTop: "7.5rem",
+    paddingBottom: "4rem",
+    paddingLeft: "1rem",
+    paddingRight: "1rem",
+    backgroundColor: "var(--bg-primary, #FAFAFA)",
+    backgroundImage: "radial-gradient(circle at 50% 0%, rgba(0, 0, 0, 0.02) 0%, transparent 75%)",
   },
   form: {
-    width: "350px",
+    width: "100%",
+    maxWidth: "440px",
     margin: "auto",
-    borderRadius: "5px",
-    padding: "2rem",
+    borderRadius: "16px",
+    padding: "2.5rem 2.25rem",
+    backgroundColor: "#FFFFFF",
+    border: "1px solid rgba(0, 0, 0, 0.08)",
+    boxShadow: "0 20px 45px -12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.03)",
+  },
+
+  avatar: {
+    margin: "0 auto 0.75rem auto",
+    backgroundColor: "#09090B !important",
+    color: "#FFFFFF !important",
+    width: "48px !important",
+    height: "48px !important",
+    boxShadow: "0 4px 14px rgba(0, 0, 0, 0.15)",
   },
 
   heading: {
     textAlign: "center",
-    marginBottom: theme.spacing(3),
-    color: "#414141",
-    fontWeight: "bold",
+    fontFamily: "var(--font-serif, 'Cormorant Garamond', Georgia, serif) !important",
+    fontSize: "1.95rem !important",
+    fontWeight: "700 !important",
+    color: "#09090B !important",
+    letterSpacing: "-0.01em",
+    marginTop: "0.25rem",
+    marginBottom: "0.35rem",
   },
-  nameInput: {
-    position: "relative",
-    "& > label": {
-      left: ".2rem",
-    },
-    padding: "4px 0px",
-    fontSize: "1rem",
-    width: "100%",
-    marginBottom: theme.spacing(5.5),
-    height: ".7rem",
+  subheading: {
+    textAlign: "center",
+    fontFamily: "var(--font-sans, -apple-system, sans-serif) !important",
+    fontSize: "0.85rem !important",
+    color: "#71717A !important",
+    marginBottom: "1.75rem !important",
+    lineHeight: 1.45,
   },
-  emailInput: {
-    position: "relative",
-    "& > label": {
-      left: ".2rem",
+
+  // Input styles
+  textField: {
+    marginBottom: "1.25rem",
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "10px",
+      backgroundColor: "#FAFAFA",
+      transition: "all 0.2s ease",
+      "& fieldset": {
+        borderColor: "#E4E4E7",
+      },
+      "&:hover fieldset": {
+        borderColor: "#A1A1AA",
+      },
+      "&.Mui-focused": {
+        backgroundColor: "#FFFFFF",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "#09090B",
+        borderWidth: "1.5px",
+      },
     },
-    padding: "4px 0px",
-    fontSize: "1rem",
-    width: "100%",
-    marginTop: "3rem",
-    height: ".7rem",
-  },
-  passwordInput: {
-    position: "relative",
-    "& > label": {
-      left: ".2rem",
+    "& .MuiInputLabel-root": {
+      fontFamily: "var(--font-sans, -apple-system, sans-serif)",
+      color: "#71717A",
+      fontSize: "0.9rem",
     },
-    padding: "4px 0px",
-    width: "100%",
-    height: ".7rem",
-    marginTop: theme.spacing(5.5),
-    "&.MuiOutlinedInput-input": {
-      padding: "14px 14px",
+    "& .MuiInputLabel-root.Mui-focused": {
+      color: "#09090B",
+      fontWeight: 500,
+    },
+    "& .MuiOutlinedInput-input": {
+      fontFamily: "var(--font-sans, -apple-system, sans-serif)",
+      color: "#09090B",
+      fontSize: "0.925rem",
+      padding: "13px 14px",
     },
   },
 
-  strengthIndicator: {
-    marginTop: theme.spacing(1),
+  nameInput: {
+    width: "100%",
+  },
+  emailInput: {
+    width: "100%",
+  },
+  passwordInput: {
+    width: "100%",
+    position: "relative",
   },
 
   showPasswordButton: {
     position: "absolute",
     top: "50%",
-    color: "rgb(0 0 0 / 85%)",
-    fontSize: "12px",
-    right: theme.spacing(2),
+    right: "8px",
     transform: "translateY(-50%)",
-    border: "none",
+    color: "#71717A !important",
+    minWidth: "auto",
+    padding: "6px",
+    borderRadius: "50%",
+    border: "none !important",
+    background: "transparent !important",
     "&:hover": {
-      color: "#ed1c24",
-      background: "none",
+      color: "#09090B !important",
+      backgroundColor: "rgba(0, 0, 0, 0.05) !important",
     },
   },
+
   rememberMeContainer: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    fontSize: "14px",
-    marginTop: theme.spacing(7),
-    "& .MuiIconButton-label": {
-      color: "black",
+    marginTop: "0.5rem",
+    marginBottom: "0.5rem",
+    "& .MuiFormControlLabel-label": {
+      fontSize: "0.85rem",
+      color: "#52525B",
+      fontFamily: "var(--font-sans, -apple-system, sans-serif)",
+    },
+    "& .MuiCheckbox-root": {
+      color: "#A1A1AA",
+      "&.Mui-checked": {
+        color: "#09090B",
+      },
     },
   },
+
   forgotPasswordLink: {
-    color: "#000",
+    color: "#52525B",
+    fontSize: "0.825rem",
+    fontWeight: 500,
     textDecoration: "none",
+    fontFamily: "var(--font-sans, -apple-system, sans-serif)",
+    transition: "color 0.2s ease",
     "&:hover": {
+      color: "#09090B",
       textDecoration: "underline",
-      color: "#ed1c24",
     },
   },
+
   termsAndConditionsText: {
-    fontFamily: "Roboto",
-    color: "#727272",
+    fontFamily: "var(--font-sans, -apple-system, sans-serif) !important",
+    color: "#71717A !important",
     textAlign: "center",
-    lineHeight: "17px",
-    paddingLeft: "4px",
-    marginTop: theme.spacing(2),
-    fontSize: "12px",
+    lineHeight: "1.45 !important",
+    fontSize: "0.775rem !important",
+    marginTop: "1rem !important",
+    marginBottom: "0.5rem !important",
   },
-  loginButton: {
-    color: "#fff",
-    backgroundColor: "#000",
-    border: "2px solid #000",
-    margin: `${theme.spacing(3)}px 0`,
-    marginTop: "1rem",
-    "&:disabled": {
-      backgroundColor: "#444444", // faded black
-      color: "#FFFFFF",
-      borderColor: "#444444",
-    },
-    "&:hover": {
-      backgroundColor: "#ff0000",
-      borderColor: "#ff0000",
-    },
-  },
+
   privacyText: {
     marginLeft: "4px",
     textDecoration: "underline",
-    color: "black",
-    fontSize: "14px",
+    color: "#09090B",
+    fontWeight: 500,
     "&:hover": {
-      color: "#ed1c24",
+      color: "#27272A",
     },
   },
-  createAccount: {
-    fontSize: "1rem",
-    fontWeight: 500,
-    color: "#121212",
-    paddingLeft: "6px",
+
+  loginButton: {
+    color: "#FFFFFF !important",
+    backgroundColor: "#09090B !important",
+    border: "1px solid #09090B !important",
+    borderRadius: "10px !important",
+    padding: "12px 0 !important",
+    fontFamily: "var(--font-sans, -apple-system, sans-serif) !important",
+    fontWeight: "600 !important",
+    fontSize: "0.925rem !important",
+    letterSpacing: "0.02em !important",
+    textTransform: "none !important",
+    marginTop: "1.25rem !important",
+    marginBottom: "1rem !important",
+    transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important",
     "&:hover": {
-      color: "#ed1c24",
+      backgroundColor: "#27272A !important",
+      borderColor: "#27272A !important",
+      transform: "translateY(-1px)",
+      boxShadow: "0 6px 20px rgba(0, 0, 0, 0.15)",
+    },
+    "&:disabled": {
+      backgroundColor: "#E4E4E7 !important",
+      color: "#A1A1AA !important",
+      borderColor: "#E4E4E7 !important",
+      cursor: "not-allowed",
+    },
+  },
+
+  createAccount: {
+    fontSize: "0.875rem",
+    fontWeight: 600,
+    color: "#09090B",
+    paddingLeft: "6px",
+    textDecoration: "none",
+    transition: "all 0.2s ease",
+    "&:hover": {
+      color: "#27272A",
       textDecoration: "underline",
     },
   },
-  // input text Filed
-  textField: {
-    marginBottom: theme.spacing(2),
-    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-input": {
-      color: "black",
-      padding: "12px 14px",
-    },
-    "& .MuiInputLabel-root": {
-      color: "black",
-      fontSize: "14px",
-      textAlign: "center",
-    },
-    "& .MuiInputLabel-root.Mui-focused": {
-      color: "black",
-      fontSize: "14px",
-      textAlign: "center",
-    },
-    "& .MuiOutlinedInput-root": {
-      "&:hover fieldset": {
-        borderColor: "black",
-        color: "black",
-      },
-      "& .MuiOutlinedInput-input": {
-        padding: "13px 8px",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "black",
-        color: "black",
-        outline: "none",
-      },
-    },
-  },
 
-  // signUp
-
-  avatar: {
-    margin: " 8px auto",
-    backgroundColor: "black",
-  },
+  // SignUp specific styles
   gridcheckbox: {
     display: "flex",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    marginTop: "3rem",
+    flexDirection: "column",
+    gap: "0.35rem",
+    marginTop: "0.75rem",
+    marginBottom: "0.5rem",
   },
   checkbox: {
-    "& .MuiTypography-body1": {
-      fontSize: "14px",
+    "& .MuiFormControlLabel-label": {
+      fontSize: "0.8rem",
+      color: "#52525B",
+      fontFamily: "var(--font-sans, -apple-system, sans-serif)",
     },
-    marginTop: theme.spacing(1),
-    "& .MuiIconButton-label": {
-      color: "black",
+    "& .MuiCheckbox-root": {
+      color: "#A1A1AA",
+      padding: "4px 8px 4px 0",
+      "&.Mui-checked": {
+        color: "#09090B",
+      },
     },
   },
 
-  // image uploader
+  // Avatar Uploader
   root: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: "3.5rem",
+    padding: "0.75rem 1rem",
+    backgroundColor: "#FAFAFA",
+    borderRadius: "10px",
+    border: "1px dashed #D4D4D8",
+    marginTop: "0.5rem",
+    marginBottom: "1rem",
   },
   avatar2: {
-    marginLeft: "6px",
-    backgroundColor: "black",
-    "&.MuiAvatar-colorDefault": {
-      color: "#fff",
-      backgroundColor: "black",
-    },
-    "&:hover": {
-      backgroundColor: "#ed1c24",
-    },
+    width: "48px !important",
+    height: "48px !important",
+    backgroundColor: "#09090B !important",
+    color: "#FFFFFF !important",
+    border: "2px solid #E4E4E7",
   },
   input: {
     display: "none",
   },
+  uploadAvatarButton: {
+    color: "#FFFFFF !important",
+    backgroundColor: "#09090B !important",
+    borderRadius: "8px !important",
+    padding: "7px 14px !important",
+    textTransform: "none !important",
+    fontSize: "0.825rem !important",
+    fontFamily: "var(--font-sans, -apple-system, sans-serif) !important",
+    fontWeight: "500 !important",
+    transition: "all 0.2s ease !important",
+    "&:hover": {
+      backgroundColor: "#27272A !important",
+      transform: "translateY(-1px)",
+    },
+  },
+  uploadAvatarText: {
+    margin: 0,
+    fontSize: "0.825rem",
+    color: "#FFFFFF",
+    fontWeight: 500,
+  },
 
-  // Update and create product styles ====================>>
-
+  // Admin / Product Update styles
   updateProduct: {
     display: "flex",
     alignItems: "flex-start",
-    backgroundColor: "#f1f1f1",
+    backgroundColor: "#FAFAFA",
     justifyContent: "center",
     width: "100%",
     gap: "1rem",
@@ -234,21 +296,20 @@ const useStyles = makeStyles((theme) => ({
     margin: "0rem",
     height: "fit-content",
     backgroundColor: "white",
-    borderRadius: "5px",
-    boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
+    borderRadius: "8px",
+    boxShadow: "0px 2px 12px rgba(0, 0, 0, 0.08)",
     display: "block",
     [theme.breakpoints.down("999")]: {
       display: "none",
     },
   },
-
   toggleBox1: {
     width: "16rem",
     margin: "0rem",
     height: "fit-content",
     backgroundColor: "white",
-    borderRadius: "5px",
-    boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
+    borderRadius: "8px",
+    boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.12)",
     display: "block",
     zIndex: "100",
     position: "absolute",
@@ -257,7 +318,7 @@ const useStyles = makeStyles((theme) => ({
   },
   secondBox1: {
     width: "75%",
-    backgroundColor: "#f1f1f1",
+    backgroundColor: "#FAFAFA",
     height: "fit-content",
     display: "flex",
     flexDirection: "column",
@@ -271,81 +332,42 @@ const useStyles = makeStyles((theme) => ({
   navBar1: {
     margin: "0rem",
   },
-
   form2: {
     marginTop: "-6rem",
   },
-  uploadAvatarButton: {
-    color: "white",
-    width: "fit-content",
-    backgroundColor: "#414141",
-    height: "2.5rem",
-    "&:hover": {
-      backgroundColor: "#ed1c24",
-    },
-  },
-
-  uploadAvatarText: {
-    fontSize: "14px",
-    backgroundColor: "inherit",
-    fontWeight: 500,
-    color: "#fff",
-
-    padding: "0 1rem",
-  },
-
   imgIcon: {
     width: "auto",
     marginLeft: "1rem",
     alignSelf: "center",
     "& svg": {
-      color: "#414141",
-      fontSize: "2.5rem !important", 
-      boxShadow: `0px 4px 10px rgba(0, 0, 0, 0.3)`,
+      color: "#09090B",
+      fontSize: "2.5rem !important",
     },
   },
-
   descriptionInput: {
-    marginTop: theme.spacing(5.5),
+    marginTop: theme.spacing(3),
     "& .MuiOutlinedInput-root": {
+      borderRadius: "10px",
       "& fieldset": {
-        borderColor: "black",
-        color: "black",
+        borderColor: "#E4E4E7",
       },
       "&:hover fieldset": {
-        borderColor: "black",
-        color: "black",
+        borderColor: "#09090B",
       },
       "&.Mui-focused fieldset": {
-        borderColor: "black",
-        color: "black",
-        outline: "none",
+        borderColor: "#09090B",
       },
-    },
-    "& .MuiOutlinedInput-input": {
-      padding: "13px 8px",
-    },
-    "& .MuiInputLabel-root": {
-      color: "black",
-      fontSize: "14px",
-      textAlign: "center",
-    },
-    "& .MuiInputLabel-root.Mui-focused": {
-      color: "black",
-      fontSize: "14px",
-      textAlign: "center",
     },
   },
   descriptionIcon: {
     marginRight: theme.spacing(1),
-    color: theme.palette.text.secondary,
+    color: "#71717A",
   },
   selectOption: {
-    marginTop: theme.spacing(5.5),
+    marginTop: theme.spacing(3),
     position: "relative",
     width: "100%",
   },
-
   imageArea: {
     display: "flex",
     gap: "18px",
@@ -353,84 +375,54 @@ const useStyles = makeStyles((theme) => ({
     overflowX: "scroll",
     scrollbarWidth: "10px",
     margin: "2rem 0",
-    "&::-webkit-scrollbar": {
-      width: "10px",
-      height: "5px",
-    },
     padding: "3px 16px",
-    boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-    borderRadius: theme.shape.borderRadius,
+    boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.05)",
+    borderRadius: "8px",
   },
   image: {
     width: "4.5rem ",
     height: "4rem ",
     objectFit: "cover",
-    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: "6px",
   },
   labelText: {
-    color: "#414141",
+    color: "#71717A",
     fontSize: "14px",
     position: "absolute",
     top: "50%",
     transform: "translateY(-50%)",
     left: "14px",
     pointerEvents: "none",
-    opacity: (props) => (props.category ? 0 : 1),
-    transition: "opacity 0.3s ease",
   },
   formControl: {
     width: "100%",
   },
   select: {
-    "& .MuiOutlinedInput-input": {
-      padding: "13px 8px",
-    },
-    "& .MuiInputLabel-outlined": {
-      pointerEvents: "none",
-      fontSize: "14px",
-      textAlign: "center",
-      color: "#414141",
-    },
     "& .MuiOutlinedInput-root": {
+      borderRadius: "10px",
       "&:hover fieldset": {
-        borderColor: "#ed1c24",
+        borderColor: "#09090B",
       },
       "&.Mui-focused fieldset": {
-        borderColor: "black",
-        outlineColor: "black",
+        borderColor: "#09090B",
       },
-      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-        borderColor: "black",
-      },
-    },
-    "& .MuiSelect-root": {
-      padding: "10px",
-      color: "black",
-    },
-    "& .MuiSelect-icon": {
-      marginRight: "-4px",
-      color: "gray",
-    },
-    "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: "black",
     },
     "& .MuiMenuItem-root:hover": {
-      backgroundColor: "#ed1c24",
-      color: "white",
+      backgroundColor: "#F4F4F5",
+      color: "#09090B",
     },
   },
-
   menu: {
     marginTop: theme.spacing(1),
     "& .MuiMenuItem-root": {
-      color: "black",
+      color: "#09090B",
     },
     "& .MuiMenuItem-root:hover": {
-      backgroundColor: "#ed1c24",
-      color: "white",
+      backgroundColor: "#F4F4F5",
+      color: "#09090B",
     },
   },
 }));
 
 export default useStyles;
+

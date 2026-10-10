@@ -28,13 +28,14 @@ function Sidebar() {
     { label: "Add Product", to: "/admin/new/product", icon: <AddCircleOutlineIcon /> },
     { label: "Categories", to: "/admin/categories", icon: <CategoryOutlinedIcon /> },
     { label: "Orders", to: "/admin/orders", icon: <ReceiptLongOutlinedIcon /> },
+    { label: "Inquiries", to: "/admin/inquiries", icon: <EmailOutlinedIcon /> },
     { label: "Reviews", to: "/admin/reviews", icon: <RateReviewOutlinedIcon /> },
     { label: "Users", to: "/admin/users", icon: <PeopleAltOutlinedIcon /> },
   ];
 
   const storeLinks = [
     { label: "Store Front", to: "/", icon: <StorefrontOutlinedIcon /> },
-    { label: "Messages", to: "/contact", icon: <EmailOutlinedIcon /> },
+    { label: "Contact Page", to: "/contact", icon: <EmailOutlinedIcon /> },
   ];
 
   return (

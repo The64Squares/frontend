@@ -63,6 +63,21 @@ const Footer = () => {
             Crafting heirloom-quality chess boards and artisanal chess sets for players, collectors, and lovers of timeless design.
           </p>
 
+          <div className="footer-direct-contact" style={{ margin: "12px 0 18px 0", fontSize: "0.84rem", color: "#a1a1aa", lineHeight: "1.7" }}>
+            <div>✉️ <a href="mailto:Info@the64squares.in" style={{ color: "#e4e4e7", textDecoration: "none" }}>Info@the64squares.in</a></div>
+            <div>📞 <a href="tel:+916378590349" style={{ color: "#e4e4e7", textDecoration: "none" }}>+91 63785 90349</a></div>
+            <div style={{ marginTop: "3px" }}>
+              <a
+                href="https://www.instagram.com/the64squares.in?stkn=dHcxYWF5b2ExZHI="
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#c5a880", textDecoration: "none", fontWeight: 600 }}
+              >
+                📸 Follow @the64squares.in ↗
+              </a>
+            </div>
+          </div>
+
           <div className="footer-newsletter">
             <h5 className="newsletter-title">Receive Curated Editions</h5>
             <p className="newsletter-sub">Subscribe to receive private collection previews & artisanal insights.</p>

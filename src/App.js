@@ -43,6 +43,7 @@ const LazyUpdateUser = React.lazy(() => import("./component/Admin/UpdateUser"));
 const LazyNewProduct = React.lazy(() => import("./component/Admin/NewProduct"));
 const LazyCategoryList = React.lazy(() => import("./component/Admin/CategoryList"));
 const LazyProductReviews = React.lazy(() => import("./component/Admin/ProductReviews"));
+const LazyInquiryList = React.lazy(() => import("./component/Admin/InquiryList"));
 
 function App() {
   const dispatch = useDispatch();
@@ -100,6 +101,7 @@ function App() {
           <Route path="/admin/products" element={<PrivateRoute isAdmin={true}><LazyProductList /></PrivateRoute>} />
           <Route path="/admin/product/:id" element={<PrivateRoute isAdmin={true}><LazyUpdateProduct /></PrivateRoute>} />
           <Route path="/admin/categories" element={<PrivateRoute isAdmin={true}><LazyCategoryList /></PrivateRoute>} />
+          <Route path="/admin/inquiries" element={<PrivateRoute isAdmin={true}><LazyInquiryList /></PrivateRoute>} />
           <Route path="/admin/reviews" element={<PrivateRoute isAdmin={true}><LazyProductReviews /></PrivateRoute>} />
           <Route path="/admin/orders" element={<PrivateRoute isAdmin={true}><LazyOrderList /></PrivateRoute>} />
           <Route path="/admin/order/:id" element={<PrivateRoute isAdmin={true}><LazyProcessOrder /></PrivateRoute>} />

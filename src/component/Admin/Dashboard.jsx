@@ -8,6 +8,8 @@ import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import axios from "axios";
 
 import { getAdminProducts, clearErrors } from "../../actions/productAction";
 import { getAllOrders } from "../../actions/orderAction";
@@ -26,6 +28,7 @@ function Dashboard() {
   const dispatch = useDispatch();
   const alert = useAlert();
   const [toggle, setToggle] = useState(false);
+  const [inquiriesCount, setInquiriesCount] = useState(0);
 
   const { products, loading, error } = useSelector((state) => state.products);
   const { orders, error: ordersError } = useSelector((state) => state.allOrders);
@@ -48,6 +51,15 @@ function Dashboard() {
     dispatch(getAllOrders());
     dispatch(getAllUsers());
     dispatch(getAdminProducts());
+
+    axios
+      .get("/api/v1/admin/inquiries")
+      .then((res) => {
+        if (res.data && res.data.success) {
+          setInquiriesCount(res.data.totalInquiries || res.data.count || 0);
+        }
+      })
+      .catch(() => {});
   }, [dispatch, error, alert, ordersError, usersError]);
 
   const toggleHandler = () => {
@@ -327,6 +339,26 @@ function Dashboard() {
                       ₹{totalRevenue.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
                     <p className="admin-kpi-subtext">All-time sales volume</p>
+                  </div>
+                </div>
+
+                {/* 5. Customer Inquiries */}
+                <div
+                  className="admin-kpi-card"
+                  onClick={() => navigate("/admin/inquiries")}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <div className="admin-kpi-card-top">
+                    <div className="admin-kpi-icon-wrap" style={{ background: "#fef3c7", color: "#d97706" }}>
+                      <EmailOutlinedIcon />
+                    </div>
+                    <span className="admin-kpi-badge">Concierge</span>
+                  </div>
+                  <div>
+                    <div className="admin-kpi-label">Customer Queries</div>
+                    <div className="admin-kpi-value">{inquiriesCount}</div>
+                    <p className="admin-kpi-subtext">Queries from Contact page</p>
                   </div>
                 </div>
               </section>

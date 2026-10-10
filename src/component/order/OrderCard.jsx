@@ -10,7 +10,7 @@ import { useAlert } from "../../context/AlertContext";
 import { addItemToCart } from "../../actions/cartAction";
 import { useNavigate, Link } from "react-router-dom";
 import DialogBox from "../Product/DialogBox";
-import { dispalyMoney } from "../DisplayMoney/DisplayMoney";
+import { useCurrency } from "../../context/CurrencyContext";
 
 const formatOrderDate = (dateString) => {
   if (!dateString) return "";
@@ -26,6 +26,7 @@ const OrderCard = ({ item, user }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const alert = useAlert();
+  const { formatPrice } = useCurrency();
   const [openReviewId, setOpenReviewId] = useState(null);
 
   const { shippingInfo, orderItems, orderStatus, totalPrice, createdAt, _id } = item;
@@ -55,7 +56,7 @@ const OrderCard = ({ item, user }) => {
         <div className="order-meta-group">
           <span className="order-meta-label">Total Amount</span>
           <span className="order-meta-value" style={{ fontWeight: 700 }}>
-            {dispalyMoney(totalPrice)}
+            {formatPrice(totalPrice)}
           </span>
         </div>
 
@@ -98,7 +99,7 @@ const OrderCard = ({ item, user }) => {
                   </span>
 
                   <span className="order-item-price">
-                    {dispalyMoney(product.price * product.quantity)}
+                    {formatPrice(product.price * product.quantity)}
                   </span>
 
                   <div className="order-actions-bar">

@@ -17,7 +17,7 @@ import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { dispalyMoney } from "../DisplayMoney/DisplayMoney";
+import { useCurrency } from "../../context/CurrencyContext";
 
 // Helper to dynamically load Razorpay checkout script
 const loadRazorpayScript = () => {
@@ -38,6 +38,7 @@ const Payment = () => {
   const navigate = useNavigate();
   const alert = useAlert();
   const dispatch = useDispatch();
+  const { formatPrice, currency, config } = useCurrency();
 
   const { shippingInfo, cartItems } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.userData);
@@ -309,9 +310,29 @@ const Payment = () => {
                   <span>
                     {isProcessing
                       ? "Launching Razorpay Checkout..."
-                      : `Pay ${dispalyMoney(totalFinalPrice)} via Razorpay`}
+                      : `Pay ${formatPrice(totalFinalPrice)} via Razorpay`}
                   </span>
                 </button>
+
+                {currency !== "INR" && (
+                  <div
+                    style={{
+                      marginTop: "12px",
+                      padding: "10px 14px",
+                      backgroundColor: "#f8fafc",
+                      border: "1px solid #e2e8f0",
+                      borderRadius: "10px",
+                      fontSize: "0.78rem",
+                      color: "#475569",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    🌐 <strong>International Card Settlement:</strong> Displayed in{" "}
+                    <strong>{currency} ({config.symbol})</strong>. Razorpay will securely charge your
+                    international card equivalent to{" "}
+                    <strong>₹{totalFinalPrice.toLocaleString("en-IN")} INR</strong>.
+                  </div>
+                )}
               </div>
             ) : (
               <div>
@@ -348,7 +369,7 @@ const Payment = () => {
                   <span>
                     {isProcessing
                       ? "Registering Acquisition..."
-                      : `Confirm Order with COD (${dispalyMoney(totalFinalPrice)})`}
+                      : `Confirm Order with COD (${formatPrice(totalFinalPrice)})`}
                   </span>
                 </button>
               </div>
@@ -393,7 +414,7 @@ const Payment = () => {
                       <span className="shipping-item-qty">Qty: {item.quantity}</span>
                     </div>
                     <span className="shipping-item-price">
-                      {dispalyMoney(item.price * item.quantity)}
+                      {formatPrice(item.price * item.quantity)}
                     </span>
                   </div>
                 ))}
@@ -403,7 +424,7 @@ const Payment = () => {
             <div className="payment-summary-breakdown">
               <div className="payment-breakdown-row">
                 <span>Items Subtotal</span>
-                <span>{dispalyMoney(subTotal)}</span>
+                <span>{formatPrice(subTotal)}</span>
               </div>
 
               <div className="payment-breakdown-row">
@@ -413,7 +434,7 @@ const Payment = () => {
 
               <div className="payment-breakdown-row total">
                 <span>Total Settlement</span>
-                <span>{dispalyMoney(totalFinalPrice)}</span>
+                <span>{formatPrice(totalFinalPrice)}</span>
               </div>
             </div>
 

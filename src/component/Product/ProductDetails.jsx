@@ -21,13 +21,14 @@ import MetaData from "../layouts/MataData/MataData";
 import { addItemToCart } from "../../actions/cartAction";
 import The64SquaresBallLoader from "../layouts/loader/Loader";
 import { PRODUCT_DETAILS_RESET } from "../../constants/productsConstatns";
-import { dispalyMoney } from "../DisplayMoney/DisplayMoney";
+import { useCurrency } from "../../context/CurrencyContext";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const alert = useAlert();
+  const { formatPrice, currency } = useCurrency();
 
   const [quantity, setQuantity] = useState(1);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -181,10 +182,12 @@ const ProductDetails = () => {
                 {/* Honest Pricing Display */}
                 <div className="details-price-box">
                   <span className="current-price">
-                    {dispalyMoney(unitPrice)}
+                    {formatPrice(unitPrice)}
                   </span>
                   <span className="tax-badge-info">
-                    (Inclusive of all taxes & duties)
+                    {currency === "INR"
+                      ? "(Inclusive of all taxes & duties)"
+                      : `(All duties included • Converted in ${currency})`}
                   </span>
                 </div>
 
@@ -267,7 +270,7 @@ const ProductDetails = () => {
                   >
                     <ShoppingBagOutlinedIcon sx={{ fontSize: 18 }} />
                     <span>
-                      Add to Cart • {dispalyMoney(lineTotal)}
+                      Add to Cart • {formatPrice(lineTotal)}
                     </span>
                   </button>
 

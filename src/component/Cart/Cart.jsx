@@ -9,12 +9,13 @@ import { Link, useNavigate } from "react-router-dom";
 import MetaData from "../layouts/MataData/MataData";
 import CartItem from "./CartItem";
 import { useAlert } from "../../context/AlertContext";
-import { dispalyMoney } from "../DisplayMoney/DisplayMoney";
+import { useCurrency } from "../../context/CurrencyContext";
 
 const Cart = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const alert = useAlert();
+  const { formatPrice, currency } = useCurrency();
   const { cartItems } = useSelector((state) => state.cart);
   const { isAuthenticated } = useSelector((state) => state.userData);
 
@@ -78,8 +79,8 @@ const Cart = () => {
   }
 
   const final = Math.max(0, totalPrice - couponDiscount);
-  const finalDisplay = dispalyMoney(final);
-  const totalPriceDisplay = dispalyMoney(totalPrice);
+  const finalDisplay = formatPrice(final);
+  const totalPriceDisplay = formatPrice(totalPrice);
 
   return (
     <>
@@ -131,7 +132,7 @@ const Cart = () => {
                 {couponDiscount > 0 && (
                   <div className="summary-row">
                     <span>Coupon Discount (10%)</span>
-                    <span className="discount-val">-{dispalyMoney(couponDiscount)}</span>
+                    <span className="discount-val">-{formatPrice(couponDiscount)}</span>
                   </div>
                 )}
 
@@ -147,7 +148,9 @@ const Cart = () => {
                   <span className="total-val">{finalDisplay}</span>
                 </div>
                 <span className="tax-inclusive-txt">
-                  (Inclusive of all packaging & taxes)
+                  {currency === "INR"
+                    ? "(Inclusive of all packaging & taxes)"
+                    : `(All duties included • Converted in ${currency})`}
                 </span>
 
                 <div className="coupon-box" style={{ flexDirection: "column", gap: "0.5rem" }}>

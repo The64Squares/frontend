@@ -1,19 +1,20 @@
 import React from "react";
 import Rating from "@mui/material/Rating";
 import { Link } from "react-router-dom";
-import { dispalyMoney, generateDiscountedPrice } from "../DisplayMoney/DisplayMoney";
+import { generateDiscountedPrice } from "../DisplayMoney/DisplayMoney";
 import { addItemToCart } from "../../actions/cartAction";
 import { useDispatch } from "react-redux";
 import { useAlert } from "../../context/AlertContext";
+import { useCurrency } from "../../context/CurrencyContext";
 import "./ProductCard.css";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
   const alert = useAlert();
+  const { formatPrice } = useCurrency();
 
-  let discountPrice = generateDiscountedPrice(product.price);
-  discountPrice = dispalyMoney(discountPrice);
-  const oldPrice = dispalyMoney(product.price);
+  const discountPrice = formatPrice(generateDiscountedPrice(product.price));
+  const oldPrice = formatPrice(product.price);
 
   const addTocartHandler = (e, id, qty) => {
     e.preventDefault();

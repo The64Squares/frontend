@@ -7,6 +7,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { useSelector } from "react-redux";
 import ProfileModal from "./ProfileModel";
+import CurrencySelector from "../CurrencySelector/CurrencySelector";
 
 function Header() {
   const navigate = useNavigate();
@@ -135,8 +136,10 @@ function Header() {
           </nav>
 
 
-          {/* Action Icons: Search, Cart, Account */}
+          {/* Action Icons: Currency, Search, Cart, Account */}
           <div className="header-actions">
+            <CurrencySelector variant="header" />
+
             <div className="search-bar-wrapper">
               <SearchBar
                 searchBarActive={searchBarActive}

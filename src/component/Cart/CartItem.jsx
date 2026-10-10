@@ -4,7 +4,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
-import { dispalyMoney } from "../DisplayMoney/DisplayMoney";
+import { useCurrency } from "../../context/CurrencyContext";
 
 const useStyles = makeStyles((theme) => ({
   itemCard: {
@@ -158,6 +158,7 @@ function CartItem({
   id,
 }) {
   const classes = useStyles();
+  const { formatPrice } = useCurrency();
   const unitPrice = item.price;
   const total = unitPrice * item.quantity;
 
@@ -216,10 +217,10 @@ function CartItem({
 
           <div className={classes.pricingWrap}>
             <span className={classes.unitPrice}>
-              {dispalyMoney(unitPrice)} each
+              {formatPrice(unitPrice)} each
             </span>
             <span className={classes.lineTotal}>
-              {dispalyMoney(total)}
+              {formatPrice(total)}
             </span>
           </div>
         </div>

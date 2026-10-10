@@ -10,11 +10,12 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { dispalyMoney } from "../DisplayMoney/DisplayMoney";
+import { useCurrency } from "../../context/CurrencyContext";
 
 const Shipping = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { formatPrice } = useCurrency();
   const { shippingInfo, cartItems } = useSelector((state) => state.cart);
 
   const [address, setAddress] = useState(shippingInfo.address || "");
@@ -400,7 +401,7 @@ const Shipping = () => {
                       <span className="shipping-item-qty">Qty: {item.quantity}</span>
                     </div>
                     <span className="shipping-item-price">
-                      {dispalyMoney(item.price * item.quantity)}
+                      {formatPrice(item.price * item.quantity)}
                     </span>
                   </div>
                 ))}
@@ -410,7 +411,7 @@ const Shipping = () => {
             <div className="shipping-summary-breakdown">
               <div className="shipping-breakdown-row">
                 <span>Items Subtotal</span>
-                <span>{dispalyMoney(subTotal)}</span>
+                <span>{formatPrice(subTotal)}</span>
               </div>
 
               <div className="shipping-breakdown-row">
@@ -420,7 +421,7 @@ const Shipping = () => {
 
               <div className="shipping-breakdown-row total">
                 <span>Estimated Total</span>
-                <span>{dispalyMoney(finalTotal)}</span>
+                <span>{formatPrice(finalTotal)}</span>
               </div>
             </div>
 

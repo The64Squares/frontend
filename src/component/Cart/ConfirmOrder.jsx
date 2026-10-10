@@ -6,10 +6,11 @@ import "./ConfirmOrder.css";
 import { Link, useNavigate } from "react-router-dom";
 import The64SquaresBallLoader from "../layouts/loader/Loader";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { dispalyMoney } from "../DisplayMoney/DisplayMoney";
+import { useCurrency } from "../../context/CurrencyContext";
 
 function ConfirmOrder() {
   const navigate = useNavigate();
+  const { formatPrice } = useCurrency();
   const { shippingInfo, cartItems } = useSelector((state) => state.cart);
   const { user, loading } = useSelector((state) => state.userData);
 
@@ -89,10 +90,10 @@ function ConfirmOrder() {
                             {item.name}
                           </Link>
                           <span className="confirm-item-meta">
-                            {item.quantity} × {dispalyMoney(item.price)}
+                            {item.quantity} × {formatPrice(item.price)}
                           </span>
                           <span className="confirm-item-total">
-                            {dispalyMoney(item.price * item.quantity)}
+                            {formatPrice(item.price * item.quantity)}
                           </span>
                         </div>
                       ))}
@@ -107,7 +108,7 @@ function ConfirmOrder() {
                 <div className="confirm-breakdown-list">
                   <div className="confirm-breakdown-row">
                     <span>Items Subtotal</span>
-                    <span>{dispalyMoney(subTotal)}</span>
+                    <span>{formatPrice(subTotal)}</span>
                   </div>
 
                   <div className="confirm-breakdown-row">
@@ -119,7 +120,7 @@ function ConfirmOrder() {
 
                   <div className="confirm-breakdown-row total">
                     <span>Grand Total</span>
-                    <span>{dispalyMoney(totalFinalPrice)}</span>
+                    <span>{formatPrice(totalFinalPrice)}</span>
                   </div>
                 </div>
 

@@ -6,11 +6,11 @@ import "swiper/swiper-bundle.min.css";
 import "swiper/swiper.min.css";
 import "./FeatureSlider.css";
 import { Link } from "react-router-dom";
-import {
-  dispalyMoney,
-  generateDiscountedPrice,
-} from "../DisplayMoney/DisplayMoney";
+import { generateDiscountedPrice } from "../DisplayMoney/DisplayMoney";
+import { useCurrency } from "../../context/CurrencyContext";
+
 const FeaturedSlider = ({ products }) => {
+  const { formatPrice } = useCurrency();
  
   return (
     <Swiper
@@ -47,9 +47,8 @@ const FeaturedSlider = ({ products }) => {
     >
       {products.map((product) => {
         const { _id, images, name ,price  } = product;
-        let newPrice = generateDiscountedPrice(price);
-        newPrice = dispalyMoney(newPrice);
-        const oldPrice = dispalyMoney(price);
+        const newPrice = formatPrice(generateDiscountedPrice(price));
+        const oldPrice = formatPrice(price);
 
         return (
           <SwiperSlide key={_id} className="featured_slides">

@@ -2,6 +2,7 @@ import React from "react";
 import { createRoot } from 'react-dom/client';
 import { Provider } from "react-redux";
 import { AlertProvider } from "./context/AlertContext";
+import { CurrencyProvider } from "./context/CurrencyContext";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import store from "./store";
 import App from "./App";
@@ -25,7 +26,9 @@ root.render(
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <AlertProvider>
-            <App />
+            <CurrencyProvider>
+              <App />
+            </CurrencyProvider>
           </AlertProvider>
         </Provider>
       </ThemeProvider>

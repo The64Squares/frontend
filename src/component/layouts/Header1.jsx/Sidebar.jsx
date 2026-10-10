@@ -12,6 +12,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import LoginIcon from "@mui/icons-material/Login";
+import CurrencySelector from "../CurrencySelector/CurrencySelector";
 import "./SideBar.css";
 
 const Sidebar = ({ handleSideBarMenu, isAuthenticated, user }) => {
@@ -99,6 +100,16 @@ const Sidebar = ({ handleSideBarMenu, isAuthenticated, user }) => {
               <span className="sidebar-menu-item-text">Contact</span>
             </li>
           </Link>
+
+          <div className="sidebar-menu-divider" />
+
+          {/* Currency & Region Selector */}
+          <div className="sidebar-currency-wrapper" style={{ padding: "8px 20px 14px 20px" }}>
+            <span style={{ fontSize: "0.72rem", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, display: "block", marginBottom: "6px" }}>
+              Currency & Region
+            </span>
+            <CurrencySelector variant="sidebar" />
+          </div>
 
           <div className="sidebar-menu-divider" />
 
